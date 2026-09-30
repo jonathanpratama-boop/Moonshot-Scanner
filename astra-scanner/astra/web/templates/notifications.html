@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block body %}
+<h2>Notification preview queue</h2>
+<div class="banner b-warn">External delivery is NOT CONFIGURED. "attempted" = written to the local preview outbox; "acknowledged" = an operator explicitly acknowledged it. Delivery to a person is otherwise UNKNOWN.</div>
+<table><tr><th>ID</th><th>Kind</th><th>Priority</th><th>Mode</th><th>Status</th><th>Created</th><th>Attempts</th><th>Acknowledged</th><th>Payload</th></tr>
+{% for n in rows %}<tr><td class="small">{{ n.notification_id }}</td><td>{{ n.kind }}</td><td>{{ n.priority }}</td><td>{{ n.mode }}</td><td>{{ n.status }}</td><td class="small">{{ n.created_at_utc }}</td><td class="small">{% for a in attempts.get(n.notification_id, []) %}<div>{{ a.attempted_at_utc }} {{ a.channel }}: {{ a.result }}</div>{% endfor %}</td><td class="small">{{ n.acknowledged_at_utc or "" }} {{ n.acknowledged_by or "" }}</td><td><details><summary>decision row</summary><pre>{{ n.payload_json|pretty }}</pre></details></td></tr>{% else %}<tr><td colspan="9" class="muted">Queue empty.</td></tr>{% endfor %}
+</table>
+{% endblock %}

@@ -1,0 +1,35 @@
+{
+  "screen_version": "ASTRA-DISCLOSURE-SCREEN-1",
+  "status": "UNVALIDATED routing screen. A flag means 'route to research', not 'material'. NOT_FLAGGED items stay retained and can be promoted manually.",
+  "sec_forms_always_flag": [
+    "6-K", "S-1", "S-1/A", "S-3", "S-3/A", "S-3ASR", "F-1", "F-3", "424B1", "424B2", "424B3", "424B4", "424B5", "424B7",
+    "SC 13D", "SC 13D/A", "SC TO-T", "SC TO-I", "SC 14D9", "DEFM14A", "PREM14A", "425", "8-K12B", "25-NSE", "NT 10-K", "NT 10-Q"
+  ],
+  "sec_8k_material_items": {
+    "1.01": "Entry into a material definitive agreement",
+    "1.02": "Termination of a material definitive agreement",
+    "1.03": "Bankruptcy or receivership",
+    "1.05": "Material cybersecurity incident",
+    "2.01": "Completion of acquisition or disposition of assets",
+    "2.02": "Results of operations and financial condition",
+    "2.03": "Creation of a direct financial obligation",
+    "2.04": "Triggering events that accelerate an obligation",
+    "2.05": "Costs associated with exit or disposal activities",
+    "2.06": "Material impairments",
+    "3.01": "Notice of delisting or failure to satisfy a listing rule",
+    "3.02": "Unregistered sales of equity securities",
+    "3.03": "Material modification to rights of security holders",
+    "4.01": "Changes in registrant's certifying accountant",
+    "4.02": "Non-reliance on previously issued financial statements",
+    "5.01": "Changes in control of registrant",
+    "5.02": "Departure/appointment of directors or certain officers",
+    "7.01": "Regulation FD disclosure",
+    "8.01": "Other events"
+  },
+  "sec_forms_not_flagged_examples": ["4", "3", "144", "SC 13G", "SC 13G/A", "10-K", "10-Q", "DEF 14A", "S-8", "FWP", "SD"],
+  "local_categories_flag": [
+    "earnings", "guidance", "contract", "m&a", "financing", "offering", "supply", "regulatory", "clinical",
+    "listing", "delisting", "governance", "halt", "bankruptcy", "restatement"
+  ],
+  "local_material_hint_field": "material_hint (boolean supplied by the retaining source; recorded as a reason, not verified)"
+}

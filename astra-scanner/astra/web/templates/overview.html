@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block body %}
+{% set cov = ov.latest_scan.coverage %}
+{% if cov is none %}
+  <div class="banner b-bad"><b>NOT SCANNED</b> — no completed anomaly scan exists. This is not a negative market result.</div>
+{% elif cov.status == "SCANNED" %}
+  <div class="banner b-ok"><b>{{ cov.headline }}</b> ({{ cov.fully_evaluated }}/{{ cov.declared_members }} declared members fully evaluated)</div>
+{% else %}
+  <div class="banner b-warn"><b>{{ cov.status }}</b> — {{ cov.headline }}</div>
+{% endif %}
+{% if ov.incomplete_runs %}<div class="banner b-bad"><b>Incomplete / interrupted runs:</b> {% for r in ov.incomplete_runs %}<a href="/runs/{{ r.run_id }}">{{ r.kind }} {{ r.started_at_utc }}</a> {% endfor %}</div>{% endif %}
+{% if ov.dead_work %}<div class="banner b-bad"><b>Dead work items (exceeded retries):</b> {{ ov.dead_work|length }}</div>{% endif %}
+
+<h2>Collection and coverage</h2>
+<table>
+<tr><th>Kind</th><th>Last successful run (completed)</th><th>Data cutoff</th><th>Coverage</th><th>Last attempt</th></tr>
+{% for kind, c in ov.collections.items() %}
+<tr>
+  <td>{{ kind }}</td>
+  <td>{% if c.last_success %}<a href="/runs/{{ c.last_success.run_id }}">{{ c.last_success.completed_at_utc|tz }}</a>{% else %}<span class="muted">never</span>{% endif %}</td>
+  <td>{% if c.last_success and c.last_success.data_cutoff_utc %}{{ c.last_success.data_cutoff_utc|tz }}{% elif c.last_success and c.last_success.requested_cutoff_utc %}{{ c.last_success.requested_cutoff_utc|tz }}{% else %}<span class="muted">—</span>{% endif %}</td>
+  <td>{{ c.last_success.coverage_status if c.last_success else "" }}</td>
+  <td>{% if c.last_attempt_status in ("failed","partial") %}<span class="st-BLOCKED">{{ c.last_attempt_status }}: {{ c.last_attempt_error }}</span>{% else %}{{ c.last_attempt_status or "" }}{% endif %}</td>
+</tr>
+{% endfor %}
+</table>
+{% if ov.source_scope_failures %}<div class="banner b-warn"><b>Source scopes failing:</b> {% for s in ov.source_scope_failures %}{{ s.scope_key }} ({{ s.consecutive_failures }}×: {{ s.last_error }}) {% endfor %}</div>{% endif %}
+
+<div class="grid">
+  <div class="card"><h3>Candidates by state</h3>{% for k, v in ov.candidate_states.items() %}<div><span class="st st-{{ k }}">{{ k }}</span>: {{ v }}</div>{% else %}<span class="muted">none</span>{% endfor %}</div>
+  <div class="card"><h3>Backlog</h3>{% for k, v in ov.backlog.items() %}<div>{{ k }}: {{ v }}</div>{% endfor %}</div>
+  <div class="card"><h3>Notifications</h3>{% for k, v in ov.notifications.items() %}<div>{{ k }}: {{ v }}</div>{% else %}<span class="muted">none</span>{% endfor %}<div class="muted small">External delivery: NOT CONFIGURED</div></div>
+  <div class="card"><h3>Outcome observations (current)</h3>{% for k, v in ov.outcomes.items() %}<div>{{ k }}: {{ v }}</div>{% else %}<span class="muted">none</span>{% endfor %}</div>
+</div>
+
+<h2>Candidates</h2>
+{% include "_candidate_table.html" %}
+
+{% if ov.recent_failures %}
+<h2>Recent failed / partial runs</h2>
+<table><tr><th>Run</th><th>Kind</th><th>Status</th><th>Started</th><th>Error</th></tr>
+{% for f in ov.recent_failures %}<tr><td><a href="/runs/{{ f.run_id }}">{{ f.run_id }}</a></td><td>{{ f.kind }}</td><td>{{ f.status }}</td><td>{{ f.started_at_utc }}</td><td>{{ f.error }}</td></tr>{% endfor %}
+</table>
+{% endif %}
+{% endblock %}

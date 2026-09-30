@@ -1,0 +1,33 @@
+{
+  "schema_version": "astra.research.v1",
+  "candidate_selector": {"symbol": "ZSMPF", "route": "announcement"},
+  "researcher": {"kind": "sample", "name": "SAMPLE RESEARCH FIXTURE (not a completed investigation)"},
+  "is_sample": true,
+  "what_changed": {"summary": "SAMPLE: synthetic 8-K item 1.01 definitive agreement to acquire a competitor, published pre-market.", "when": "2026-09-17T07:45:00-04:00", "when_basis": "source_publication"},
+  "mechanism": ["ECON"],
+  "facts": [
+    {"id": "F1", "text": "SAMPLE: the announcement describes a definitive agreement with stated consideration.", "source_refs": ["S1"]}
+  ],
+  "inferences": [
+    {"id": "I1", "text": "SAMPLE: accretion depends on financing terms not yet disclosed.", "based_on": ["F1"]}
+  ],
+  "unknowns": [
+    {"item": "Financing mix (cash/debt/equity)", "blocks_conclusions": ["per_share_accretion"]}
+  ],
+  "sources": [
+    {"ref": "S1", "title": "SAMPLE issuer wire SW-0004", "url": "https://example.invalid/sample/SW-0004", "kind": "primary", "stance": "supports", "published_at": "2026-09-17T07:45:00-04:00"}
+  ],
+  "contrary_evidence": [],
+  "economic_materiality": {"status": "assessed", "summary": "SAMPLE: headline consideration is large relative to revenue, but headline size is not shareholder value.", "source_refs": ["S1"]},
+  "valuation_scale": {"status": "unknown", "blocks_conclusions": ["valuation_scale"]},
+  "liquidity": {"status": "unknown", "blocks_conclusions": ["execution_feasibility"]},
+  "financing": {"status": "unknown", "blocks_conclusions": ["per_share_accretion"]},
+  "dilution": {"status": "unknown", "blocks_conclusions": ["per_share_accretion"]},
+  "execution": {"status": "unknown", "blocks_conclusions": ["execution_feasibility"]},
+  "remaining_uncertainty": "SAMPLE: accretion and valuation scale unknown; missing items block only the dependent conclusions listed.",
+  "blockers": [],
+  "recheck": {"due_in": "P1D", "condition": "SAMPLE: check for the definitive-agreement exhibit and financing terms", "priority": "routine"},
+  "expiry": {"due_in": "P10D", "condition": "SAMPLE: expire if no financing detail within 10 days"},
+  "proposed_disposition": "researched",
+  "disposition_rationale": "SAMPLE: researched; material unknowns recorded as dependent unknowns rather than blockers."
+}

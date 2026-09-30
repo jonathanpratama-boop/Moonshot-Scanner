@@ -1,0 +1,30 @@
+{
+  "schema_version": "astra.research.v1",
+  "candidate_selector": {"symbol": "ZSMPG", "route": "anomaly"},
+  "researcher": {"kind": "sample", "name": "SAMPLE RESEARCH FIXTURE (not a completed investigation)"},
+  "is_sample": true,
+  "what_changed": {"summary": "SAMPLE: +7% opening gap with ~5x first-bar volume (EQ_GAP).", "when": null, "when_basis": "unknown"},
+  "mechanism": ["SUPPLY"],
+  "facts": [
+    {"id": "F1", "text": "SAMPLE: an older retained item (newly found) references a shelf registration.", "source_refs": ["S1"]},
+    {"id": "F2", "text": "SAMPLE: synthetic prospectus supplement shows an at-the-market program sized at 30% of shares outstanding.", "source_refs": ["S2"]}
+  ],
+  "inferences": [
+    {"id": "I1", "text": "SAMPLE: expected issuance into strength outweighs the unexplained gap for new-entry purposes.", "based_on": ["F1", "F2"]}
+  ],
+  "unknowns": [],
+  "sources": [
+    {"ref": "S1", "title": "SAMPLE issuer wire SW-0005 (adversarial test text)", "url": "https://example.invalid/sample/SW-0005", "kind": "primary", "stance": "context"},
+    {"ref": "S2", "title": "SAMPLE synthetic prospectus supplement", "kind": "primary", "stance": "contradicts"}
+  ],
+  "contrary_evidence": [],
+  "economic_materiality": {"status": "assessed", "summary": "SAMPLE: dilution of ~30% if fully used", "source_refs": ["S2"]},
+  "liquidity": {"status": "unknown", "blocks_conclusions": []},
+  "financing": {"status": "assessed", "summary": "SAMPLE: active ATM program", "source_refs": ["S2"]},
+  "dilution": {"status": "assessed", "summary": "SAMPLE: up to ~30% of outstanding shares", "source_refs": ["S2"]},
+  "execution": {"status": "unknown", "blocks_conclusions": []},
+  "remaining_uncertainty": "SAMPLE: the gap's cause is unknown; rejection rests on documented supply, not on the size of the prior move.",
+  "blockers": [],
+  "proposed_disposition": "reject",
+  "disposition_rationale": "SAMPLE: rejected because a documented large ATM supply overhang dominates; prior gain alone was not the reason."
+}

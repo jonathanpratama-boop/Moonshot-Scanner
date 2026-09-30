@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block body %}
+<h2>Candidates (research state only — not positions)</h2>
+<p class="muted small">States: DETECTED → RESEARCHED | BLOCKED | REJECTED | EXPIRED. CONDITIONAL_READY and ENTRY_ELIGIBLE are reserved and unreachable in this prototype.</p>
+{% include "_candidate_table.html" %}
+{% endblock %}

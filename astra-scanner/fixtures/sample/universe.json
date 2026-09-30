@@ -1,0 +1,8 @@
+{
+  "format": "astra.universe.v1",
+  "universe_id": "SAMPLE-US-7@1",
+  "name": "Synthetic sample universe (7 fictional tickers)",
+  "is_sample": true,
+  "description": "Declared membership for the demonstration. Not a market universe.",
+  "members": ["ZSMPA", "ZSMPB", "ZSMPC", "ZSMPD", "ZSMPE", "ZSMPF", "ZSMPG"]
+}

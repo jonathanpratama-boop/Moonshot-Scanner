@@ -1,0 +1,9 @@
+# OPTIONAL. Only needed if you deliberately activate the paid AI researcher
+# (ASTRA_AI_PAID_CALLS=enabled + ASTRA_AI_PROVIDER=anthropic). Not needed for the demo or tests.
+# Version verified importable in the build environment on 2026-09-30; no paid call was made.
+anthropic==1.9.0
+httpx2==2.13.1
+httpcore2==2.13.1
+jiter==0.17.0
+sniffio==1.3.1
+truststore==0.10.4

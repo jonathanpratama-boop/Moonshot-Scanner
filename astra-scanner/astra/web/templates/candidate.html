@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block body %}
+<h2>{{ c.candidate_id }} · {{ c.symbol or "no symbol" }} · <span class="st st-{{ c.state }}">{{ c.state }}</span></h2>
+{% if c.mode == "sample" %}<div class="banner b-warn">SAMPLE candidate from synthetic data.</div>{% endif %}
+{% if c.mode == "replay" %}<div class="banner b-warn">REPLAY candidate — simulated cutoff {{ c.simulated_cutoff_utc }}. Retrospective; not a historical live detection.</div>{% endif %}
+<table>
+<tr><th>Route</th><td>{{ c.route }}{% if c.mechanism_hint %} ({{ c.mechanism_hint }}){% endif %}</td><th>Owner</th><td>{{ c.owner }}</td></tr>
+<tr><th>Created / detected (actual software clock)</th><td>{{ c.detected_at_utc|tz }}</td><th>Data cutoff</th><td>{{ c.data_cutoff_utc|tz }}</td></tr>
+<tr><th>Research status</th><td>{{ c.research_status }}</td><th>Observation class</th><td>{{ c.observation_class or "—" }}</td></tr>
+<tr><th>Next recheck</th><td>{% if c.next_recheck_at_utc %}{{ c.next_recheck_at_utc|tz }}{% else %}UNKNOWN{% endif %}<div class="small muted">{{ c.next_recheck_condition }}</div></td>
+    <th>Expiry</th><td>{% if c.expires_at_utc %}{{ c.expires_at_utc|tz }}{% else %}UNKNOWN{% endif %}<div class="small muted">{{ c.expiry_condition }}</div></td></tr>
+</table>
+
+{% if announcement %}
+<h3>Announcement (untrusted source text shown as data)</h3>
+<table>
+<tr><th>Title</th><td>{{ announcement.title }}</td></tr>
+<tr><th>URL</th><td>{{ announcement.url }}</td></tr>
+<tr><th>Source publication</th><td>{{ announcement.published_at_utc|tz }} <span class="small muted">raw "{{ announcement.published_raw }}" · {{ announcement.published_tz }} · {{ announcement.published_time_kind }} · session {{ announcement.published_session_context }}</span></td></tr>
+<tr><th>First observed by ASTRA</th><td>{{ announcement.first_observed_at_utc|tz }}</td></tr>
+<tr><th>Screen</th><td>{{ announcement.screen_result }} · {{ announcement.screen_reasons_json }}</td></tr>
+<tr><th>Identity</th><td>{{ announcement.identity_status }}</td></tr>
+<tr><th>Revisions</th><td>{% for r in revisions %}<div>rev {{ r.revision_no }} observed {{ r.observed_at_utc }} · hash {{ r.content_hash[:12] }}</div>{% endfor %}</td></tr>
+</table>
+{% endif %}
+
+<h3>Unresolved</h3>
+{% for b in unresolved.open_blockers %}<div class="st-BLOCKED">Blocker <code>{{ b.key }}</code>: {{ b.description }} — blocks {{ b.blocks|join(", ") }} — clearing evidence: {{ b.clearing_evidence }}</div>{% endfor %}
+{% for u in unresolved.unknowns %}<div>Unknown: {{ u.item }}{% if u.blocks_conclusions %} (blocks {{ u.blocks_conclusions|join(", ") }}){% endif %}</div>{% endfor %}
+{% for s in unresolved.unknown_sections %}<div class="muted">Section unknown: {{ s.section }}{% if s.blocks_conclusions %} (blocks {{ s.blocks_conclusions|join(", ") }}){% else %} (blocks no conclusion){% endif %}</div>{% endfor %}
+{% if not unresolved.open_blockers and not unresolved.unknowns and not unresolved.unknown_sections %}<div class="muted">{% if c.research_status == "COMPLETED" %}No recorded unknowns.{% else %}Research not completed — everything beyond the frozen evidence is UNKNOWN.{% endif %}</div>{% endif %}
+
+<h3>State transitions (append-only)</h3>
+<table><tr><th>At</th><th>From → To</th><th>Actor</th><th>Reason</th><th>Evidence delta</th><th>Remaining blockers</th></tr>
+{% for t in transitions %}<tr><td class="small">{{ t.at_utc }}</td><td>{{ t.from_state or "∅" }} → <b>{{ t.to_state }}</b></td><td class="small">{{ t.actor }}</td><td>{{ t.reason }}{% if t.reason_type %}<div class="small muted">{{ t.reason_type }}</div>{% endif %}</td><td><pre>{{ t.evidence_json|pretty }}</pre></td><td><pre>{{ t.remaining_blockers_json|pretty }}</pre></td></tr>{% endfor %}
+</table>
+
+<h3>Frozen evidence</h3>
+{% for e in evidence %}
+<div class="card"><b>{{ e.role }}</b> · {{ e.kind }} · {{ e.evidence_id }} · created {{ e.created_at_utc }} · hash <code>{{ e.content_hash[:16] }}</code>
+ · read-back {% if readbacks.get(e.evidence_id) and readbacks[e.evidence_id].ok %}<span style="color:var(--ok)">verified {{ readbacks[e.evidence_id].verified_at_utc }}</span>{% else %}<span class="st-BLOCKED">NOT VERIFIED</span>{% endif %}
+ <details><summary>content</summary><pre>{{ e.content_json|pretty }}</pre></details></div>
+{% endfor %}
+
+<h3>Research records</h3>
+{% for r in research %}
+<div class="card"><b>{{ r.research_id }}</b> · {{ r.researcher_kind }}{% if r.is_sample %} <span class="st-BLOCKED">SAMPLE RESEARCH (not a completed live investigation)</span>{% endif %}{% if r.retrospective %} <span class="st-DETECTED">RETROSPECTIVE</span>{% endif %}
+ · completed {{ r.completed_at_utc }} ({{ r.completed_at_basis }}) · imported {{ r.imported_at_utc }}{% if r.parent_research_id %} · revises {{ r.parent_research_id }} ({{ r.revision_reason_type }}){% endif %}
+ <details><summary>record</summary><pre>{{ r.content_json|pretty }}</pre></details></div>
+{% else %}<div class="muted">No research imported.</div>{% endfor %}
+
+<h3>Blockers</h3>
+<table><tr><th>Key</th><th>Status</th><th>Description</th><th>Clearing evidence required</th><th>Opened</th><th>Cleared</th></tr>
+{% for b in blockers %}<tr><td><code>{{ b.key }}</code></td><td>{{ b.status }}</td><td>{{ b.description }}</td><td>{{ b.clearing_evidence_required }}</td><td class="small">{{ b.opened_at_utc }}</td><td class="small">{{ b.cleared_at_utc or "" }}{% if b.clearing_evidence_json %}<pre>{{ b.clearing_evidence_json|pretty }}</pre>{% endif %}</td></tr>{% endfor %}
+</table>
+
+<h3>Scheduled work</h3>
+<table><tr><th>Kind</th><th>Priority</th><th>Due</th><th>Status</th><th>Attempts</th><th>Condition</th><th>Last error</th></tr>
+{% for w in work %}<tr><td>{{ w.kind }}</td><td>{{ w.priority }}</td><td class="small">{{ w.due_at_utc|tz }}</td><td>{{ w.status }}</td><td>{{ w.attempts }}/{{ w.max_attempts }}</td><td class="small">{{ w.condition }}</td><td class="small">{{ w.last_error or "" }}</td></tr>{% endfor %}
+</table>
+
+<h3>Forward outcomes (exploratory labels, not trading returns)</h3>
+<table><tr><th>Reference role</th><th>Ref session</th><th>Ref price</th><th>Horizon</th><th>Status</th><th>Return</th><th>Excess vs benchmark</th><th>Reason</th></tr>
+{% for o in outcomes %}<tr><td>{{ o.reference_role }}</td><td>{{ o.reference_session_date }}</td><td>{{ o.reference_price }}</td><td>+{{ o.horizon_sessions }} sessions</td><td>{{ o.status }}</td><td>{{ "%.4f"|format(o.return_value) if o.return_value is not none else "" }}</td><td>{{ "%.4f"|format(o.excess_return) if o.excess_return is not none else (o.benchmark_status or "") }}</td><td class="small">{{ o.reason or "" }}</td></tr>{% else %}<tr><td colspan="8" class="muted">No outcome subjects.</td></tr>{% endfor %}
+</table>
+
+<h3>Notifications</h3>
+<table><tr><th>Kind</th><th>Status</th><th>Created</th><th>Acknowledged</th></tr>
+{% for n in notifications %}<tr><td>{{ n.kind }}</td><td>{{ n.status }}</td><td class="small">{{ n.created_at_utc }}</td><td class="small">{{ n.acknowledged_at_utc or "" }} {{ n.acknowledged_by or "" }}</td></tr>{% endfor %}
+</table>
+
+<h3>Events</h3>
+<table><tr><th>At</th><th>Kind</th><th>Actor</th><th>Detail</th></tr>
+{% for e in events %}<tr><td class="small">{{ e.at_utc }}</td><td>{{ e.kind }}</td><td class="small">{{ e.actor }}</td><td><pre>{{ e.detail_json|pretty }}</pre></td></tr>{% endfor %}
+</table>
+{% endblock %}

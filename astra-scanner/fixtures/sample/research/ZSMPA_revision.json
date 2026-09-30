@@ -1,0 +1,40 @@
+{
+  "schema_version": "astra.research.v1",
+  "candidate_selector": {"symbol": "ZSMPA", "route": "anomaly"},
+  "researcher": {"kind": "sample", "name": "SAMPLE RESEARCH FIXTURE (not a completed investigation)"},
+  "is_sample": true,
+  "parent_research_id": "latest",
+  "revision_reason_type": "NEW_EVENT",
+  "what_changed": {"summary": "SAMPLE: a synthetic exchange notice and a timestamped quote were found after the recheck.", "when": null, "when_basis": "unknown"},
+  "mechanism": ["TAPE", "FLOW"],
+  "facts": [
+    {"id": "F1", "text": "SAMPLE: synthetic exchange notice reports index inclusion effective next week.", "source_refs": ["S3"]},
+    {"id": "F2", "text": "SAMPLE: synthetic quote shows a 0.3% spread with displayed size.", "source_refs": ["S4"]}
+  ],
+  "inferences": [
+    {"id": "I1", "text": "SAMPLE: index-inclusion demand is a plausible FLOW mechanism for the move.", "based_on": ["F1"]}
+  ],
+  "unknowns": [
+    {"item": "Size of index demand relative to float", "blocks_conclusions": ["flow_magnitude"]}
+  ],
+  "sources": [
+    {"ref": "S3", "title": "SAMPLE synthetic exchange notice", "url": "https://example.invalid/sample/notice", "kind": "primary", "stance": "supports"},
+    {"ref": "S4", "title": "SAMPLE synthetic quote snapshot", "kind": "data", "stance": "context", "retrieved_at": "2026-09-17T15:20:00Z"}
+  ],
+  "contrary_evidence": [],
+  "economic_materiality": {"status": "not_applicable", "summary": "SAMPLE: FLOW mechanism, not an earnings bridge"},
+  "liquidity": {"status": "assessed", "summary": "SAMPLE: 0.3% quoted spread with displayed size", "source_refs": ["S4"]},
+  "financing": {"status": "not_applicable", "summary": "SAMPLE: none"},
+  "dilution": {"status": "unknown", "blocks_conclusions": []},
+  "execution": {"status": "unknown", "blocks_conclusions": ["position_sizing"]},
+  "remaining_uncertainty": "SAMPLE: magnitude of flow unknown; no plan or entry permission exists in this prototype.",
+  "cleared_blockers": [
+    {"key": "catalyst-unidentified", "clearing_evidence": "SAMPLE synthetic exchange notice (index inclusion)", "source_refs": ["S3"]},
+    {"key": "liquidity-unverified", "clearing_evidence": "SAMPLE synthetic timestamped quote", "source_refs": ["S4"]}
+  ],
+  "blockers": [],
+  "recheck": {"due_in": "P1D", "condition": "SAMPLE: recheck flow estimate after the next session", "priority": "routine"},
+  "expiry": {"due_in": "P5D", "condition": "SAMPLE: expire after the inclusion effective date"},
+  "proposed_disposition": "researched",
+  "disposition_rationale": "SAMPLE: blockers cleared with cited evidence; remains research-only (RESEARCHED is not entry permission)."
+}

@@ -1,0 +1,18 @@
+.venv/
+__pycache__/
+*.pyc
+*.egg-info/
+.pytest_cache/
+var/
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+.env
+dist/
+outbox/
+# Full doctrine bundle may be dropped here locally; it contains private account data and is never committed.
+doctrine/local/
+.ruff_cache/
+.mypy_cache/
+build/

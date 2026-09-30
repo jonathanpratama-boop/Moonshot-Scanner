@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block body %}
+<h2>Run {{ r.run_id }} · {{ r.kind }} · {{ r.status }}</h2>
+<table>
+<tr><th>Mode / classification</th><td>{{ r.mode }} / {{ r.source_classification }}</td><th>Cohort</th><td>{{ r.cohort_eligibility or "—" }}</td></tr>
+<tr><th>Started (actual)</th><td>{{ r.started_at_utc|tz }}</td><th>Completed (actual)</th><td>{{ r.completed_at_utc|tz }}</td></tr>
+<tr><th>Requested cutoff</th><td>{{ r.requested_cutoff_utc|tz }}</td><th>Data cutoff</th><td>{{ r.data_cutoff_utc|tz }}</td></tr>
+<tr><th>Provider / dataset</th><td>{{ r.provider_id or "—" }} / {{ r.dataset_id or "—" }}</td><th>Config</th><td class="small">{{ r.config_version or "—" }}</td></tr>
+<tr><th>Input</th><td colspan="3" class="small">{{ r.input_ref or "—" }}</td></tr>
+<tr><th>Error</th><td colspan="3">{{ r.error or "" }}</td></tr>
+</table>
+<h3>Declared scope</h3><pre>{{ r.declared_scope_json|pretty if r.declared_scope_json else "—" }}</pre>
+<h3>Actual coverage</h3><pre>{{ r.coverage_json|pretty if r.coverage_json else "—" }}</pre>
+<h3>Summary</h3><pre>{{ r.summary_json|pretty if r.summary_json else "—" }}</pre>
+{% if results %}
+<h3>Detector results (all members, all statuses)</h3>
+<table><tr><th>Symbol</th><th>Detector</th><th>Status</th><th>Reason</th><th>Signal bar end</th><th>Feature available</th><th>Evidence</th></tr>
+{% for x in results %}<tr><td>{{ x.symbol }}</td><td>{{ x.detector }}</td><td class="st {% if x.status == 'SIGNAL' %}st-RESEARCHED{% elif x.status == 'NO_SIGNAL' %}{% else %}st-BLOCKED{% endif %}">{{ x.status }}</td><td class="small">{{ x.reason or "" }}</td><td class="small">{{ x.signal_bar_end_utc or "" }}</td><td class="small">{{ x.feature_available_at_utc or "" }}</td><td class="small">{{ x.evidence_id or "" }}</td></tr>{% endfor %}
+</table>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,68 @@
+{
+  "bundle_date_wib": "2026-09-30",
+  "copied_at_utc": "2026-09-30T10:28:14.956921+00:00",
+  "source_root": "/Users/jonathanpratama/.codex/.chatgpt-projects/g-p-6a9fd0f810148191b107e45a07720dd3",
+  "scope": "Reference documents and frozen configurations; historical state is not current account or deployment verification.",
+  "files": [
+    {
+      "path": "AGENTS.override.md",
+      "role": "Source project operating instructions",
+      "bytes": 3466,
+      "sha256": "618466ddee05f4564aee17e1605c3c72dc3d5408732dbf667b26085ef033f863"
+    },
+    {
+      "path": "TRADING_DOCTRINE.md",
+      "role": "Canonical GD-1.1 trading doctrine",
+      "bytes": 23096,
+      "sha256": "c7addff2f6a5aebe1dae84257799ed89617b3aae863a1cccfa015b8c556b76ee"
+    },
+    {
+      "path": "trading/astra-operations-20260929.txt",
+      "role": "Operating amendments including r1.2",
+      "bytes": 9604,
+      "sha256": "65164e13d2d958978bf93aa548e9174400aa8f1981fe9a39ca2fba2593b6089e"
+    },
+    {
+      "path": "trading/event-readiness-GD-1.1.txt",
+      "role": "Event clocks, quote conflicts and conditional planning",
+      "bytes": 3467,
+      "sha256": "82c07de7b91e0a49b569e49b12e22d5a31fbe811bb94d8caa17ccb958296e8bd"
+    },
+    {
+      "path": "trading/STATE.md",
+      "role": "Dated implementation history; not current holdings",
+      "bytes": 25153,
+      "sha256": "a8662e4894aecb09b46b6b49a94619b3f131d1056b97109b408480f39b8f8969"
+    },
+    {
+      "path": "trading/records/README.md",
+      "role": "Evidence storage and scoring requirements",
+      "bytes": 11740,
+      "sha256": "d734e8928f474a262222f2853861115529cdb1ca46ea1849d2b0bd9b6f4f6ed4"
+    },
+    {
+      "path": "trading/pilot/README.md",
+      "role": "Frozen v1 detector documentation and limitations",
+      "bytes": 15632,
+      "sha256": "75104a103659f53b88c75f28ac8f536bb4235346d2309df2bfa52bb96ed728a1"
+    },
+    {
+      "path": "trading/pilot/detectors-v1.json",
+      "role": "Frozen v1 detector configuration",
+      "bytes": 1868,
+      "sha256": "09297ed3303ebd5f0801d756cb6c46bc4966044b7ad2b51a30e648eaa8a21ddd"
+    },
+    {
+      "path": "trading/live/README.md",
+      "role": "Local crypto prototype scope and limitations",
+      "bytes": 6945,
+      "sha256": "fde5c171380dca7be88294da7c3dba26473634aecab8e5c34b49fa0ff4ee12ce"
+    },
+    {
+      "path": "trading/live/v2-rules.json",
+      "role": "Frozen experimental crypto v2 configuration",
+      "bytes": 2404,
+      "sha256": "82dcb1f46b783b97ab58580e3deece40a721c457b014f99181516124f8cacc78"
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "schema_version": "astra.research.v1",
+  "candidate_selector": {"symbol": "ZSMPA", "route": "anomaly"},
+  "researcher": {"kind": "sample", "name": "SAMPLE RESEARCH FIXTURE (not a completed investigation)"},
+  "is_sample": true,
+  "what_changed": {"summary": "SAMPLE: IGNITION detector fired on a +~4.9% three-bar impulse with ~6x matched volume; no catalyst identified in retained sources.", "when": null, "when_basis": "unknown"},
+  "mechanism": ["TAPE"],
+  "facts": [
+    {"id": "F1", "text": "SAMPLE: frozen detection evidence shows the 10:45-10:55 ET bars rose about 4.9% with about 6x matched volume.", "source_refs": ["S1"]},
+    {"id": "F2", "text": "SAMPLE: the only retained ZSMPA announcement is a 10 Sep supply agreement that was later revised.", "source_refs": ["S2"]}
+  ],
+  "inferences": [
+    {"id": "I1", "text": "SAMPLE: the 10 Sep agreement predates the move by a week, so it does not by itself explain the timing.", "based_on": ["F1", "F2"]}
+  ],
+  "unknowns": [
+    {"item": "Catalyst for the 17 Sep move", "blocks_conclusions": ["mechanism_attribution"]},
+    {"item": "Executable depth and spread", "blocks_conclusions": ["execution_feasibility"]}
+  ],
+  "sources": [
+    {"ref": "S1", "title": "ASTRA frozen detection evidence (synthetic)", "kind": "data", "stance": "context"},
+    {"ref": "S2", "title": "SAMPLE issuer wire SW-0003", "url": "https://example.invalid/sample/SW-0003", "kind": "primary", "stance": "context"}
+  ],
+  "contrary_evidence": [
+    {"id": "C1", "text": "SAMPLE: benchmark was flat, so the move is idiosyncratic but may be noise in a thin name.", "source_refs": ["S1"]}
+  ],
+  "competing_explanations": ["SAMPLE: undisclosed news", "SAMPLE: liquidity-driven order imbalance"],
+  "economic_materiality": {"status": "unknown", "blocks_conclusions": ["economic_mechanism"]},
+  "liquidity": {"status": "unknown", "blocks_conclusions": ["execution_feasibility"]},
+  "financing": {"status": "not_applicable", "summary": "SAMPLE: no financing event retained"},
+  "dilution": {"status": "unknown", "blocks_conclusions": []},
+  "execution": {"status": "unknown", "blocks_conclusions": ["execution_feasibility"]},
+  "remaining_uncertainty": "SAMPLE: cause of the move is unidentified; the tape signal alone is unvalidated.",
+  "blockers": [
+    {"key": "catalyst-unidentified", "description": "No primary-source explanation for the move", "blocks": ["mechanism_attribution"], "clearing_evidence": "Primary issuer/exchange/regulatory source explaining the move, or an explicit FLOW mechanism with evidence"},
+    {"key": "liquidity-unverified", "description": "Spread/depth not observed", "blocks": ["execution_feasibility"], "clearing_evidence": "Timestamped quote with bid/ask/size from a named source"}
+  ],
+  "recheck": {"due_in": "PT0S", "condition": "SAMPLE: recheck primary sources for a catalyst (demo: due immediately)", "priority": "urgent"},
+  "expiry": {"due_in": "P3D", "condition": "SAMPLE: expire if no catalyst or liquidity evidence within 3 days"},
+  "proposed_disposition": "blocked",
+  "disposition_rationale": "SAMPLE: blocked pending catalyst and liquidity evidence; detector output alone grants nothing."
+}

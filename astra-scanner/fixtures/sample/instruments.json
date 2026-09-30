@@ -1,0 +1,14 @@
+{
+  "format": "astra.instruments.v1",
+  "is_sample": true,
+  "instruments": [
+    {"symbol": "XBMK",  "name": "SYNTHETIC BENCHMARK (not a real security)", "exchange_mic": "XNYS", "currency": "USD", "security_type": "etf", "benchmark_symbol": null},
+    {"symbol": "ZSMPA", "name": "SYNTHETIC SAMPLE A (not a real security)", "exchange_mic": "XNAS", "currency": "USD", "security_type": "common_stock", "benchmark_symbol": "XBMK"},
+    {"symbol": "ZSMPB", "name": "SYNTHETIC SAMPLE B (not a real security)", "exchange_mic": "XNYS", "currency": "USD", "security_type": "common_stock", "benchmark_symbol": "XBMK"},
+    {"symbol": "ZSMPC", "name": "SYNTHETIC SAMPLE C (not a real security)", "exchange_mic": "XNAS", "currency": "USD", "security_type": "common_stock", "benchmark_symbol": "XBMK"},
+    {"symbol": "ZSMPD", "name": "SYNTHETIC SAMPLE D (not a real security)", "exchange_mic": "XNAS", "currency": "USD", "security_type": "common_stock", "benchmark_symbol": "XBMK"},
+    {"symbol": "ZSMPE", "name": "SYNTHETIC SAMPLE E (not a real security)", "exchange_mic": "XNAS", "currency": "USD", "security_type": "common_stock", "benchmark_symbol": "XBMK"},
+    {"symbol": "ZSMPF", "name": "SYNTHETIC SAMPLE F (not a real security)", "exchange_mic": "XNYS", "currency": "USD", "security_type": "common_stock", "benchmark_symbol": "XBMK", "issuer_cik": "0009990006"},
+    {"symbol": "ZSMPG", "name": "SYNTHETIC SAMPLE G (not a real security)", "exchange_mic": "XNAS", "currency": "USD", "security_type": "common_stock", "benchmark_symbol": "XBMK", "issuer_cik": "0009990007"}
+  ]
+}

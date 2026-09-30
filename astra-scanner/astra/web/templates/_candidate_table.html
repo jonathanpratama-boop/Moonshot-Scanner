@@ -1,0 +1,19 @@
+<table>
+<tr><th>Candidate</th><th>Mode</th><th>Route</th><th>Symbol</th><th>State</th><th>Owner</th><th>Detected (actual)</th><th>Research</th><th>Next recheck</th><th>Expiry</th></tr>
+{% for c in candidates %}
+<tr>
+  <td><a href="/candidates/{{ c.candidate_id }}">{{ c.candidate_id }}</a>{% if c.observation_class %}<div class="small muted">{{ c.observation_class }}</div>{% endif %}</td>
+  <td>{{ c.mode }}{% if c.simulated_cutoff_utc %}<div class="small muted">sim cutoff {{ c.simulated_cutoff_utc }}</div>{% endif %}</td>
+  <td>{{ c.route }}</td><td>{{ c.symbol or "—" }}</td>
+  <td class="st st-{{ c.state }}">{{ c.state }}</td>
+  <td class="small">{{ c.owner }}</td>
+  <td class="small">{{ c.detected_at_utc|tz }}{% if c.data_cutoff_utc %}<div class="muted">data cutoff {{ c.data_cutoff_utc }}</div>{% endif %}</td>
+  <td>{{ c.research_status }}
+    {% if c.unresolved %}{% for b in c.unresolved.open_blockers %}<div class="small st-BLOCKED">blocker: {{ b.description }} → needs {{ b.clearing_evidence }}</div>{% endfor %}
+    {% for u in c.unresolved.unknowns %}<div class="small muted">unknown: {{ u.item }}{% if u.blocks_conclusions %} (blocks {{ u.blocks_conclusions|join(", ") }}){% endif %}</div>{% endfor %}{% endif %}
+  </td>
+  <td class="small">{% if c.next_recheck_at_utc %}{{ c.next_recheck_at_utc|tz }}<div class="muted">{{ c.next_recheck_condition }}</div>{% else %}{{ c.next_recheck_condition or "UNKNOWN" }}{% endif %}</td>
+  <td class="small">{% if c.expires_at_utc %}{{ c.expires_at_utc|tz }}<div class="muted">{{ c.expiry_condition }}</div>{% else %}{{ c.expiry_condition or "UNKNOWN" }}{% endif %}</td>
+</tr>
+{% else %}<tr><td colspan="10" class="muted">No candidates.</td></tr>{% endfor %}
+</table>

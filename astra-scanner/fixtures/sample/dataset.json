@@ -1,0 +1,23 @@
+{
+  "format": "astra.market.dataset.v1",
+  "provider": {
+    "provider_id": "sample-synthetic",
+    "name": "SYNTHETIC SAMPLE PROVIDER (not market data)",
+    "is_sample": true,
+    "description": "Deterministic synthetic bars from fixtures/generate_sample.py for demonstration and tests only."
+  },
+  "dataset": {
+    "dataset_id": "sample-synthetic-5m-rth",
+    "interval_seconds": 300,
+    "price_adjustment": "unadjusted",
+    "volume_scope": "consolidated",
+    "volume_unit": "shares",
+    "venue": "SYNTHETIC (stands in for the consolidated US tape)",
+    "session_timezone": "America/New_York",
+    "calendar_id": "XNYS-RTH-RULES-2019-2027-v1",
+    "currency": "USD",
+    "bar_time_convention": "start",
+    "availability_basis": "ASSUMED_BAR_END_PLUS_LATENCY",
+    "assumed_latency_seconds": 30
+  }
+}

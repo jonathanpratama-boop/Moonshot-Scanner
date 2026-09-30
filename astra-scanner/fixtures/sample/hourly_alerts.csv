@@ -1,0 +1,5 @@
+radar,symbol,alert_time,alert_time_tz,alert_time_basis,delivery_time,excerpt
+Americas Early-Move Radar (SAMPLE),ZSMPG,2026-09-17T10:05:00,America/New_York,message_timestamp,,SYNTHETIC alert: gap-up mover
+Americas Early-Move Radar (SAMPLE),ZSMPA,2026-09-17T12:00:00,America/New_York,message_timestamp,,SYNTHETIC alert: late-morning momentum
+Americas Early-Move Radar (SAMPLE),ZSMPQ,2026-09-17T11:00:00,America/New_York,message_timestamp,,SYNTHETIC alert on a symbol outside the scanner universe
+Americas Early-Move Radar (SAMPLE),ZSMPC,2026-09-18T10:00:00,America/New_York,scheduled_run_boundary,,SYNTHETIC alert outside the declared coverage window

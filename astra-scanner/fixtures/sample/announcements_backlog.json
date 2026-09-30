@@ -1,0 +1,15 @@
+{
+  "format": "astra.announcements.v1",
+  "source": {
+    "name": "sample-issuer-wire",
+    "kind": "local_json",
+    "is_sample": true,
+    "coverage_label": "SYNTHETIC retained announcements for 7 fictional issuers. Not complete or earliest issuer news."
+  },
+  "retrieved_at": "2026-09-16T22:00:00Z",
+  "items": [
+    {"external_id": "SW-0001", "symbol": "ZSMPF", "issuer_name": "Synthetic Sample F Corp", "title": "SAMPLE: Synthetic Sample F reports second-quarter results", "url": "https://example.invalid/sample/SW-0001", "published_at": "2026-08-06T16:05:00", "published_tz": "America/New_York", "categories": ["earnings"], "body": "SYNTHETIC. Quarterly results text."},
+    {"external_id": "SW-0002", "symbol": "ZSMPC", "issuer_name": "Synthetic Sample C Inc", "title": "SAMPLE: Synthetic Sample C to present at conference", "url": "https://example.invalid/sample/SW-0002", "published_at": "2026-09-02T08:00:00-04:00", "categories": ["investor_relations"], "body": "SYNTHETIC. Conference participation."},
+    {"external_id": "SW-0003", "symbol": "ZSMPA", "issuer_name": "Synthetic Sample A Ltd", "title": "SAMPLE: Synthetic Sample A announces supply agreement", "url": "https://example.invalid/sample/SW-0003", "published_at": "2026-09-10T07:30:00", "published_tz": "America/New_York", "categories": ["contract"], "body": "SYNTHETIC. Original text version 1."}
+  ]
+}

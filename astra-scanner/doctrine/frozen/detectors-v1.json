@@ -1,0 +1,50 @@
+{
+  "rule_version": "EXPERIMENTAL-DETECTORS-1",
+  "created_at_utc": "2026-09-25T15:42:29Z",
+  "validation_status": "UNVALIDATED_EXPERIMENT",
+  "bar_interval_seconds": 300,
+  "maximum_bar_age_seconds": 900,
+  "maximum_prospective_cutoff_age_seconds": 300,
+  "maximum_members": 200,
+  "volume_baseline": {
+    "minimum_prior_sessions": 10,
+    "maximum_prior_sessions": 20,
+    "statistic": "median",
+    "matching": "same instrument feed volume unit session class and exact three clock slots"
+  },
+  "compression": {
+    "lookback_bars": 48,
+    "pivot_left_bars": 2,
+    "pivot_right_bars": 2,
+    "ceiling_touch_tolerance_fraction": 0.0075,
+    "minimum_separated_ceiling_touches": 2,
+    "touch_separation_bars": 3,
+    "minimum_confirmed_rising_lows": 2,
+    "minimum_rise_between_last_two_lows_fraction": 0.003,
+    "maximum_second_half_range_to_first_half_range": 0.8,
+    "maximum_distance_below_ceiling_fraction": 0.02,
+    "maximum_distance_above_ceiling_fraction": 0.005,
+    "minimum_relative_return_percentage_points": 0.0
+  },
+  "ignition": {
+    "impulse_bars": 3,
+    "minimum_return_fraction": 0.03,
+    "minimum_relative_return_percentage_points": 1.5,
+    "minimum_matched_volume_multiple": 3.0,
+    "requires_successful_pullback": false
+  },
+  "cohort": {
+    "development_runs": 20,
+    "validation_runs": 20,
+    "minimum_cutoff_spacing_seconds": 3600,
+    "assignment": "chronological eligible prospective runs only; no threshold edits within version",
+    "statistical_power_established": false,
+    "initial_status": "NOT_STARTED"
+  },
+  "operations": {
+    "local_execution": "user-invoked; no live feed or scheduler installed",
+    "existing_cloud_alert_schedule": "hourly at last verified deployment; inspect saved schedule before claiming current cadence",
+    "low_latency_detection_established": false,
+    "entry_permission": false
+  }
+}

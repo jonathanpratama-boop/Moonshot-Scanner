@@ -1,0 +1,46 @@
+{
+  "schema_version": "CRYPTO-SHADOW-RULES-2",
+  "rule_version": "EXPERIMENTAL-CRYPTO-V2-20260927",
+  "validation_status": "UNVALIDATED_EXPERIMENT",
+  "entry_permission": false,
+  "bar_interval_seconds": 300,
+  "maximum_bar_age_seconds": 900,
+  "required_benchmark_base_asset": "BTC",
+  "event_ignition": {
+    "minimum_postevent_return_fraction": 0.02,
+    "minimum_postevent_btc_excess_percentage_points": 2.0,
+    "participation_bars": 3,
+    "minimum_matched_volume_multiple": 3.0,
+    "postevent_reference": "OPEN_OF_FIRST_5M_BAR_STARTING_ON_OR_AFTER_PUBLIC_AVAILABILITY",
+    "missing_or_branches": "A passing observed branch detects; otherwise any missing branch is INSUFFICIENT_DATA, never zero. Event research is independent."
+  },
+  "rs_shock": {
+    "lookback_bars": 48,
+    "minimum_btc_excess_percentage_points": 4.0,
+    "return_definition": "FIRST_OPEN_TO_LAST_CLOSE_OVER_EXACTLY_4H"
+  },
+  "second_leg": {
+    "lookback_bars": 24,
+    "impulse_bars": 6,
+    "pullback_bars": 15,
+    "reclaim_bars": 3,
+    "minimum_impulse_return_fraction": 0.05,
+    "maximum_impulse_return_fraction": 0.15,
+    "maximum_impulse_close_distance_below_peak_fraction": 0.01,
+    "minimum_peak_to_pullback_depth_fraction_of_impulse": 0.20,
+    "maximum_peak_to_pullback_depth_fraction_of_impulse": 0.50,
+    "maximum_pullback_mean_volume_to_impulse_mean": 0.75,
+    "minimum_pullback_btc_excess_percentage_points": 0.0,
+    "minimum_reclaim_mean_volume_to_pullback_mean": 1.5,
+    "minimum_reclaim_matched_volume_multiple": 1.5,
+    "reclaim_condition": "FINAL_CLOSE_AT_OR_ABOVE_IMPULSE_HIGH; no pullback high above impulse high",
+    "window_selection": "FIXED_LATEST_24_COMPLETED_BARS; no search for the best past segmentation"
+  },
+  "notes": [
+    "These prospective hypotheses were specified before running the new cohort. Retrospective winners do not establish an edge.",
+    "All bars, benchmark bars and baseline windows must be observed, completed, matched in time and available by cutoff. No future bars or backdated event knowledge.",
+    "Comparable volume uses the frozen v1 validator: median of 10 to 20 unique prior same-clock/session/feed/unit intervals.",
+    "A stale completed close is SIGNAL_BAR_REFERENCE only, never an executable/detection-price scoring baseline.",
+    "This evaluator does not schedule, deliver notifications, place orders or create an ENTRY-ELIGIBLE decision."
+  ]
+}

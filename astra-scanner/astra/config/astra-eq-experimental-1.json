@@ -1,0 +1,45 @@
+{
+  "rule_version": "ASTRA-EQ-EXPERIMENTAL-1",
+  "created_at_utc": "2026-09-30T00:00:00Z",
+  "validation_status": "UNVALIDATED_EXPERIMENT",
+  "entry_permission": false,
+  "purpose": "US-equity adaptation layer for the frozen EXPERIMENTAL-DETECTORS-1 parameters plus one new gap detector. Thresholds were chosen before any outcome was observed; they are not tuned or validated.",
+  "equity_adaptation_of_v1": {
+    "v1_rule_version": "EXPERIMENTAL-DETECTORS-1",
+    "v1_config_sha256": "09297ed3303ebd5f0801d756cb6c46bc4966044b7ad2b51a30e648eaa8a21ddd",
+    "v1_numeric_parameters_changed": false,
+    "engine": "independent reimplementation from trading/pilot/README.md; equivalence to the original runner.py is UNVERIFIED because that code was not available",
+    "cohort": "EXCLUDED from the authoritative v1 pilot cohort (trading/pilot/runs/). Sample and replay runs are excluded from any performance denominator.",
+    "session_class": "RTH only (09:30-16:00 America/New_York, early close 13:00); PRE/POST bars never enter windows or baselines",
+    "calendar": "XNYS-RTH-RULES-2019-2027-v1",
+    "dataset_requirements": {
+      "interval_seconds": 300,
+      "session_timezone": "America/New_York",
+      "price_adjustment": "declared (not 'unknown'); one basis per dataset",
+      "volume_scope_and_unit": "declared (not 'unknown') for volume-dependent detectors; one scope per dataset"
+    },
+    "interpretations_needing_review": [
+      "touch separation: two ceiling touches count when their bar indices differ by at least touch_separation_bars (3)",
+      "pivot low: strictly lower than each of the 2 bars on each side; equal lows are not pivots",
+      "compression window may span one declared session break only at exact session boundaries (last RTH slot -> first RTH slot of the next session)",
+      "ignition baseline: walk back through prior sessions (most recent first, at most 40 sessions) collecting sessions whose three matching RTH slots are all usable; stop at 20; require at least 10",
+      "freshness: latest usable RTH bar end must be within maximum_bar_age_seconds of the scan cutoff; outside RTH this makes the detector INSUFFICIENT_DATA (market closed), not NO_SIGNAL",
+      "benchmark: the instrument's declared benchmark_symbol from the same dataset; every window timestamp must have a usable benchmark bar"
+    ]
+  },
+  "eq_gap": {
+    "detector": "EQ_GAP",
+    "definition": "Regular-session opening gap: open of the first RTH bar of the cutoff's session versus close of the final RTH bar of the previous session.",
+    "minimum_gap_fraction": 0.05,
+    "minimum_gap_excess_over_benchmark_percentage_points": 3.0,
+    "first_bar_matched_volume": {
+      "minimum_multiple": 3.0,
+      "baseline": "median volume of the same first RTH slot over the most recent 10-20 prior sessions with a usable first bar (same dataset/scope/unit)",
+      "minimum_prior_sessions": 10,
+      "maximum_prior_sessions": 20
+    },
+    "direction": "upside only (consistent with IGNITION); downside gaps are not detected by this version",
+    "freshness": "same maximum_bar_age_seconds as v1 (900 s) for the latest usable bar",
+    "premarket": "excluded; the gap is measured between regular-session prints only"
+  }
+}

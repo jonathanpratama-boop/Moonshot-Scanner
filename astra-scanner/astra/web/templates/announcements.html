@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block body %}
+<h2>Announcements (first observations; source text is untrusted data)</h2>
+<p class="muted small">SEC coverage is filings coverage for configured issuers only; it does not establish complete or earliest issuer news. BASELINE_BACKLOG is history from a scope's first collection, not new news.</p>
+<table><tr><th>Source</th><th>Symbol</th><th>Title</th><th>Published (source)</th><th>First observed (ASTRA)</th><th>Class</th><th>Screen</th><th>Revisions</th><th>Sightings</th></tr>
+{% for a in rows %}<tr><td class="small">{{ a.source_name }}</td><td>{{ a.symbol or "—" }}</td><td>{{ a.title }}<div class="small muted">{{ a.url or "" }}</div></td><td class="small">{{ a.published_at_utc|tz }}<div class="muted">{{ a.published_time_kind }} · {{ a.published_session_context }}</div></td><td class="small">{{ a.first_observed_at_utc }}</td><td class="small">{{ a.observation_class }}</td><td class="small">{{ a.screen_result }}</td><td>{{ a.revisions }}</td><td>{{ a.sightings }}</td></tr>{% else %}<tr><td colspan="9" class="muted">No announcements retained.</td></tr>{% endfor %}
+</table>
+{% endblock %}

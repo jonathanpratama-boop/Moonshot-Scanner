@@ -1,0 +1,9 @@
+{
+  "format": "astra.sec_issuers.v1",
+  "note": "Example bounded issuer list for live SEC filings collection. Edit before use; keep it short (ASTRA_SEC_MAX_ISSUERS).",
+  "issuers": [
+    {"cik": "0000320193", "ticker": "AAPL", "name": "Apple Inc."},
+    {"cik": "0000789019", "ticker": "MSFT", "name": "Microsoft Corp"},
+    {"cik": "0001045810", "ticker": "NVDA", "name": "NVIDIA Corp"}
+  ]
+}
