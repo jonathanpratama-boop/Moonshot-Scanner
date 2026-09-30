@@ -253,5 +253,10 @@ Deviations:
 
 ## 12. Git commit / status
 
-Branch `claude/loving-gauss-1o1ldm` of `jonathanpratama-boop/Moonshot-Scanner`. The commit that
-added this application is recorded below after pushing.
+- Repository: `jonathanpratama-boop/Moonshot-Scanner` (public), branch `claude/loving-gauss-1o1ldm`.
+- Application commit: `72a4d0261327eed5ac2e96780f29e0a20fa82029` ("Add ASTRA local US-equities research scanner prototype"),
+  pushed 2026-09-30. The commit containing this line only records that hash.
+- Working tree at that commit: clean (untracked `var/`, `.venv/`, `dist/` are git-ignored).
+- No pull request has been opened.
+- Transfer package: `python scripts/package_transfer.py` →
+  `dist/astra-scanner-transfer-<date>.zip` (tracked files + `PACKAGE_MANIFEST.json` with SHA-256 per file).

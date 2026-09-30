@@ -41,42 +41,156 @@
     ]
   },
   "components": {
-    "cli": {"status": "IMPLEMENTED_TESTED"},
-    "database_migrations": {"status": "IMPLEMENTED_TESTED", "append_only_triggers": true},
-    "exchange_calendar": {"status": "IMPLEMENTED_TESTED", "range": "2019-01-01..2027-12-31", "verified_against_official_source": "2026-2027 only"},
-    "announcement_local_json": {"status": "IMPLEMENTED_TESTED"},
-    "announcement_sec_submissions": {"status": "IMPLEMENTED_MOCK_TESTED", "live_run": "BLOCKED_CONFIG: ASTRA_SEC_USER_AGENT (contact identity) not configured", "network_reachable": true, "coverage": "filings only, configured issuers only"},
-    "market_import": {"status": "IMPLEMENTED_TESTED", "formats": ["csv", "json"]},
-    "market_live_provider": {"status": "NOT_IMPLEMENTED", "interface": "astra.market.MarketProvider"},
-    "detector_compression": {"status": "IMPLEMENTED_TESTED", "rule_version": "EXPERIMENTAL-DETECTORS-1", "validation": "UNVALIDATED", "engine_equivalence": "UNVERIFIED"},
-    "detector_ignition": {"status": "IMPLEMENTED_TESTED", "rule_version": "EXPERIMENTAL-DETECTORS-1", "validation": "UNVALIDATED", "engine_equivalence": "UNVERIFIED"},
-    "detector_eq_gap": {"status": "IMPLEMENTED_TESTED", "rule_version": "ASTRA-EQ-EXPERIMENTAL-1", "validation": "UNVALIDATED"},
-    "evidence_freeze_readback": {"status": "IMPLEMENTED_TESTED"},
-    "research_manual_import": {"status": "IMPLEMENTED_TESTED", "schema": "astra.research.v1"},
-    "research_ai_adapter": {"status": "IMPLEMENTED_MOCK_TESTED", "provider": "anthropic (official SDK, optional extra)", "default": "DISABLED", "activation": "ASTRA_AI_PAID_CALLS=enabled AND ASTRA_AI_PROVIDER=anthropic", "live_calls": 0},
-    "state_machine": {"status": "IMPLEMENTED_TESTED", "states": ["DETECTED", "RESEARCHED", "BLOCKED", "REJECTED", "EXPIRED"], "reserved_unreachable": ["CONDITIONAL_READY", "ENTRY_ELIGIBLE"]},
-    "work_queue_recovery": {"status": "IMPLEMENTED_TESTED"},
-    "notifications": {"status": "IMPLEMENTED_TESTED", "channels": {"local_outbox": "implemented", "external": "NOT_CONFIGURED"}, "digest_cap": "NOT_IMPLEMENTED"},
-    "outcomes": {"status": "IMPLEMENTED_TESTED", "definition": "ASTRA-OUTCOME-EQ-1", "excursions": "NOT_MEASURED"},
-    "replay": {"status": "IMPLEMENTED_TESTED"},
-    "exports_and_comparison": {"status": "IMPLEMENTED_TESTED", "real_hourly_alerts_imported": false},
-    "dashboard": {"status": "IMPLEMENTED_TESTED", "bind": "127.0.0.1 default", "read_only": true, "authentication": "none"},
-    "positions_or_simulated_trades": {"status": "NOT_IMPLEMENTED_BY_DESIGN"},
-    "corporate_actions": {"status": "NOT_IMPLEMENTED"},
-    "scheduler": {"status": "NOT_IMPLEMENTED_BY_DESIGN"}
+    "cli": {
+      "status": "IMPLEMENTED_TESTED"
+    },
+    "database_migrations": {
+      "status": "IMPLEMENTED_TESTED",
+      "append_only_triggers": true
+    },
+    "exchange_calendar": {
+      "status": "IMPLEMENTED_TESTED",
+      "range": "2019-01-01..2027-12-31",
+      "verified_against_official_source": "2026-2027 only"
+    },
+    "announcement_local_json": {
+      "status": "IMPLEMENTED_TESTED"
+    },
+    "announcement_sec_submissions": {
+      "status": "IMPLEMENTED_MOCK_TESTED",
+      "live_run": "BLOCKED_CONFIG: ASTRA_SEC_USER_AGENT (contact identity) not configured",
+      "network_reachable": true,
+      "coverage": "filings only, configured issuers only"
+    },
+    "market_import": {
+      "status": "IMPLEMENTED_TESTED",
+      "formats": [
+        "csv",
+        "json"
+      ]
+    },
+    "market_live_provider": {
+      "status": "NOT_IMPLEMENTED",
+      "interface": "astra.market.MarketProvider"
+    },
+    "detector_compression": {
+      "status": "IMPLEMENTED_TESTED",
+      "rule_version": "EXPERIMENTAL-DETECTORS-1",
+      "validation": "UNVALIDATED",
+      "engine_equivalence": "UNVERIFIED"
+    },
+    "detector_ignition": {
+      "status": "IMPLEMENTED_TESTED",
+      "rule_version": "EXPERIMENTAL-DETECTORS-1",
+      "validation": "UNVALIDATED",
+      "engine_equivalence": "UNVERIFIED"
+    },
+    "detector_eq_gap": {
+      "status": "IMPLEMENTED_TESTED",
+      "rule_version": "ASTRA-EQ-EXPERIMENTAL-1",
+      "validation": "UNVALIDATED"
+    },
+    "evidence_freeze_readback": {
+      "status": "IMPLEMENTED_TESTED"
+    },
+    "research_manual_import": {
+      "status": "IMPLEMENTED_TESTED",
+      "schema": "astra.research.v1"
+    },
+    "research_ai_adapter": {
+      "status": "IMPLEMENTED_MOCK_TESTED",
+      "provider": "anthropic (official SDK, optional extra)",
+      "default": "DISABLED",
+      "activation": "ASTRA_AI_PAID_CALLS=enabled AND ASTRA_AI_PROVIDER=anthropic",
+      "live_calls": 0
+    },
+    "state_machine": {
+      "status": "IMPLEMENTED_TESTED",
+      "states": [
+        "DETECTED",
+        "RESEARCHED",
+        "BLOCKED",
+        "REJECTED",
+        "EXPIRED"
+      ],
+      "reserved_unreachable": [
+        "CONDITIONAL_READY",
+        "ENTRY_ELIGIBLE"
+      ]
+    },
+    "work_queue_recovery": {
+      "status": "IMPLEMENTED_TESTED"
+    },
+    "notifications": {
+      "status": "IMPLEMENTED_TESTED",
+      "channels": {
+        "local_outbox": "implemented",
+        "external": "NOT_CONFIGURED"
+      },
+      "digest_cap": "NOT_IMPLEMENTED"
+    },
+    "outcomes": {
+      "status": "IMPLEMENTED_TESTED",
+      "definition": "ASTRA-OUTCOME-EQ-1",
+      "excursions": "NOT_MEASURED"
+    },
+    "replay": {
+      "status": "IMPLEMENTED_TESTED"
+    },
+    "exports_and_comparison": {
+      "status": "IMPLEMENTED_TESTED",
+      "real_hourly_alerts_imported": false
+    },
+    "dashboard": {
+      "status": "IMPLEMENTED_TESTED",
+      "bind": "127.0.0.1 default",
+      "read_only": true,
+      "authentication": "none"
+    },
+    "positions_or_simulated_trades": {
+      "status": "NOT_IMPLEMENTED_BY_DESIGN"
+    },
+    "corporate_actions": {
+      "status": "NOT_IMPLEMENTED"
+    },
+    "scheduler": {
+      "status": "NOT_IMPLEMENTED_BY_DESIGN"
+    }
   },
   "verification": {
-    "tests_main_env": {"passed": 68, "failed": 0, "skipped": 0},
-    "tests_clean_pip_env": {"passed": 67, "failed": 0, "skipped": 1, "skip_reason": "optional anthropic SDK not installed"},
+    "tests_main_env": {
+      "passed": 68,
+      "failed": 0,
+      "skipped": 0
+    },
+    "tests_clean_pip_env": {
+      "passed": 67,
+      "failed": 0,
+      "skipped": 1,
+      "skip_reason": "optional anthropic SDK not installed"
+    },
     "demo_self_checks_passed": 26,
     "dashboard_http_pages_checked": 26,
-    "replay_cli_run": {"sessions": 4, "cutoffs": 52, "detector_rows": 1092},
+    "replay_cli_run": {
+      "sessions": 4,
+      "cutoffs": 52,
+      "detector_rows": 1092
+    },
     "sec_cli_exercise": "SEC_USER_AGENT_NOT_CONFIGURED; no request sent; failure recorded",
     "details": "docs/VERIFICATION.md"
   },
   "sample_data": {
     "synthetic": true,
-    "tickers": ["ZSMPA", "ZSMPB", "ZSMPC", "ZSMPD", "ZSMPE", "ZSMPF", "ZSMPG", "XBMK"],
+    "tickers": [
+      "ZSMPA",
+      "ZSMPB",
+      "ZSMPC",
+      "ZSMPD",
+      "ZSMPE",
+      "ZSMPF",
+      "ZSMPG",
+      "XBMK"
+    ],
     "generator": "fixtures/generate_sample.py",
     "real_data_fixture": "fixtures/sec/CIK0000320193_submissions_trimmed.json (public SEC response, trimmed; tests only)"
   },
@@ -101,6 +215,7 @@
   "git": {
     "repository": "jonathanpratama-boop/Moonshot-Scanner",
     "branch": "claude/loving-gauss-1o1ldm",
-    "application_commit": "recorded in HANDOFF.md section 12 after push"
+    "application_commit": "72a4d0261327eed5ac2e96780f29e0a20fa82029",
+    "pull_request": "none opened"
   }
 }
