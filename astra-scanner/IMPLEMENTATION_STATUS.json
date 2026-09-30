@@ -240,7 +240,7 @@
     "branch": "claude/loving-gauss-1o1ldm",
     "application_commit": "72a4d0261327eed5ac2e96780f29e0a20fa82029",
     "pull_request": "none opened",
-    "review_round_1_commit": "the commit titled 'Correct integrity defects from ASTRA review round 1' (hash in git log)"
+    "review_round_1_commit": "86385c902f54a29c8e3f879d33d1ac9183098ffd"
   },
   "review_round_1": {
     "reviewer": "ASTRA (independent local test of commit 39c9c78)",
