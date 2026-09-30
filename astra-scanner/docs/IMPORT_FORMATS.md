@@ -42,6 +42,16 @@ detectors (`IGNITION`, `EQ_GAP`) `UNAVAILABLE`.
 `availability_basis`: imported history uses `ASSUMED_BAR_END_PLUS_LATENCY` (a bar is
 assumed available at `min(end + latency, batch as_of)`, never before its end). A future
 live provider must use `OBSERVED_RETRIEVAL` (available at the actual retrieval time).
+Two exceptions always apply, whatever the basis (review round 1):
+
+- a **revision** of an already-delivered bar (a correction, or a forming bar later completed)
+  is available only from its own batch `as_of` (`REVISION_AT_BATCH_AS_OF`);
+- a bar **missing from an earlier batch that covered its time** (between that symbol's first
+  delivered bar and the latest earlier batch `as_of`) is a late gap fill, available only from
+  its own batch `as_of` (`LATE_ARRIVAL_AT_BATCH_AS_OF`).
+
+A batch run is classified `OBSERVED_MARKET` only when the dataset is `OBSERVED_RETRIEVAL` and the
+batch `as_of` is at most 300 s old at import time; otherwise `RETROSPECTIVE` (or `SYNTHETIC`).
 
 ## 2. Instruments (`astra.instruments.v1`)
 
@@ -110,6 +120,10 @@ index. Bars are classified into `RTH`, `PRE`, `POST` or `OFF` using the exchange
 
 - `external_id` is the dedup key within a source. The whole item is the hashed content;
   any change appends a revision; an unchanged item records a sighting only.
+- Every revision is re-screened (result stored with the revision). A revision that screens
+  potentially material for an item without a candidate creates a `MATERIAL_REVISION`
+  candidate from the revised content; a revision of an item with an open candidate attaches
+  evidence and queues a research request.
 - `retrieved_at` is stored as a source-declared (unverified) value. ASTRA's own first
   observation time is always the software clock at import.
 - Classification per scope (`local:<source name>`): first successful collection →
@@ -131,7 +145,10 @@ Bounded by `ASTRA_SEC_MAX_ISSUERS` (default 25). Requires `ASTRA_SEC_USER_AGENT`
 a name and contact email (SEC fair-access format) — without it no request is sent and the
 run is recorded as failed with the exact reason. Only `filings.recent` metadata is read.
 `acceptanceDateTime` is stored as the publication time with kind `SEC_ACCEPTANCE` (UTC).
-The configured ticker is checked against SEC's `tickers` list (`identity_status`).
+A stock symbol is attached only when SEC's response confirms both the requested CIK and the
+configured ticker (`SEC_CIK_TICKER_MATCH`). `TICKER_MISMATCH`, `CIK_MISMATCH` or no configured
+ticker (`SEC_CIK_ONLY`) leave the symbol empty: candidates carry the issuer CIK only, and no
+price data or outcome is attached to any stock.
 
 ## 7. Research record (`astra.research.v1`)
 
@@ -144,7 +161,9 @@ the validating model. Key rules:
 - `researcher.kind`: `manual`, `ai`, or `sample` (sample requires `is_sample: true`).
 - `what_changed` (+ `when`, `when_basis`), `mechanism` ⊆ {ECON, PROB, NAV, FLOW, SUPPLY, TAPE}.
 - `facts` (with `source_refs`), `inferences` (`based_on`), `unknowns` (`blocks_conclusions`),
-  `sources`, `contrary_evidence`, `competing_explanations`.
+  `sources` (optional `evidence_id` to cite an ASTRA evidence snapshot), `contrary_evidence`,
+  `competing_explanations`. Records with `researcher.kind: ai` may cite only evidence ids or
+  URLs present in the candidate's saved context and may not clear blockers.
 - Sections `economic_materiality`, `valuation_scale`, `liquidity`, `financing`, `dilution`,
   `execution`: `status` = `assessed` | `unknown` | `not_applicable`; an unknown section may
   list the conclusions it blocks — it blocks nothing else. `valuation_scale` assessed requires
@@ -176,4 +195,6 @@ astra --db DB import-hourly-alerts alerts.csv --source-name "Americas Early-Move
 ```
 
 `alert_time_basis` records what the time means (e.g. `message_timestamp`,
-`scheduled_run_boundary`, `unknown`). A blank `delivery_time` stays UNKNOWN.
+`scheduled_run_boundary`, `unknown`). A blank `delivery_time` stays UNKNOWN. Each import is one
+source window: `export comparison` compares it only with scans, signals and candidates inside
+that exact window, and only with that import's alerts (see `docs/OUTCOMES.md`).

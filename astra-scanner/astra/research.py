@@ -42,6 +42,7 @@ class Source(_Strict):
     retrieved_at: str | None = None
     kind: Literal["primary", "secondary", "data", "other"] = "other"
     stance: Literal["supports", "contradicts", "context"] = "context"
+    evidence_id: str | None = None  # an ASTRA evidence snapshot this source refers to
 
 
 class Statement(_Strict):
@@ -272,10 +273,65 @@ def import_research(conn: sqlite3.Connection, data: dict, *, candidate_id: str |
     return {"run_id": run_id, **result}
 
 
+def _collect_urls(obj: Any, out: set[str]) -> None:
+    if isinstance(obj, dict):
+        for k, v in obj.items():
+            if k == "url" and isinstance(v, str) and v.strip():
+                out.add(v.strip())
+            else:
+                _collect_urls(v, out)
+    elif isinstance(obj, list):
+        for v in obj:
+            _collect_urls(v, out)
+
+
+def context_sources(conn: sqlite3.Connection, candidate_id: str) -> list[dict]:
+    """Sources an AI researcher was given for this candidate: linked evidence snapshots and
+    the sources of the latest prior research record. AI research may cite only these."""
+    out: list[dict] = []
+    for r in conn.execute(
+        "SELECT e.evidence_id, e.kind, e.content_json FROM candidate_evidence ce JOIN evidence_snapshots e "
+        "ON e.evidence_id = ce.evidence_id WHERE ce.candidate_id = ? ORDER BY ce.linked_at_utc", (candidate_id,)):
+        urls: set[str] = set()
+        _collect_urls(json.loads(r["content_json"]), urls)
+        out.append({"evidence_id": r["evidence_id"], "kind": r["kind"], "urls": sorted(urls)})
+    cand = cands.get(conn, candidate_id)
+    if cand["latest_research_id"]:
+        rec = json.loads(conn.execute("SELECT content_json FROM research_records WHERE research_id=?",
+                                      (cand["latest_research_id"],)).fetchone()["content_json"])
+        for src in rec.get("sources", []):
+            if src.get("url") or src.get("evidence_id"):
+                out.append({"research_id": cand["latest_research_id"], "title": src.get("title"),
+                            "evidence_id": src.get("evidence_id"), "urls": [src["url"]] if src.get("url") else []})
+    return out
+
+
+def _check_ai_record(conn: sqlite3.Connection, candidate_id: str, rec: "ResearchRecordV1") -> None:
+    """AI works only from saved context: it cannot bring new evidence, so it may cite only
+    sources present in that context and may not clear blockers."""
+    if rec.cleared_blockers:
+        raise AstraError(
+            "AI_BLOCKER_CLEARING_REFUSED: AI research cannot clear blockers because it does not retrieve new "
+            "evidence; clear blockers with manual research citing the clearing evidence"
+        )
+    allowed = context_sources(conn, candidate_id)
+    ids = {a["evidence_id"] for a in allowed if a.get("evidence_id")}
+    urls = {u for a in allowed for u in a["urls"]}
+    bad = [s.ref for s in rec.sources
+           if not ((s.evidence_id and s.evidence_id in ids) or (s.url and s.url.strip() in urls))]
+    if bad:
+        raise AstraError(
+            f"AI_SOURCE_NOT_IN_CONTEXT: sources {bad} are not evidence ids or URLs present in the candidate's "
+            "saved context; AI research may not introduce sources"
+        )
+
+
 def _apply(conn: sqlite3.Connection, cand: sqlite3.Row, rec: ResearchRecordV1, raw: dict, run_id: str, actor: str) -> dict:
     cid = cand["candidate_id"]
     if cand["state"] not in cands.OPEN_STATES:
         raise AstraError(f"candidate {cid} is {cand['state']} (terminal); new evidence needs a new candidate")
+    if rec.researcher.kind == "ai":
+        _check_ai_record(conn, cid, rec)
     if cand["mode"] == "replay" and not rec.retrospective:
         raise AstraError("research on a replay candidate must set retrospective=true (hindsight risk)")
     imported = now()
@@ -357,6 +413,8 @@ def _apply(conn: sqlite3.Connection, cand: sqlite3.Row, rec: ResearchRecordV1, r
             work.schedule(conn, kind="recheck", candidate_id=cid, due_at=due, priority=rec.recheck.priority,
                           dedup_key=f"recheck:{rid}", condition=rec.recheck.condition)
         else:
+            # removing a recheck removes its scheduled job too; a stale job must not fire later
+            work.cancel_pending(conn, cid, "recheck", f"recheck removed by research {rid}")
             updates.update(next_recheck_at_utc=None,
                            next_recheck_condition="UNKNOWN: latest research set no recheck")
         if rec.expiry:

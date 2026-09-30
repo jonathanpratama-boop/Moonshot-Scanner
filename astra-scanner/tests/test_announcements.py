@@ -21,7 +21,10 @@ def test_backlog_then_new_classification_and_candidates(sample_db, clock):
     assert second["NEWLY_FOUND_OLD_INFORMATION"] == 1
     assert second["NEW_OBSERVATION_TIME_UNKNOWN"] == 1
     assert second["sightings_only"] == 1 and second["revisions"] == 1
-    assert second["candidates_created"] == 2
+    # ZSMPF new publication, ZSMPG newly-found-old, and ZSMPA's backlog item whose post-baseline
+    # revision still screens potentially material (MATERIAL_REVISION)
+    assert second["candidates_created"] == 3
+    assert cand_by(sample_db, "ZSMPA", "announcement")["observation_class"] == "MATERIAL_REVISION"
     f = cand_by(sample_db, "ZSMPF", "announcement")
     assert f["observation_class"] == "NEW_PUBLICATION"
     g = cand_by(sample_db, "ZSMPG", "announcement")

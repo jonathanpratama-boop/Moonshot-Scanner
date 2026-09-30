@@ -86,12 +86,33 @@ Covers the "gap" lane that IGNITION deliberately excludes.
 - Upside only. Premarket prints are excluded. Same freshness rule.
 - Thresholds were chosen before any outcome was observed and are unvalidated.
 
+## Known divergence: COMPRESSION plateau lows
+
+ASTRA's review (2026-09-30) found that this COMPRESSION implementation differs from the original
+v1 detector on plateau lows. Here a pivot low must be **strictly** lower than the two bars on each
+side, so equal lows are never pivots. The original `trading/pilot/runner.py` is not in the doctrine
+bundle, so its exact rule cannot be reproduced without guessing. Status: `KNOWN_DIVERGENCE`,
+parity pending the original code and a side-by-side run on identical inputs.
+
+## Cohort eligibility
+
+- Sample runs: `EXCLUDED_SYNTHETIC`.
+- Replay runs: `EXCLUDED_RETROSPECTIVE`.
+- A live-database scan is `PROSPECTIVE_ASTRA_EQ` only if all of these hold:
+  - the dataset is `OBSERVED_RETRIEVAL`;
+  - its latest bar batch was classified `OBSERVED_MARKET` (observed retrieval, at most 300 s old
+    at import);
+  - the data cutoff is at most 300 s before the scan (frozen v1
+    `maximum_prospective_cutoff_age_seconds`).
+- Otherwise it is `EXCLUDED_NOT_PROSPECTIVE: <reasons>` and the run is classified
+  `RETROSPECTIVE`. Importing history into a live database never makes it prospective.
+
 ## Run records and coverage
 
 Each scan run stores: declared universe membership + hash, benchmarks, provider and
 dataset, requested cutoff and data cutoff, detector config versions and hash, cohort
-eligibility (`EXCLUDED_SYNTHETIC`, `EXCLUDED_RETROSPECTIVE`, or
-`PROSPECTIVE_ASTRA_EQ (separate from the authoritative v1 pilot cohort)`), and one
+eligibility (see above; prospective runs are separate from the authoritative v1 pilot cohort),
+and one
 `detector_results` row per member × detector.
 
 Per member: `EVALUATED` (all detectors SIGNAL/NO_SIGNAL), `PARTIAL`, `NOT_EVALUATED`, or

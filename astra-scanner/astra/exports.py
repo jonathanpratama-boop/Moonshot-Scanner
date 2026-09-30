@@ -131,80 +131,123 @@ def _session_of(ts: str | None) -> str | None:
         return None
 
 
+def _run_time(run: sqlite3.Row) -> str | None:
+    """The time a scan represents: actual completion for live runs, the (simulated/data) cutoff otherwise."""
+    return run["completed_at_utc"] if run["mode"] == "live" else run["requested_cutoff_utc"]
+
+
 def export_comparison(conn: sqlite3.Connection, path: str | Path) -> dict[str, Any]:
-    """One row per (session, symbol) inside common coverage."""
-    cov = conn.execute("SELECT * FROM external_alert_coverage ORDER BY coverage_start_utc").fetchall()
-    if not cov:
+    """Compare the scanner with each retained alert source over that source's own window.
+
+    For every alert import (one declared window, one source): only scanner runs, detector
+    signals and ASTRA candidates whose time lies inside that window, and only alerts from
+    that import, are considered. Rows are (window, session, symbol) pairs with at least one
+    fully evaluated scan inside the window (and inside the declared alert universe, if any).
+    An alert is attached to at most one row; every alert not attached is listed with the reason.
+    """
+    windows = conn.execute("SELECT * FROM external_alert_coverage ORDER BY coverage_start_utc, run_id").fetchall()
+    if not windows:
         raise AstraError("no external alert coverage imported; run import-hourly-alerts first")
-    # scanner coverage: per (session, symbol) count of scans and of full evaluations
-    scanner: dict[tuple[str, str], dict[str, Any]] = {}
-    for run in conn.execute("SELECT * FROM runs WHERE kind IN ('anomaly_scan','replay') AND coverage_json IS NOT NULL"):
-        c = json.loads(run["coverage_json"])
-        t = run["requested_cutoff_utc"] if run["mode"] != "live" else run["completed_at_utc"]
-        sess = _session_of(t)
-        for sym, st in (c.get("per_symbol") or {}).items():
-            e = scanner.setdefault((sess, sym), {"scans": 0, "evaluated": 0, "first_time": None, "mode": run["mode"]})
-            e["scans"] += 1
-            e["evaluated"] += 1 if st == "EVALUATED" else 0
-    det_first: dict[tuple[str, str], dict[str, Any]] = {}
-    for r in conn.execute(
-        "SELECT r.symbol, r.detector, u.mode, u.requested_cutoff_utc, u.completed_at_utc FROM detector_results r "
-        "JOIN runs u ON u.run_id=r.run_id WHERE r.status='SIGNAL' ORDER BY u.started_at_utc"):
-        t = r["requested_cutoff_utc"] if r["mode"] != "live" else r["completed_at_utc"]
-        key = (_session_of(t), r["symbol"])
-        e = det_first.setdefault(key, {"time": t, "detectors": set()})
-        e["detectors"].add(r["detector"])
-    cands: dict[tuple[str, str], dict[str, Any]] = {}
+    scan_runs = [r for r in conn.execute(
+        "SELECT * FROM runs WHERE kind IN ('anomaly_scan','replay') AND coverage_json IS NOT NULL "
+        "AND status IN ('completed','partial') ORDER BY started_at_utc")]
+    signals = [r for r in conn.execute(
+        "SELECT r.symbol, r.detector, u.* FROM detector_results r JOIN runs u ON u.run_id=r.run_id "
+        "WHERE r.status='SIGNAL' ORDER BY u.started_at_utc")]
+    all_cands = []
     for c in conn.execute("SELECT * FROM candidates ORDER BY created_at_utc"):
-        t = c["simulated_cutoff_utc"] or (c["data_cutoff_utc"] if c["mode"] == "sample" else c["detected_at_utc"])
         if c["route"] == "announcement" and c["mode"] == "sample":
             a = conn.execute("SELECT published_at_utc FROM announcements WHERE announcement_id=?", (c["announcement_id"],)).fetchone()
             t = a["published_at_utc"] if a and a["published_at_utc"] else c["detected_at_utc"]
-        key = (_session_of(t), c["symbol"])
-        cands.setdefault(key, []).append(c)
-    alerts: dict[tuple[str, str], list] = {}
-    for a in conn.execute("SELECT * FROM external_alerts ORDER BY alert_time_utc"):
-        alerts.setdefault((_session_of(a["alert_time_utc"]), a["symbol"]), []).append(a)
-    rows, excluded = [], []
-    for w in cov:
+        else:
+            t = c["simulated_cutoff_utc"] or (c["data_cutoff_utc"] if c["mode"] == "sample" else c["detected_at_utc"])
+        all_cands.append((t, c))
+    rows, excluded, per_window = [], [], []
+    for w in windows:
+        w0, w1 = w["coverage_start_utc"], w["coverage_end_utc"]
         uni = set(json.loads(w["universe_json"])) if w["universe_json"] else None
-        in_window = lambda sess: sess and w["coverage_start_utc"][:10] <= sess <= w["coverage_end_utc"][:10]  # noqa: E731
-        for (sess, sym), sc in sorted(scanner.items()):
-            if not in_window(sess) or sc["evaluated"] == 0 or (uni is not None and sym not in uni):
+        inside = lambda t: bool(t) and w0 <= t <= w1  # noqa: E731
+        covered: dict[tuple[str, str], dict[str, Any]] = {}
+        for run in scan_runs:
+            t = _run_time(run)
+            if not inside(t):
                 continue
-            d = det_first.get((sess, sym))
-            cs = cands.get((sess, sym), [])
-            al = alerts.get((sess, sym), [])
-            rows.append({
+            for sym, st in (json.loads(run["coverage_json"]).get("per_symbol") or {}).items():
+                if uni is not None and sym not in uni:
+                    continue
+                e = covered.setdefault((_session_of(t), sym), {"scans": 0, "evaluated": 0, "mode": run["mode"]})
+                e["scans"] += 1
+                e["evaluated"] += 1 if st == "EVALUATED" else 0
+        first_signal: dict[tuple[str, str], dict[str, Any]] = {}
+        for r in signals:
+            t = _run_time(r)
+            if inside(t):
+                e = first_signal.setdefault((_session_of(t), r["symbol"]), {"time": t, "detectors": set()})
+                e["detectors"].add(r["detector"])
+        attached: dict[tuple[str, str], list] = {}
+        n_alerts = 0
+        for a in conn.execute("SELECT * FROM external_alerts WHERE run_id=? ORDER BY alert_time_utc", (w["run_id"],)):
+            n_alerts += 1
+            key = (_session_of(a["alert_time_utc"]), a["symbol"])
+            if not a["alert_time_utc"]:
+                reason = "alert time unknown"
+            elif not inside(a["alert_time_utc"]):
+                reason = "alert time outside this source's declared window"
+            elif uni is not None and a["symbol"] not in uni:
+                reason = "symbol outside this source's declared universe"
+            elif covered.get(key, {}).get("evaluated", 0) == 0:
+                reason = "no fully evaluated scanner run for this symbol/session inside this source's window"
+            else:
+                attached.setdefault(key, []).append(a)
+                continue
+            excluded.append({"source_name": w["source_name"], "alert_import_run_id": w["run_id"],
+                             "session_date": key[0], "symbol": a["symbol"], "alert_time_utc": a["alert_time_utc"],
+                             "reason": reason})
+        w_rows = []
+        for (sess, sym), sc in sorted(covered.items()):
+            if sc["evaluated"] == 0:
+                continue
+            d = first_signal.get((sess, sym))
+            cs = [c for t, c in all_cands if inside(t) and c["symbol"] == sym and _session_of(t) == sess]
+            al = attached.get((sess, sym), [])
+            w_rows.append({
+                "alert_source": w["source_name"], "alert_import_run_id": w["run_id"],
+                "window_start_utc": w0, "window_end_utc": w1,
                 "session_date": sess, "symbol": sym, "mode": sc["mode"], "sample_data": sc["mode"] == "sample",
-                "scanner_scans": sc["scans"], "scanner_full_evaluations": sc["evaluated"],
+                "scanner_scans_in_window": sc["scans"], "scanner_full_evaluations_in_window": sc["evaluated"],
                 "detector_only_signal": bool(d), "detector_first_time_utc": d["time"] if d else None,
                 "detector_time_basis": ("actual run completion" if sc["mode"] == "live" else "data/simulated cutoff (not live detection)") if d else None,
                 "detectors": "+".join(sorted(d["detectors"])) if d else None,
                 "astra_candidates": ";".join(f"{c['candidate_id']}:{c['route']}:{c['state']}" for c in cs) or None,
-                "hourly_alert": bool(al), "hourly_first_alert_time_utc": al[0]["alert_time_utc"] if al else None,
+                "hourly_alert": bool(al), "hourly_alerts_count": len(al),
+                "hourly_first_alert_time_utc": al[0]["alert_time_utc"] if al else None,
                 "hourly_alert_time_basis": al[0]["alert_time_basis"] if al else None,
                 "hourly_delivery_time_utc": (al[0]["delivery_time_utc"] or "UNKNOWN") if al else None,
-                "hourly_radar": al[0]["radar"] if al else None, "alert_source": w["source_name"],
+                "hourly_radar": al[0]["radar"] if al else None,
             })
-        for (sess, sym), al in alerts.items():
-            if not any(r["session_date"] == sess and r["symbol"] == sym for r in rows):
-                reason = ("outside declared alert coverage window" if not in_window(sess)
-                          else "no completed scanner coverage for this symbol/session")
-                excluded.append({"session_date": sess, "symbol": sym, "alerts": len(al), "reason": reason})
-    cols = ["session_date", "symbol", "mode", "sample_data", "scanner_scans", "scanner_full_evaluations",
-            "detector_only_signal", "detector_first_time_utc", "detector_time_basis", "detectors", "astra_candidates",
-            "hourly_alert", "hourly_first_alert_time_utc", "hourly_alert_time_basis", "hourly_delivery_time_utc",
-            "hourly_radar", "alert_source"]
-    n = _write(path, rows, cols)
+        rows.extend(w_rows)
+        per_window.append({
+            "source_name": w["source_name"], "alert_import_run_id": w["run_id"], "window_start_utc": w0,
+            "window_end_utc": w1, "alerts_imported": n_alerts,
+            "alerts_in_common_coverage": sum(r["hourly_alerts_count"] for r in w_rows),
+            "rows_in_common_coverage": len(w_rows),
+            "detector_only_signal_rows": sum(1 for r in w_rows if r["detector_only_signal"]),
+            "hourly_alert_rows": sum(1 for r in w_rows if r["hourly_alert"]),
+            "both": sum(1 for r in w_rows if r["hourly_alert"] and r["detector_only_signal"]),
+        })
+    cols = ["alert_source", "alert_import_run_id", "window_start_utc", "window_end_utc", "session_date", "symbol", "mode",
+            "sample_data", "scanner_scans_in_window", "scanner_full_evaluations_in_window", "detector_only_signal",
+            "detector_first_time_utc", "detector_time_basis", "detectors", "astra_candidates", "hourly_alert",
+            "hourly_alerts_count", "hourly_first_alert_time_utc", "hourly_alert_time_basis", "hourly_delivery_time_utc",
+            "hourly_radar"]
+    _write(path, rows, cols)
     summary = {
-        "rows_in_common_coverage": n,
-        "detector_only_signals": sum(1 for r in rows if r["detector_only_signal"]),
-        "hourly_alert_rows": sum(1 for r in rows if r["hourly_alert"]),
-        "both": sum(1 for r in rows if r["hourly_alert"] and r["detector_only_signal"]),
-        "excluded_alerts_outside_common_coverage": excluded,
+        "per_window": per_window,
+        "excluded_alerts": excluded,
         "caveats": [
-            "common coverage = symbol-session pairs with at least one fully evaluated scanner run inside the declared alert window/universe",
+            "each alert source is compared only over its own declared window (exact times, not calendar days) and universe",
+            "scanner scans, detector signals and ASTRA candidates count for a window only if their time lies inside it",
+            "each alert is attached to at most one row or listed as excluded with its reason; windows are not summed",
             "hourly alert delivery time is UNKNOWN unless supplied; alert time basis is as declared by the importer",
             "sample/replay times are data or simulated cutoffs, not live detection times",
             "counts are descriptive; they do not establish accuracy, lead time or trading performance",

@@ -76,7 +76,7 @@ def calls_today(conn: sqlite3.Connection) -> int:
     ).fetchone()[0]
 
 
-def check_gate(conn: sqlite3.Connection, s: AISettings) -> None:
+def check_static_gate(s: AISettings) -> None:
     if s.paid_calls != "enabled":
         raise AIGateError("AI_RESEARCH_DISABLED: set ASTRA_AI_PAID_CALLS=enabled to allow paid calls "
                           "(an API key alone never activates them). Manual research import remains available.")
@@ -86,9 +86,44 @@ def check_gate(conn: sqlite3.Connection, s: AISettings) -> None:
         raise AIGateError(f"ASTRA_AI_EFFORT={s.effort!r} invalid")
     if s.fallbacks not in ("default", "off"):
         raise AIGateError("ASTRA_AI_FALLBACKS must be 'default' or 'off'")
+
+
+def _daily_limit_error(used: int, s: AISettings) -> AIGateError:
+    return AIGateError(f"AI_DAILY_LIMIT: {used} calls reserved or made in the last 24h >= "
+                       f"ASTRA_AI_MAX_CALLS_PER_DAY={s.max_calls_per_day}")
+
+
+def check_gate(conn: sqlite3.Connection, s: AISettings) -> None:
+    """Advisory pre-check (e.g. before claiming backlog work). The binding check is reserve_call."""
+    check_static_gate(s)
     used = calls_today(conn)
     if used >= s.max_calls_per_day:
-        raise AIGateError(f"AI_DAILY_LIMIT: {used} calls in the last 24h >= ASTRA_AI_MAX_CALLS_PER_DAY={s.max_calls_per_day}")
+        raise _daily_limit_error(used, s)
+
+
+def reserve_call(conn: sqlite3.Connection, s: AISettings, base: dict, input_chars: int) -> None:
+    """Atomically count the last 24h and reserve one call before any request is sent.
+
+    Runs inside BEGIN IMMEDIATE, so overlapping processes serialize here: at most
+    max_calls_per_day reservations exist per 24h. A reservation whose process dies before
+    finishing stays 'reserved' and keeps counting (conservative: it may have been billed).
+    """
+    err = None
+    with tx(conn):
+        used = calls_today(conn)
+        if used >= s.max_calls_per_day:
+            err = _daily_limit_error(used, s)
+            _record_call(conn, **base, status="blocked_by_gate", attempts=0, input_chars=input_chars, error=str(err))
+        else:
+            _record_call(conn, **base, status="reserved", attempts=0, input_chars=input_chars)
+    if err is not None:  # raised after commit so the refusal itself is recorded
+        raise err
+
+
+def _finish_call(conn: sqlite3.Connection, call_id: str, **cols: Any) -> None:
+    sets = ", ".join(f"{k} = ?" for k in cols)
+    with tx(conn):
+        conn.execute(f"UPDATE ai_calls SET {sets} WHERE call_id = ? AND status = 'reserved'", (*cols.values(), call_id))
 
 
 def make_client(s: AISettings) -> MessagesClient:
@@ -104,7 +139,10 @@ that follows the schema astra.research.v1 described below, and nothing else (no 
 
 Rules:
 - Separate facts (each citing source refs from the provided context), inferences (based_on fact ids) and unknowns.
-- Use only sources present in the provided context. Do not invent sources, prices, share counts or dates.
+- Cite only sources listed in allowed_sources: every entry in "sources" must carry either an "evidence_id" or a "url"
+  taken from allowed_sources. Records citing anything else are rejected. Do not invent sources, prices, share counts
+  or dates.
+- You cannot clear blockers (cleared_blockers must be empty): you receive no new evidence. Re-list every open blocker.
 - Do not give return targets or trading instructions. Subjective probabilities are optional and only for an exact,
   scoreable event with a deadline, labelled UNCALIBRATED_JUDGMENT.
 - A missing input blocks only the conclusions that depend on it: mark that section status "unknown" and list
@@ -117,13 +155,12 @@ Rules:
 Schema (fields): schema_version="astra.research.v1"; what_changed{summary, when, when_basis in
 [source_publication, source_public_availability, first_observation, unknown]}; mechanism: non-empty list from
 [ECON, PROB, NAV, FLOW, SUPPLY, TAPE]; facts[{id,text,source_refs}]; inferences[{id,text,based_on}];
-unknowns[{item,blocks_conclusions}]; sources[{ref,title,url,publisher,published_at,retrieved_at,kind in
+unknowns[{item,blocks_conclusions}]; sources[{ref,title,url,evidence_id,publisher,published_at,retrieved_at,kind in
 [primary,secondary,data,other],stance in [supports,contradicts,context]}]; contrary_evidence[{id,text,source_refs}];
 competing_explanations[str]; economic_materiality, liquidity, financing, dilution, execution: each
 {status in [assessed,unknown,not_applicable], summary, source_refs, blocks_conclusions};
 valuation_scale{same fields plus price, price_time, economic_shares, shares_source_ref};
-remaining_uncertainty; blockers[]; cleared_blockers[{key,clearing_evidence,source_refs}] for any open blocker you
-can clear with cited evidence; recheck{due_in (ISO-8601 duration like P1D) , condition, priority in [urgent,routine]}
+remaining_uncertainty; blockers[] (re-list every open blocker); cleared_blockers: always []; recheck{due_in (ISO-8601 duration like P1D) , condition, priority in [urgent,routine]}
 or null; expiry{due_in, condition} or null; proposed_disposition; disposition_rationale;
 revision_reason_type (required when prior research exists) in [NEW_EVENT, PRICE_OR_CONDITION_CHANGE,
 CORRECTED_INPUT, NEWLY_FOUND_OLD_INFORMATION, CHANGED_INFERENCE]; subjective_probabilities[]."""
@@ -144,6 +181,7 @@ def build_context(conn: sqlite3.Connection, candidate_id: str) -> dict:
         "open_blockers": cands.open_blockers(conn, candidate_id),
         "prior_research": latest,
         "evidence": ev,
+        "allowed_sources": research.context_sources(conn, candidate_id),
     }
 
 
@@ -166,7 +204,7 @@ def investigate(conn: sqlite3.Connection, candidate_id: str, *, settings: AISett
     base = {"call_id": call_id, "candidate_id": candidate_id, "provider": s.provider or "none", "model": s.model,
             "requested_at_utc": now_str()}
     try:
-        check_gate(conn, s)
+        check_static_gate(s)
     except AIGateError as exc:
         with tx(conn):
             _record_call(conn, **base, status="blocked_by_gate", attempts=0, error=str(exc))
@@ -179,6 +217,7 @@ def investigate(conn: sqlite3.Connection, candidate_id: str, *, settings: AISett
                          error=f"context {len(user)} chars exceeds ASTRA_AI_MAX_INPUT_CHARS={s.max_input_chars}; not truncated")
         raise AstraError("AI_INPUT_TOO_LARGE: context not sent (no silent truncation)")
     client = client or make_client(s)
+    reserve_call(conn, s, base, len(user))
     kwargs: dict[str, Any] = {
         "model": s.model, "max_tokens": s.max_output_tokens, "system": SYSTEM_PROMPT,
         "messages": [{"role": "user", "content": user}], "output_config": {"effort": s.effort},
@@ -188,10 +227,9 @@ def investigate(conn: sqlite3.Connection, candidate_id: str, *, settings: AISett
     try:
         resp = client.beta.messages.create(**kwargs)
     except Exception as exc:  # SDK already retried within ASTRA_AI_MAX_RETRIES
-        with tx(conn):
-            _record_call(conn, **base, status="error", attempts=1 + s.max_retries, input_chars=len(user),
-                         http_status=getattr(exc, "status_code", None), error=f"{type(exc).__name__}: {exc}"[:2000],
-                         completed_at_utc=now_str())
+        _finish_call(conn, call_id, status="error", attempts=1 + s.max_retries,
+                     http_status=getattr(exc, "status_code", None), error=f"{type(exc).__name__}: {exc}"[:2000],
+                     completed_at_utc=now_str())
         raise AstraError(f"AI_CALL_FAILED: {type(exc).__name__}: {exc}") from exc
     usage = getattr(resp, "usage", None)
     out_tokens = getattr(usage, "output_tokens", None)
@@ -221,9 +259,8 @@ def investigate(conn: sqlite3.Connection, candidate_id: str, *, settings: AISett
                                               source_label=f"ai_call {call_id}")
         except (ValueError, AstraError) as exc:
             status, error = "invalid_output", f"{type(exc).__name__}: {exc}"[:2000]
-    with tx(conn):
-        _record_call(conn, **{**base, "model": served}, status=status, attempts=1, input_chars=len(user),
-                     output_tokens=out_tokens, error=error, response_excerpt=text[:4000], completed_at_utc=now_str())
+    _finish_call(conn, call_id, model=served, status=status, attempts=1, output_tokens=out_tokens, error=error,
+                 response_excerpt=text[:4000], completed_at_utc=now_str())
     if status != "succeeded":
         raise AstraError(f"AI_RESEARCH_{status.upper()}: {error}")
     return {"call_id": call_id, "model": served, "output_tokens": out_tokens, **result}

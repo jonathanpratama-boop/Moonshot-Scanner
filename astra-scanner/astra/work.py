@@ -45,8 +45,18 @@ def claim(conn: sqlite3.Connection, worker: str, kinds: tuple[str, ...], limit: 
     pri_sql, pri_args = ("AND priority = ?", (priority,)) if priority else ("", ())
     claimed = []
     with tx(conn):
+        # A lease that expired after the last permitted attempt means the worker died mid-job
+        # every time: dead-letter it instead of granting attempts beyond max_attempts.
+        for r in conn.execute("SELECT * FROM work_items WHERE status='leased' AND lease_expires_at_utc < ? "
+                              "AND attempts >= max_attempts", (t,)).fetchall():
+            err = (f"lease expired after attempt {r['attempts']}/{r['max_attempts']} held by {r['lease_owner']} "
+                   "(worker interrupted); not retried")
+            conn.execute("UPDATE work_items SET status='dead', last_error=?, lease_owner=NULL, lease_expires_at_utc=NULL, "
+                         "updated_at_utc=? WHERE work_id=? AND status='leased'", (err, t, r["work_id"]))
+            conn.execute("INSERT INTO work_attempts VALUES (?,?,?,?,?,?,?)",
+                         (new_id("wat"), r["work_id"], worker, t, "dead_lease_expired", err, None))
         rows = conn.execute(
-            f"SELECT * FROM work_items WHERE kind IN ({marks}) {pri_sql} AND "
+            f"SELECT * FROM work_items WHERE kind IN ({marks}) {pri_sql} AND attempts < max_attempts AND "
             "((status='pending' AND due_at_utc <= ?) OR (status='leased' AND lease_expires_at_utc < ?)) "
             "ORDER BY priority='urgent' DESC, due_at_utc LIMIT ?",
             (*kinds, *pri_args, t, t, limit),
@@ -54,7 +64,7 @@ def claim(conn: sqlite3.Connection, worker: str, kinds: tuple[str, ...], limit: 
         for r in rows:
             cur = conn.execute(
                 "UPDATE work_items SET status='leased', lease_owner=?, lease_expires_at_utc=?, attempts=attempts+1, "
-                "updated_at_utc=? WHERE work_id=? AND ((status='pending' AND due_at_utc <= ?) OR "
+                "updated_at_utc=? WHERE work_id=? AND attempts < max_attempts AND ((status='pending' AND due_at_utc <= ?) OR "
                 "(status='leased' AND lease_expires_at_utc < ?))",
                 (worker, lease_until, t, r["work_id"], t, t),
             )

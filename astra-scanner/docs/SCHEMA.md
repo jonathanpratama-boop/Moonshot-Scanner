@@ -45,6 +45,18 @@ mode; foreign keys on.
 | `external_alert_coverage` | config | declared coverage window/universe per alert import |
 | `ai_calls` | audit | every AI gate decision and call (blocked, succeeded, refused, invalid…) |
 
+## Migration `0002_review_round1.sql` (additive)
+
+- `outcome_subjects`: `reference_time_utc`, `reference_revision_no`, `benchmark_reference_revision_no`.
+- `outcome_observations`: `endpoint_revision_no`.
+- `announcement_revisions`: `screen_version`, `screen_result`, `screen_reasons_json`.
+
+Existing rows keep NULL in these columns. `ai_calls.status` gains the value `reserved`
+(allowance reserved before a request; updated in place when the call finishes). Bar
+`availability_basis` gains `REVISION_AT_BATCH_AS_OF` and `LATE_ARRIVAL_AT_BATCH_AS_OF`.
+Verified on 2026-09-30 by upgrading a database created at `39c9c78`: both migrations are recorded,
+the 117 EQ-1 subjects are retained and not evaluated, and new EQ-2 subjects are created.
+
 ## Migrations
 
 - `astra init --mode …` creates the file and applies all migrations; every other command

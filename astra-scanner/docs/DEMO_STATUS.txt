@@ -1,16 +1,16 @@
 ========================================================================
 SAMPLE DATA - synthetic fixtures; nothing below is a market observation
 ========================================================================
-Mode: sample    generated 2026-09-30T11:30:56Z
+Mode: sample    generated 2026-09-30T16:56:07Z
 Latest scan: COVERAGE INCOMPLETE: 2 of 7 members not fully evaluated; absence of signals for them is not a negative market result
-  bar_import           last success 2026-09-30T11:30:55Z, data cutoff 2026-09-24T20:30:00Z
-  announcement_import  last success 2026-09-30T11:30:54Z
+  bar_import           last success 2026-09-30T16:56:06Z, data cutoff 2026-09-24T20:30:00Z
+  announcement_import  last success 2026-09-30T16:56:05Z
   sec_collection       last success never
-  anomaly_scan         last success 2026-09-30T11:30:55Z, data cutoff 2026-09-17T15:00:30Z
+  anomaly_scan         last success 2026-09-30T16:56:06Z, data cutoff 2026-09-17T15:00:30Z
   replay               last success never
-Candidates by state: {'DETECTED': 2, 'REJECTED': 1, 'RESEARCHED': 2}
-Backlog: {'research_requests_pending': 2, 'due_now': 0, 'scheduled_future': 6, 'leased': 0, 'dead': 0, 'retrying': 0}
-Notifications: {'acknowledged': 1, 'attempted': 10}    Outcomes (current): {'CENSORED': 2, 'MEASURED': 23, 'UNKNOWN': 2}
+Candidates by state: {'DETECTED': 3, 'REJECTED': 1, 'RESEARCHED': 2}
+Backlog: {'research_requests_pending': 3, 'due_now': 0, 'scheduled_future': 7, 'leased': 0, 'dead': 0, 'retrying': 0}
+Notifications: {'acknowledged': 1, 'attempted': 11}    Outcomes (current): {'CENSORED': 2, 'MEASURED': 18, 'UNKNOWN': 13}
 Note: Research signals only: no orders, holdings or entry permission exist in this prototype.
 Note: Detectors are UNVALIDATED experiments; no predictive accuracy is claimed.
 Note: Coverage is limited to declared universes, datasets and configured SEC issuers.

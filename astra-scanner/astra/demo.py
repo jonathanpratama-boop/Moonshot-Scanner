@@ -167,8 +167,13 @@ def run_demo(db_path: Path, reset: bool = False) -> dict:
     export_detector_results(conn, out_dir / "detector_results.csv")
     export_outcomes(conn, out_dir / "outcomes.csv")
     export_runs(conn, out_dir / "runs.csv")
-    print(f"  comparison: rows={cmp_summary['rows_in_common_coverage']} detector_only={cmp_summary['detector_only_signals']} "
-          f"hourly={cmp_summary['hourly_alert_rows']} both={cmp_summary['both']} excluded={len(cmp_summary['excluded_alerts_outside_common_coverage'])}")
+    for w in cmp_summary["per_window"]:
+        print(f"  comparison [{w['source_name']} {w['window_start_utc']}..{w['window_end_utc']}]: rows={w['rows_in_common_coverage']} "
+              f"detector_only={w['detector_only_signal_rows']} hourly={w['hourly_alert_rows']} both={w['both']} "
+              f"alerts {w['alerts_in_common_coverage']}/{w['alerts_imported']} in common coverage")
+    _check(sum(w["alerts_in_common_coverage"] for w in cmp_summary["per_window"]) + len(cmp_summary["excluded_alerts"])
+           == sum(w["alerts_imported"] for w in cmp_summary["per_window"]),
+           "every imported alert is either in common coverage once or excluded with a reason")
     print(f"  exports written to {out_dir}")
 
     states = dict(conn.execute("SELECT state, count(*) FROM candidates GROUP BY state").fetchall())

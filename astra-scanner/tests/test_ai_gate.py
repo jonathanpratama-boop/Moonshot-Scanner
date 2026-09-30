@@ -13,13 +13,13 @@ from astra.core import AstraError
 from .conftest import cand_by
 
 
-def blocked_output() -> dict:
+def blocked_output(evidence_id: str = "EVIDENCE_ID_UNSET") -> dict:
     return {
         "what_changed": {"summary": "Compression detector fired; no catalyst in context.", "when_basis": "unknown"},
         "mechanism": ["TAPE"],
         "facts": [{"id": "F1", "text": "Detector evidence shows compression.", "source_refs": ["S1"]}],
         "inferences": [], "unknowns": [{"item": "catalyst", "blocks_conclusions": ["mechanism_attribution"]}],
-        "sources": [{"ref": "S1", "title": "frozen evidence", "kind": "data", "stance": "context"}],
+        "sources": [{"ref": "S1", "title": "frozen evidence", "kind": "data", "stance": "context", "evidence_id": evidence_id}],
         "contrary_evidence": [], "competing_explanations": [],
         "economic_materiality": {"status": "unknown"}, "liquidity": {"status": "unknown"},
         "financing": {"status": "unknown"}, "dilution": {"status": "unknown"}, "execution": {"status": "unknown"},
@@ -76,7 +76,7 @@ def test_api_key_alone_never_activates_paid_calls(scanned_db, monkeypatch):
 
 def test_enabled_adapter_with_fake_response_imports_ai_research(scanned_db):
     b = cand_by(scanned_db, "ZSMPB", "anomaly")
-    fake = client_with(resp(json.dumps(blocked_output())))
+    fake = client_with(resp(json.dumps(blocked_output(b["origin_evidence_id"]))))
     out = ai.investigate(scanned_db, b["candidate_id"], settings=enabled(max_output_tokens=2000), client=fake)
     kw = fake.beta.messages.calls[0]
     assert kw["model"] == "claude-opus-5-5" and kw["max_tokens"] == 2000
@@ -92,7 +92,7 @@ def test_enabled_adapter_with_fake_response_imports_ai_research(scanned_db):
 
 def test_fallbacks_can_be_switched_off(scanned_db):
     b = cand_by(scanned_db, "ZSMPB", "anomaly")
-    fake = client_with(resp(json.dumps(blocked_output())))
+    fake = client_with(resp(json.dumps(blocked_output(b["origin_evidence_id"]))))
     ai.investigate(scanned_db, b["candidate_id"], settings=enabled(fallbacks="off"), client=fake)
     assert "fallbacks" not in fake.beta.messages.calls[0] and "betas" not in fake.beta.messages.calls[0]
 
@@ -104,7 +104,7 @@ def test_fallbacks_can_be_switched_off(scanned_db):
 ])
 def test_untrusted_model_output_cannot_change_permissions(scanned_db, mutate, expect):
     b = cand_by(scanned_db, "ZSMPB", "anomaly")
-    data = blocked_output()
+    data = blocked_output(b["origin_evidence_id"])
     mutate(data)
     with pytest.raises(AstraError):
         ai.investigate(scanned_db, b["candidate_id"], settings=enabled(), client=client_with(resp(json.dumps(data))))
@@ -130,15 +130,28 @@ def test_daily_cap_and_input_limit(scanned_db):
         ai.investigate(scanned_db, b["candidate_id"], settings=enabled(max_input_chars=500), client=fake)
     assert fake.beta.messages.calls == []
     ai.investigate(scanned_db, b["candidate_id"], settings=enabled(max_calls_per_day=1),
-                   client=client_with(resp(json.dumps(blocked_output()))))
+                   client=client_with(resp(json.dumps(blocked_output(b["origin_evidence_id"])))))
     with pytest.raises(ai.AIGateError, match="AI_DAILY_LIMIT"):
         ai.investigate(scanned_db, b["candidate_id"], settings=enabled(max_calls_per_day=1), client=client_with())
 
 
 def test_backlog_is_bounded_per_invocation(scanned_db):
-    fake = client_with(resp(json.dumps(blocked_output())))
+    import re
+
+    calls = []
+
+    class Answering:
+        """Answers for whichever candidate the adapter asks about, citing its own frozen evidence."""
+
+        def create(self, **kw):
+            calls.append(kw)
+            cid = re.search(r'"candidate_id":"(cand_[0-9a-f]+)"', kw["messages"][0]["content"]).group(1)
+            ev = scanned_db.execute("SELECT origin_evidence_id FROM candidates WHERE candidate_id=?", (cid,)).fetchone()[0]
+            return resp(json.dumps(blocked_output(ev)))
+
+    fake = SimpleNamespace(beta=SimpleNamespace(messages=Answering()))
     out = ai.run_backlog(scanned_db, settings=enabled(max_calls_per_run=1), client=fake)
-    assert out["claimed"] == 1 and len(fake.beta.messages.calls) == 1
+    assert out["claimed"] == 1 and len(calls) == 1 and out["results"][0]["ok"] is True
 
 
 def test_official_sdk_request_shape_and_retry_with_mock_transport(scanned_db):
@@ -151,7 +164,7 @@ def test_official_sdk_request_shape_and_retry_with_mock_transport(scanned_db):
         if len(seen) == 1:
             return httpx2.Response(429, headers={"retry-after": "0"}, json={"type": "error", "error": {"type": "rate_limit_error", "message": "slow down"}})
         body = {"id": "msg_test", "type": "message", "role": "assistant", "model": "claude-opus-5-5",
-                "content": [{"type": "text", "text": json.dumps(blocked_output())}], "stop_reason": "end_turn",
+                "content": [{"type": "text", "text": json.dumps(blocked_output(b["origin_evidence_id"]))}], "stop_reason": "end_turn",
                 "stop_sequence": None, "usage": {"input_tokens": 10, "output_tokens": 42}}
         return httpx2.Response(200, json=body)
 

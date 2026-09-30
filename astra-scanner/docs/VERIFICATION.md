@@ -5,6 +5,52 @@ bundled with CPython, dependency versions as pinned in `requirements.txt`; optio
 `anthropic==1.9.0` installed for one SDK-level test. Clock: system UTC. Date: 2026-09-30.
 **Not executed on macOS**; the target machine path `/Users/jonathanpratama/...` did not exist here.
 
+## Current state — after review round 1 (2026-09-30)
+
+ASTRA's review of `39c9c78` reproduced nine integrity defects (listed in `docs/REVIEW_ROUND1.md`).
+Each was rebuilt as a failing test in `tests/test_review_round1.py`. The reviewer's own scripts
+were not available, so these are independent reconstructions. Each test was **observed failing on
+the unfixed code**:
+
+| Defect | Observed failure before the fix |
+|---|---|
+| future correction in replay | Sep-24 correction had `available_at 2026-09-17T14:05:30Z`; gap fill likewise |
+| SEC wrong stock | 16 Apple filings stored with symbol `GOOG` |
+| AI invented evidence | record with non-context URLs cleared both blockers (no error raised) |
+| outcome timing | `OBSERVATION_BAR_REFERENCE` observed `2026-09-30T12:01:00Z` measured to an endpoint closing `2026-09-18T20:00:00Z` |
+| benchmark contamination | frozen benchmark reference `486.1931` (corrected) instead of `482.1931` |
+| comparison | rows attributed to source A from a scan outside A's window |
+| material revision | no candidate (None) and 0 research requests |
+| recheck removal / crash loop | 1 active recheck after removal; 4 claims on a 2-attempt job |
+| AI daily cap | overlapping second call returned `ran` under a 1-call limit |
+| cohort label | historical import scanned in a live DB labelled `PROSPECTIVE_ASTRA_EQ` |
+
+After the fixes, the following results were observed:
+
+- `python -m pytest -v` → **85 passed** (68 earlier tests, some with expectations updated as
+  documented in `docs/REVIEW_ROUND1.md`, plus 17 review tests). Full output:
+  `docs/TEST_RESULTS.txt`. Clean `pip` environment from `requirements.txt` → **84 passed,
+  1 skipped** (optional SDK), 1 test-only deprecation warning.
+- `astra demo --reset` → **27 checks ok** (new: every imported alert is counted once or excluded
+  with a reason). Candidate states DETECTED 3 / RESEARCHED 2 / REJECTED 1. Outcomes after stage 2:
+  18 MEASURED, 13 UNKNOWN (stale observation references, the material-revision pre-event
+  reference, missing endpoints), 2 CENSORED. Transcript: `docs/DEMO_TRANSCRIPT.txt`.
+- Dashboard: 28 pages (all candidate and run pages) HTTP 200, no leaked `None`.
+- Migration: a database created at `39c9c78` opened cleanly with `0002` applied. Its 117 EQ-1
+  subjects were retained and left unevaluated; new EQ-2 subjects were created and measured.
+- `scripts/verify_doctrine.py` → ALL MATCH. `ruff` (pyflakes rules) clean.
+
+**Still not established:**
+- COMPRESSION parity with the original v1 engine: known plateau-low divergence; original code
+  needed.
+- Any comparison against **real** retained alerts.
+- A live SEC run with a compliant User-Agent.
+- Live market data.
+- Predictive value.
+
+Sections 1–7 below record the original build verification at `39c9c78` as observed then; the
+numbers there predate the corrections.
+
 ## 1. Doctrine sources
 
 - The original project path was not accessible. The user uploaded

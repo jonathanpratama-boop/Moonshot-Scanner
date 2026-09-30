@@ -20,7 +20,7 @@ cd astra-scanner
 python3 -m venv .venv
 .venv/bin/pip install -r requirements.txt
 .venv/bin/pip install -e . --no-deps
-.venv/bin/python -m pytest -q          # 68 tests, ~1 minute, no network
+.venv/bin/python -m pytest -q          # 85 tests, ~1.5 minutes, no network
 ```
 
 No accounts or keys are needed for the demonstration. `requirements-ai.txt` is only for
@@ -75,4 +75,5 @@ astra --db DB export candidates|detector-results|outcomes|runs|comparison --out 
 | `docs/CALENDAR.md` | exchange calendar rules, sources and known conflicts |
 | `docs/SCHEMA.md` | database tables and migration procedure |
 | `docs/VERIFICATION.md` | commands actually executed and observed results |
+| `docs/REVIEW_ROUND1.md` | review findings of 2026-09-30, root causes, fixes and reproduction tests |
 | `doctrine/DOCTRINE_REFERENCE.md` | doctrine sources read, hashes, adopted rules, open conflicts |

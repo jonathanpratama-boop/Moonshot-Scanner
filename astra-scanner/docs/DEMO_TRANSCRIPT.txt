@@ -1,11 +1,11 @@
 SAMPLE DATA DEMONSTRATION - synthetic fixtures, sample research, no network, no paid calls
-database: <project>/var/demo.db   started (actual clock): 2026-09-30T11:30:53Z   ops revision: ASTRA-OPS-20260929-r1.2
+database: <project>/var/demo.db   started (actual clock): 2026-09-30T16:56:04Z   ops revision: ASTRA-OPS-20260929-r1.2
 
 === STEP 1: sample import (dataset, instruments, universe, stage-1 bars, announcements) ===
-  bars stage 1: {'run_id': 'run_326599df815740ad', 'as_of': '2026-09-17T15:00:30Z', 'rows': 9501, 'inserted': 9501, 'revised': 0, 'unchanged': 0, 'data_conflict': 1, 'forming': 7, 'identical_duplicates': 0, 'calendar_unavailable': 0}
+  bars stage 1: {'run_id': 'run_9335607a2f054c7a', 'as_of': '2026-09-17T15:00:30Z', 'rows': 9501, 'inserted': 9501, 'revised': 0, 'unchanged': 0, 'data_conflict': 1, 'forming': 7, 'identical_duplicates': 0, 'calendar_unavailable': 0}
   ok: one DATA_CONFLICT bar quarantined, 7 forming bars retained but unusable
   ok: first collection is baseline backlog: no candidates
-  announcements second import: {'NEW_PUBLICATION': 1, 'NEWLY_FOUND_OLD_INFORMATION': 1, 'NEW_OBSERVATION_TIME_UNKNOWN': 1, 'sightings_only': 1, 'revisions': 1, 'candidates_created': 2}
+  announcements second import: {'NEW_PUBLICATION': 1, 'NEWLY_FOUND_OLD_INFORMATION': 1, 'NEW_OBSERVATION_TIME_UNKNOWN': 1, 'sightings_only': 1, 'revisions': 1, 'candidates_created': 3}
   ok: new item, one revision and one duplicate sighting
   ok: re-importing the same file creates no duplicates
 
@@ -17,16 +17,16 @@ database: <project>/var/demo.db   started (actual clock): 2026-09-30T11:30:53Z  
   ok: re-running the same scan creates no duplicate candidates
 
 === STEP 3: frozen evidence (saved before research, read back) ===
-  ok: ZSMPA evidence ev_516eb0478fa14fac hash c42578817e31 read back; research not yet done
-  ok: ZSMPB evidence ev_68672564f77e463f hash 2acaaddc9be2 read back; research not yet done
-  ok: ZSMPG evidence ev_4c3cf5e5717b4213 hash e3d4abd952b2 read back; research not yet done
+  ok: ZSMPA evidence ev_0087b706b8c74af3 hash c42578817e31 read back; research not yet done
+  ok: ZSMPB evidence ev_0f5a4b693d1841f5 hash 2acaaddc9be2 read back; research not yet done
+  ok: ZSMPG evidence ev_e750032188aa47a2 hash e3d4abd952b2 read back; research not yet done
   ok: evidence rows are append-only (UPDATE aborted by trigger)
 
 === STEP 4: research import (sample research) and state update ===
   ok: ZSMPA -> BLOCKED with 2 blockers and clearing evidence requirements
   ok: ZSMPF announcement candidate -> RESEARCHED (no price move needed)
   ok: ZSMPG anomaly -> REJECTED with retained reason
-  ok: invalid transition refused: invalid transition REJECTED -> RESEARCHED for cand_cf527ea82d424b6d
+  ok: invalid transition refused: invalid transition REJECTED -> RESEARCHED for cand_827fc293e5a14481
   ok: ENTRY_ELIGIBLE refused (reserved; no readiness in prototype)
   ok: paid AI research disabled by default (gate refused, no request sent)
 
@@ -37,21 +37,22 @@ database: <project>/var/demo.db   started (actual clock): 2026-09-30T11:30:53Z  
   ok: untrusted source text is escaped
 
 === STEP 6: due recheck processing (interruption-safe queue) ===
-  urgent: {'claimed': 1, 'done': 1}  routine: {'claimed': 0}  backlog: 3
+  urgent: {'claimed': 1, 'done': 1}  routine: {'claimed': 0}  backlog: 4
   ok: the due urgent recheck for ZSMPA was processed and queued for research
   ok: revision cleared both blockers with cited evidence: BLOCKED -> RESEARCHED
 
 === STEP 7: outcome records (stage-2 bars arrive, forward outcomes measured) ===
-  outcome statuses before stage 2: ['MEASURED', 'PENDING_DATA']
+  outcome statuses before stage 2: ['MEASURED', 'PENDING_DATA', 'UNKNOWN']
   ok: forming bars from stage 1 were appended as completed revisions (originals kept)
-  outcomes: {'subjects': 9, 'appended': 24, 'MEASURED': 23, 'PENDING_DATA': 0, 'UNKNOWN': 2, 'CENSORED': 2}
+  outcomes: {'subjects': 11, 'appended': 18, 'MEASURED': 18, 'PENDING_DATA': 0, 'UNKNOWN': 13, 'CENSORED': 2}
   ok: MEASURED, UNKNOWN (missing endpoint bar) and CENSORED (coverage ended) all recorded
 
 === STEP 8: notifications (local preview only), comparison exports ===
-  ok: 11 notifications written to local outbox; external channel not configured
-  notification statuses: {'acknowledged': 1, 'attempted': 10}
-  comparison: rows=5 detector_only=3 hourly=2 both=2 excluded=2
+  ok: 12 notifications written to local outbox; external channel not configured
+  notification statuses: {'acknowledged': 1, 'attempted': 11}
+  comparison [SAMPLE hourly radar 2026-09-17T13:00:00Z..2026-09-17T21:00:00Z]: rows=5 detector_only=3 hourly=2 both=2 alerts 2/4 in common coverage
+  ok: every imported alert is either in common coverage once or excluded with a reason
   exports written to <project>/var/demo_exports
 
-DEMO COMPLETE (actual clock 2026-09-30T11:30:56Z). Candidate states: {'DETECTED': 2, 'REJECTED': 1, 'RESEARCHED': 2}
+DEMO COMPLETE (actual clock 2026-09-30T16:56:07Z). Candidate states: {'DETECTED': 3, 'REJECTED': 1, 'RESEARCHED': 2}
 Start the dashboard:  astra --db <project>/var/demo.db serve   ->  http://127.0.0.1:8765

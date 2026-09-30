@@ -244,6 +244,37 @@ def _truthy(v: Any) -> bool | None:
     return None
 
 
+# Frozen v1 maximum_prospective_cutoff_age_seconds: a batch counts as a live observation only
+# when its snapshot time is this close to the actual import/scan time.
+MAX_PROSPECTIVE_AGE_SECONDS = 300
+
+
+def batch_classification(ds: Any, as_of_dt: datetime) -> str:
+    if ds["is_sample"]:
+        return "SYNTHETIC"
+    if ds["availability_basis"] == "OBSERVED_RETRIEVAL" and (now() - as_of_dt).total_seconds() <= MAX_PROSPECTIVE_AGE_SECONDS:
+        return "OBSERVED_MARKET"
+    return "RETROSPECTIVE"  # historical file, assumed availability, or a stale observed snapshot
+
+
+def _prior_coverage(conn: sqlite3.Connection, dataset_id: str, symbols: set[str]) -> dict[str, tuple[str, str]]:
+    """Per symbol: (earliest bar start, latest batch as_of) already delivered for this dataset.
+
+    Bars inside that span that were absent from earlier batches are late arrivals.
+    """
+    out: dict[str, tuple[str, str]] = {}
+    for sym in symbols:
+        row = conn.execute(
+            "SELECT (SELECT min(start_utc) FROM bar_revisions WHERE dataset_id=:ds AND symbol=:s) AS s0, "
+            "(SELECT max(u.data_cutoff_utc) FROM runs u WHERE u.run_id IN "
+            " (SELECT DISTINCT run_id FROM bar_revisions WHERE dataset_id=:ds AND symbol=:s)) AS c",
+            {"ds": dataset_id, "s": sym},
+        ).fetchone()
+        if row["s0"] and row["c"]:
+            out[sym] = (row["s0"], row["c"])
+    return out
+
+
 def import_bars(conn: sqlite3.Connection, dataset_id: str, bars_path: str | Path, as_of: str | None = None) -> dict:
     """Import a batch of bars into ``dataset_id``. Incremental: only new or changed bars write rows."""
     path = Path(bars_path)
@@ -263,7 +294,7 @@ def import_bars(conn: sqlite3.Connection, dataset_id: str, bars_path: str | Path
     mode = db_mode(conn)
     if mode == "live" and ds["is_sample"]:
         raise AstraError("refusing sample dataset in a live database")
-    classification = "SYNTHETIC" if ds["is_sample"] else ("OBSERVED_MARKET" if ds["availability_basis"] == "OBSERVED_RETRIEVAL" else "RETROSPECTIVE")
+    classification = batch_classification(ds, as_of_dt)
     run_id = start_run(conn, "bar_import", mode, source_classification=classification,
                        provider_id=ds["provider_id"], dataset_id=dataset_id,
                        data_cutoff_utc=fmt_utc(as_of_dt), input_ref=f"{path} sha256={file_sha256(str(path))}")
@@ -283,6 +314,7 @@ def import_bars(conn: sqlite3.Connection, dataset_id: str, bars_path: str | Path
             start_dt, _ = parse_source_time(str(start_raw), ds["session_timezone"])
             grouped.setdefault((sym, fmt_utc(start_dt)), []).append(r)
         with tx(conn):
+            prior_coverage = _prior_coverage(conn, dataset_id, {s for s, _ in grouped})
             for (sym, start_s), group in grouped.items():
                 start_dt = parse_utc(start_s)
                 first = group[0]
@@ -333,6 +365,17 @@ def import_bars(conn: sqlite3.Connection, dataset_id: str, bars_path: str | Path
                 else:
                     avail_dt = max(end_dt, min(end_dt + timedelta(seconds=latency), as_of_dt))
                     basis = "ASSUMED_BAR_END_PLUS_LATENCY"
+                cur = conn.execute(
+                    "SELECT content_hash, revision_no FROM bars WHERE dataset_id=? AND symbol=? AND start_utc=?",
+                    (dataset_id, sym, start_s),
+                ).fetchone()
+                # A correction, or a bar missing from an earlier batch that covered its time, is only
+                # known from this batch's snapshot time; it must never become visible earlier in replay.
+                cov = prior_coverage.get(sym)
+                if cur is not None and avail_dt < as_of_dt:
+                    avail_dt, basis = as_of_dt, "REVISION_AT_BATCH_AS_OF"
+                elif cur is None and cov and cov[0] <= start_s and fmt_utc(end_dt) <= cov[1] and avail_dt < as_of_dt:
+                    avail_dt, basis = as_of_dt, "LATE_ARRIVAL_AT_BATCH_AS_OF"
                 quality = "DATA_CONFLICT" if reasons else "OK"
                 if quality == "DATA_CONFLICT":
                     counts["data_conflict"] += 1
@@ -341,10 +384,6 @@ def import_bars(conn: sqlite3.Connection, dataset_id: str, bars_path: str | Path
                 payload = {"open": o, "high": h, "low": l, "close": c, "volume": v,
                            "complete": bool(complete), "quality": quality, "reasons": sorted(set(reasons))}
                 chash = content_hash(payload)
-                cur = conn.execute(
-                    "SELECT content_hash, revision_no FROM bars WHERE dataset_id=? AND symbol=? AND start_utc=?",
-                    (dataset_id, sym, start_s),
-                ).fetchone()
                 if cur and cur["content_hash"] == chash:
                     counts["unchanged"] += 1
                     continue

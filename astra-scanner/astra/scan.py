@@ -21,8 +21,8 @@ from . import evidence, notifications, outcomes
 from .config import settings
 from .core import AstraError, canonical_json, content_hash, fmt_utc, new_id, now, now_str, parse_utc
 from .db import db_mode, tx
-from .market import PointInTimeStore, dataset_as_of, get_dataset, get_universe
-from .runs import finish_run, start_run
+from .market import MAX_PROSPECTIVE_AGE_SECONDS, PointInTimeStore, dataset_as_of, get_dataset, get_universe
+from .runs import MODE_CLASSIFICATION, finish_run, start_run
 
 LOOKBACK_DAYS = 70
 NON_SIGNAL_SPACING_SECONDS = 3600  # doctrine: full non-signal samples at least one hour apart
@@ -59,6 +59,27 @@ def resolve_cutoff(conn: sqlite3.Connection, mode: str, dataset_id: str, cutoff:
     return (cutoff or parse_utc(as_of)), as_of
 
 
+def cohort_for(conn: sqlite3.Connection, mode: str, ds: Any, requested: datetime, as_of: str) -> tuple[str, str]:
+    """(cohort eligibility, run source classification). A live database alone never makes a scan
+    prospective: its data must be a fresh observed retrieval, not an imported history file."""
+    if mode != "live":
+        return COHORT[mode], MODE_CLASSIFICATION[mode]
+    reasons = []
+    if ds["availability_basis"] != "OBSERVED_RETRIEVAL":
+        reasons.append(f"dataset availability basis {ds['availability_basis']} (imported history)")
+    last = conn.execute("SELECT source_classification FROM runs WHERE kind='bar_import' AND dataset_id=? AND "
+                        "status IN ('completed','partial') ORDER BY data_cutoff_utc DESC, completed_at_utc DESC LIMIT 1",
+                        (ds["dataset_id"],)).fetchone()
+    if not last or last["source_classification"] != "OBSERVED_MARKET":
+        reasons.append("latest bar batch was not a fresh observed retrieval")
+    age = (requested - parse_utc(as_of)).total_seconds()
+    if age > MAX_PROSPECTIVE_AGE_SECONDS:
+        reasons.append(f"data cutoff {as_of} is {int(age)} s before the scan (limit {MAX_PROSPECTIVE_AGE_SECONDS} s)")
+    if reasons:
+        return "EXCLUDED_NOT_PROSPECTIVE: " + "; ".join(reasons), "RETROSPECTIVE"
+    return COHORT["live"], "OBSERVED_MARKET"
+
+
 def _sample_non_signals(run_id: str, symbols: list[str], k: int) -> list[str]:
     ranked = sorted(symbols, key=lambda s: hashlib.sha256(f"{run_id}:{s}".encode()).hexdigest())
     return ranked[:k]
@@ -80,13 +101,14 @@ def scan(conn: sqlite3.Connection, dataset_id: str, universe_id: str, cutoff: da
     with tx(conn):
         recs = ensure_configs(conn)
     config_version = ",".join(sorted(r["config_id"] for r in recs.values()))
+    cohort, classification = cohort_for(conn, mode, ds, requested, as_of)
     scope = {"universe_id": universe_id, "members": members, "members_hash": content_hash(members),
              "benchmarks": benchmarks, "dataset_id": dataset_id, "calendar_id": cal.CALENDAR_ID}
     run_id = start_run(
         conn, run_kind, mode, provider_id=ds["provider_id"], dataset_id=dataset_id,
         requested_cutoff_utc=fmt_utc(requested), data_cutoff_utc=fmt_utc(data_cutoff),
         config_version=config_version, config_hash=content_hash({k: r["params_hash"] for k, r in recs.items()}),
-        declared_scope=scope, cohort_eligibility=COHORT[mode],
+        declared_scope=scope, cohort_eligibility=cohort, source_classification=classification,
     )
     try:
         if store is None:
@@ -160,7 +182,9 @@ def _persist(conn, run_id, mode, ds, requested, data_cutoff, recs, per_symbol, v
                      canonical_json(r.features), fmt_utc(r.signal_bar_end), fmt_utc(r.feature_available_at), ev_id),
                 )
             if fired:
-                cid, new = _candidate_for(conn, run_id, mode, sym, fired, requested, data_cutoff, latest, ds, inst)
+                bsym = inst["benchmark_symbol"] if inst else None
+                bench_bar = views[bsym].by_start.get(latest.start) if bsym in views else None
+                cid, new = _candidate_for(conn, run_id, mode, sym, fired, requested, data_cutoff, latest, ds, inst, bench_bar)
                 (created if new else attached).append(cid)
         # sampled non-signals for the outcome baseline (deterministic per run)
         sampled = _sample_non_signals(run_id, sorted(no_signal_symbols), settings().non_signal_samples_per_run)
@@ -173,11 +197,13 @@ def _persist(conn, run_id, mode, ds, requested, data_cutoff, recs, per_symbol, v
                 (sym, ds["dataset_id"], mode, fmt_utc(latest.start - timedelta(seconds=NON_SIGNAL_SPACING_SECONDS)),
                  fmt_utc(latest.start))).fetchone():
                 continue  # samples are >= 1 hour apart; repeated runs must not inflate the denominator
+            bsym = inst["benchmark_symbol"] if inst else None
             outcomes.create_subject(
                 conn, subject_type="sampled_non_signal", candidate_id=None, run_id=run_id, symbol=sym,
                 dataset_id=ds["dataset_id"], mode=mode, reference_role="SIGNAL_BAR_REFERENCE",
-                ref_bar_start=fmt_utc(latest.start), ref_price=latest.close, ref_session=latest.session_date,
-                reason=None, benchmark_symbol=inst["benchmark_symbol"] if inst else None,
+                reference_time=fmt_utc(requested), ref=outcomes.RefBar.of(latest),
+                bench=outcomes.RefBar.of(views[bsym].by_start.get(latest.start)) if bsym in views else None,
+                benchmark_symbol=bsym,
             )
         n = len(coverage)
         evaluated = sum(1 for v in coverage.values() if v == "EVALUATED")
@@ -207,7 +233,7 @@ def _persist(conn, run_id, mode, ds, requested, data_cutoff, recs, per_symbol, v
     return summary
 
 
-def _candidate_for(conn, run_id, mode, sym, fired, requested, data_cutoff, latest, ds, inst) -> tuple[str, bool]:
+def _candidate_for(conn, run_id, mode, sym, fired, requested, data_cutoff, latest, ds, inst, bench_bar) -> tuple[str, bool]:
     detectors_fired = [d for d, _ in fired]
     if mode == "replay":
         key = f"anomaly:replay:{sym}:{cal.local_date(requested).isoformat()}"
@@ -240,7 +266,8 @@ def _candidate_for(conn, run_id, mode, sym, fired, requested, data_cutoff, lates
         cands.attach_evidence(conn, cid, ev, "co_detection", "system", {"detector": d, "run_id": run_id})
     outcomes.create_subject(
         conn, subject_type="candidate", candidate_id=cid, run_id=run_id, symbol=sym, dataset_id=ds["dataset_id"],
-        mode=mode, reference_role="SIGNAL_BAR_REFERENCE", ref_bar_start=fmt_utc(latest.start), ref_price=latest.close,
-        ref_session=latest.session_date, reason=None, benchmark_symbol=inst["benchmark_symbol"] if inst else None,
+        mode=mode, reference_role="SIGNAL_BAR_REFERENCE", reference_time=fmt_utc(requested),
+        ref=outcomes.RefBar.of(latest), bench=outcomes.RefBar.of(bench_bar),
+        benchmark_symbol=inst["benchmark_symbol"] if inst else None,
     )
     return cid, True

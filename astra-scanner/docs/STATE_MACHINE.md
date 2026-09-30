@@ -38,7 +38,9 @@ CONDITIONAL_READY, ENTRY_ELIGIBLE: RESERVED — unreachable
 
 `RESEARCHED` may remain unforecastable; no targets or probabilities are required. Unknown
 sections (e.g. dilution) block only the conclusions they list. AI research may propose
-`researched` or `blocked` only.
+`researched` or `blocked` only, may cite only evidence ids or URLs already in the candidate's
+saved context, and may never clear blockers (it retrieves no new evidence). Clearing a blocker
+requires manual research citing the clearing evidence.
 
 ## Blockers and clearing evidence
 
@@ -54,8 +56,11 @@ clearing evidence and at least one cited source; otherwise the import is refused
 - On detection (sample/live): a research request is queued, and a default expiry is set to
   the close of the 5th US session after detection (`ASTRA_DEFAULT_EXPIRY_SESSIONS`).
 - Research sets the recheck (with condition and priority) and expiry; older pending
-  rechecks/expiries are cancelled as superseded. Missing values are shown as `UNKNOWN`
-  with the reason, never omitted.
+  rechecks/expiries are cancelled as superseded. A research revision with `recheck: null`
+  also cancels the pending recheck job (review round 1). An expiry can be replaced but not
+  removed. Missing values are shown as `UNKNOWN` with the reason, never omitted.
+- A revision of an announcement with an open candidate queues a research request (state is not
+  changed by the revision itself).
 - `process-due` handles due work in doctrine order (urgent first). A due recheck records an
   event, queues a research request (the research backlog), clears the displayed next
   recheck ("awaiting research update") and queues a `recheck_due` notification. A due
@@ -67,8 +72,11 @@ clearing evidence and at least one cited source; otherwise the import is refused
 `work_items` are claimed with a conditional `UPDATE` inside `BEGIN IMMEDIATE`, so two
 workers (or processes) cannot claim the same item. Handling and marking done happen in one
 transaction; if a worker dies, its lease (`ASTRA_LEASE_SECONDS`, default 300) expires and the
-next run reclaims the item, recording `recovered expired lease held by …`. Failures are
-retried up to `max_attempts` (default 3) and then marked `dead`, visible on the dashboard.
+next run reclaims the item, recording `recovered expired lease held by …`. Every claim counts
+as an attempt and no item is claimed once `attempts = max_attempts` (default 3): failures are
+retried up to the limit and then marked `dead`, and a lease that expires after the last
+permitted attempt (a worker interrupted every time) is dead-lettered on the next claim pass
+(`lease expired after attempt n/n … not retried`). Dead items are visible on the dashboard.
 A worker whose lease was taken over cannot complete the item (`lease_lost`).
 
 ## Notifications

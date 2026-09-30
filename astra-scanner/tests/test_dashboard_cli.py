@@ -76,5 +76,5 @@ def test_full_demo_workflow(tmp_path, monkeypatch):
 
     monkeypatch.setenv("ASTRA_OUTBOX_DIR", str(tmp_path / "outbox"))
     res = run_demo(tmp_path / "demo.db")
-    assert res["states"] == {"DETECTED": 2, "REJECTED": 1, "RESEARCHED": 2}
+    assert res["states"] == {"DETECTED": 3, "REJECTED": 1, "RESEARCHED": 2}
     assert (tmp_path / "demo_exports" / "comparison.csv").exists()

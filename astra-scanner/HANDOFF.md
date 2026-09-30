@@ -6,6 +6,17 @@ quality and trading performance remain **unproven**.
 
 Machine-readable summary: `IMPLEMENTATION_STATUS.json`. Evidence: `docs/VERIFICATION.md`.
 
+> **Status after review round 1 (2026-09-30).** ASTRA's independent review of `39c9c78` found
+> nine integrity defects: replay chronology, SEC identity, AI evidence validation, outcome
+> timing, alert comparison, material revisions, work recovery, the AI daily cap, and cohort
+> labels. All nine were reproduced as failing tests and corrected
+> (`docs/REVIEW_ROUND1.md`, `tests/test_review_round1.py`).
+>
+> **Not resolved:** COMPRESSION parity with the original v1 engine. The reported plateau-low
+> divergence needs the original `trading/pilot/runner.py`. Historical results and the alert
+> comparison should not be trusted until parity is established and a prospective comparison
+> runs against real retained alerts.
+
 ---
 
 ## 1. What works, with exact commands
@@ -16,7 +27,7 @@ From the `astra-scanner/` directory (Python ≥ 3.11):
 python3 -m venv .venv
 .venv/bin/pip install -r requirements.txt
 .venv/bin/pip install -e . --no-deps
-.venv/bin/python -m pytest -q                      # 68 tests (67 + 1 skipped without the optional SDK)
+.venv/bin/python -m pytest -q                      # 85 tests (84 + 1 skipped without the optional SDK)
 .venv/bin/astra demo --reset                       # complete SAMPLE workflow, self-checking
 .venv/bin/astra --db var/demo.db status            # text summary (SAMPLE banner, coverage, backlog)
 .venv/bin/astra --db var/demo.db serve             # read-only dashboard, http://127.0.0.1:8765
@@ -48,13 +59,15 @@ Working capabilities (all offline unless noted):
   recovery, retries, dead-letter; research backlog; ownership.
 - **Notifications**: local preview queue with dedup and r1.2 decision rows; queued →
   attempted (local outbox) → acknowledged; external channel `not_configured`.
-- **Outcomes**: frozen definition `ASTRA-OUTCOME-EQ-1`, reference roles, +1/+3/+5 sessions,
+- **Outcomes**: frozen definition `ASTRA-OUTCOME-EQ-2` (reference time recorded, fresh and
+  point-in-time references, endpoints strictly after the reference time), reference roles, +1/+3/+5 sessions,
   MEASURED / PENDING_DATA / UNKNOWN / CENSORED, rejected candidates and sampled non-signals
   included, no excursions.
 - **Replay**: `replay` with point-in-time bar revisions and simulated cutoffs kept separate
   from actual timestamps.
 - **Exports**: candidates, detector-only baseline, outcomes, runs, and a comparison with
-  retained hourly alerts over common coverage (`import-hourly-alerts`, `export comparison`).
+  retained hourly alerts, per source window with exact-time matching (`import-hourly-alerts`,
+  `export comparison`).
 - **Dashboard**: mode, SAMPLE DATA banner, last successful collections and data cutoffs,
   coverage (NO SIGNAL IN COMPLETED COVERAGE vs COVERAGE INCOMPLETE vs NOT SCANNED),
   candidates with evidence and unresolved items, next recheck/expiry, failures, backlog,
@@ -65,6 +78,10 @@ Working capabilities (all offline unless noted):
 Details and numbers: `docs/VERIFICATION.md`; raw outputs: `docs/TEST_RESULTS.txt`,
 `docs/DEMO_TRANSCRIPT.txt`, `docs/DEMO_STATUS.txt`. Summary:
 
+- After review round 1: `pytest` **85 passed** (main env), clean `pip` env **84 passed, 1 skipped**;
+  `astra demo --reset` **27 checks**, states DETECTED 3 / RESEARCHED 2 / REJECTED 1, outcomes
+  18 MEASURED / 13 UNKNOWN / 2 CENSORED; 28 dashboard pages HTTP 200; `0001` database upgraded
+  through `0002`. The bullets below describe the original build at `39c9c78`.
 - `pytest`: **68 passed** (main env); clean `pip` env: **67 passed, 1 skipped**.
 - `astra demo --reset`: 26 self-checks passed; 3 synthetic detector signals; coverage PARTIAL
   with the reasons; research moved ZSMPA BLOCKED → RESEARCHED after a processed due recheck;
@@ -127,9 +144,19 @@ on open, each checksummed; never edit an applied migration — add `0002_….sql
 
 ## 7. Known defects and operational limitations
 
+- **COMPRESSION known divergence** from the original v1 detector on plateau lows (reported by
+  ASTRA's review). This implementation requires strictly lower pivot lows. Parity is unverified
+  for COMPRESSION and IGNITION. Do not treat ASTRA COMPRESSION results as v1 results.
 - **Detectors are unvalidated**; v1 engine equivalence is unverified (interpretations listed
   in `astra/config/astra-eq-experimental-1.json`). Synthetic random walks already trigger noise
   signals in replay — expect false alerts.
+- The nine review-round-1 defects are corrected; their reproductions are permanent regression
+  tests. Parts of the corrected rules are deliberately conservative:
+  - a corrected bar is only visible from its batch time;
+  - a revision of a backlog item that still screens material becomes a candidate;
+  - an AI reservation left by a crashed process keeps counting toward the daily cap.
+- The optional AI adapter works only from saved context. It does not search the web or fetch
+  filing documents, and it may not clear blockers.
 - **Corporate actions are not modelled**: splits in unadjusted data look like moves; adjusted
   data embeds later corporate actions (hindsight in replay). Instrument metadata is current,
   not point-in-time.
@@ -174,22 +201,29 @@ on open, each checksummed; never edit an applied migration — add `0002_….sql
 
 ## 10. Prioritized next tasks for Codex
 
-1. **Place and run on the Mac**: clone this branch (or unzip the transfer package) into
-   `/Users/jonathanpratama/Documents/Codex/astra-scanner`; run the setup, tests and demo; record results.
-2. **SEC live check**: with the user's chosen contact in `ASTRA_SEC_USER_AGENT`, run
+Order follows ASTRA's review: integrity fixes first (done in round 1 — re-verify them),
+then detector parity, then a prospective comparison against real retained alerts.
+
+1. **Re-verify round-1 corrections** on the Mac: clone this branch into
+   `/Users/jonathanpratama/Documents/Codex/astra-scanner`, run setup, tests and demo, and rerun
+   the reviewer's own reproduction scripts against it.
+2. **Detector parity (COMPRESSION first)**: run the original `trading/pilot/runner.py` and ASTRA
+   on identical 5-minute inputs, including plateau-low cases. Diff statuses and features, adopt the
+   original rule where it differs (engine version bump; earlier ASTRA runs stay labelled), and
+   settle the listed interpretations.
+3. **Prospective comparison against real alerts**: export the existing hourly radar outputs to the
+   alert CSV with their declared windows, and compare only over common prospective coverage.
+   This needs live data (task 6).
+4. **SEC live check**: with the user's chosen contact in `ASTRA_SEC_USER_AGENT`, run
    `sec-collect` twice on 2–3 issuers in a live DB; confirm baseline backlog then no duplicates;
    record the actual output.
-3. **v1 equivalence**: run the original `trading/pilot/runner.py` and ASTRA on identical 5-minute
-   inputs; diff statuses/features; settle the listed interpretations; decide the cohort policy.
-4. **Records reconciliation**: decide whether ASTRA emits `trading/records/` coverage/decision
+5. **Records reconciliation**: decide whether ASTRA emits `trading/records/` coverage/decision
    records via `record_control.py`; implement the exporter if so.
-5. **Live market data**: choose a provider (cost decision by the user), implement
+6. **Live market data**: choose a provider (cost decision by the user), implement
    `MarketProvider` with observed retrieval times, consolidated volume and RTH 5-minute bars.
-6. **Corporate actions + point-in-time metadata** (split handling, instrument history as-of).
-7. **Alert digest** per ops r1 (0–1 urgent, ≤3 candidates) and a delivery-channel proposal
+7. **Corporate actions + point-in-time metadata** (split handling, instrument history as-of).
+8. **Alert digest** per ops r1 (0–1 urgent, ≤3 candidates) and a delivery-channel proposal
    (needs authorization).
-8. **Real hourly-alert comparison**: define a manual export of radar outputs to the CSV
-   format; run `export comparison` over a declared common window.
 9. **Calendar**: extend beyond 2027 from an authoritative source; resolve the July 2026 footnote.
 10. **AI adapter** (only if the user authorizes): provider choice (an OpenAI/ChatGPT adapter can
     implement the same interface), structured-output hardening, a capped live test.
@@ -220,7 +254,7 @@ astra-scanner/
     notifications.py preview queue, r1.2 decision rows
     outcomes.py      frozen outcome definition + measurement
     replay.py        historical replay
-    exports.py       CSV exports, hourly-alert comparison
+    exports.py       CSV exports, hourly-alert comparison (per source window)
     ai.py            optional gated AI researcher
     status.py        shared status summary
     demo.py          sample workflow
@@ -229,7 +263,7 @@ astra-scanner/
     config/          detectors-v1.json (frozen), astra-eq-experimental-1.json, screen-1.json
   config/sec_issuers.example.json
   fixtures/generate_sample.py, fixtures/sample/* (synthetic), fixtures/sec/* (real trimmed payload + provenance)
-  tests/             68 tests
+  tests/             85 tests (tests/test_review_round1.py: review reproductions)
   docs/              IMPORT_FORMATS, DETECTORS, STATE_MACHINE, OUTCOMES, CALENDAR, SCHEMA, VERIFICATION,
                      TEST_RESULTS.txt, DEMO_TRANSCRIPT.txt, DEMO_STATUS.txt
   doctrine/          DOCTRINE_REFERENCE.md, frozen/{detectors-v1.json, v2-rules.json, SOURCE_MANIFEST.json}

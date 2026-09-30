@@ -27,8 +27,11 @@ def test_pending_then_measured_unknown_censored(scanned_db, clock):
     assert now[("ZSMPA", "candidate", "SIGNAL_BAR_REFERENCE", 5)]["endpoint_session_date"] == "2026-09-24"
     c3 = now[("ZSMPC", "sampled_non_signal", "SIGNAL_BAR_REFERENCE", 3)]
     assert c3["status"] == "CENSORED" and "coverage ended" in c3["reason"]
-    f3 = now[("ZSMPF", "candidate", "OBSERVATION_BAR_REFERENCE", 3)]
+    f3 = now[("ZSMPF", "sampled_non_signal", "SIGNAL_BAR_REFERENCE", 3)]
     assert f3["status"] == "UNKNOWN" and f3["reason"] == "endpoint_bar_missing"
+    # sample data ends 24 Sep but ASTRA observed the announcement on 30 Sep: no fresh reference existed
+    obs = now[("ZSMPF", "candidate", "OBSERVATION_BAR_REFERENCE", 1)]
+    assert obs["status"] == "UNKNOWN" and obs["reference_status"] == "UNAVAILABLE" and "stale reference" in obs["reason"]
     # PRE_EVENT reference uses the last close before the 07:45 ET publication
     pre = now[("ZSMPF", "candidate", "PRE_EVENT_REFERENCE", 1)]
     assert pre["reference_session_date"] == "2026-09-16" and pre["status"] == "MEASURED"

@@ -21,7 +21,9 @@
     "complete_market_coverage": "NOT_ESTABLISHED",
     "notification_delivery": "NOT_ESTABLISHED (local preview outbox only)",
     "continuous_operation": "NOT_ESTABLISHED (runs only when invoked)",
-    "trading_performance": "NOT_ESTABLISHED"
+    "trading_performance": "NOT_ESTABLISHED",
+    "improvement_over_hourly_alerts": "NOT_ESTABLISHED (comparison so far uses synthetic alerts only)",
+    "historical_results_trustworthy": "NOT_ESTABLISHED until detector parity and real-alert prospective comparison"
   },
   "doctrine": {
     "version": "GD-1.1",
@@ -46,7 +48,11 @@
     },
     "database_migrations": {
       "status": "IMPLEMENTED_TESTED",
-      "append_only_triggers": true
+      "append_only_triggers": true,
+      "applied": [
+        "0001_initial",
+        "0002_review_round1"
+      ]
     },
     "exchange_calendar": {
       "status": "IMPLEMENTED_TESTED",
@@ -54,13 +60,15 @@
       "verified_against_official_source": "2026-2027 only"
     },
     "announcement_local_json": {
-      "status": "IMPLEMENTED_TESTED"
+      "status": "IMPLEMENTED_TESTED",
+      "revisions": "re-screened; material revisions create candidates / queue research"
     },
     "announcement_sec_submissions": {
       "status": "IMPLEMENTED_MOCK_TESTED",
       "live_run": "BLOCKED_CONFIG: ASTRA_SEC_USER_AGENT (contact identity) not configured",
       "network_reachable": true,
-      "coverage": "filings only, configured issuers only"
+      "coverage": "filings only, configured issuers only",
+      "identity": "symbol attached only when SEC confirms CIK and configured ticker"
     },
     "market_import": {
       "status": "IMPLEMENTED_TESTED",
@@ -77,7 +85,7 @@
       "status": "IMPLEMENTED_TESTED",
       "rule_version": "EXPERIMENTAL-DETECTORS-1",
       "validation": "UNVALIDATED",
-      "engine_equivalence": "UNVERIFIED"
+      "engine_equivalence": "KNOWN_DIVERGENCE (plateau lows, reported 2026-09-30); parity pending original runner.py"
     },
     "detector_ignition": {
       "status": "IMPLEMENTED_TESTED",
@@ -102,7 +110,9 @@
       "provider": "anthropic (official SDK, optional extra)",
       "default": "DISABLED",
       "activation": "ASTRA_AI_PAID_CALLS=enabled AND ASTRA_AI_PROVIDER=anthropic",
-      "live_calls": 0
+      "live_calls": 0,
+      "evidence_rule": "may cite only context evidence ids/URLs; may not clear blockers",
+      "daily_cap": "reserved atomically before each request"
     },
     "state_machine": {
       "status": "IMPLEMENTED_TESTED",
@@ -119,7 +129,8 @@
       ]
     },
     "work_queue_recovery": {
-      "status": "IMPLEMENTED_TESTED"
+      "status": "IMPLEMENTED_TESTED",
+      "max_attempts": "enforced across interrupted leases (dead-lettered at the limit)"
     },
     "notifications": {
       "status": "IMPLEMENTED_TESTED",
@@ -131,15 +142,21 @@
     },
     "outcomes": {
       "status": "IMPLEMENTED_TESTED",
-      "definition": "ASTRA-OUTCOME-EQ-1",
-      "excursions": "NOT_MEASURED"
+      "definition": "ASTRA-OUTCOME-EQ-2",
+      "excursions": "NOT_MEASURED",
+      "superseded": [
+        "ASTRA-OUTCOME-EQ-1 (kept, not evaluated)"
+      ],
+      "reference_time_recorded": true,
+      "point_in_time_references": true
     },
     "replay": {
       "status": "IMPLEMENTED_TESTED"
     },
     "exports_and_comparison": {
       "status": "IMPLEMENTED_TESTED",
-      "real_hourly_alerts_imported": false
+      "real_hourly_alerts_imported": false,
+      "matching": "per alert-source window, exact times; each alert counted once or excluded with reason"
     },
     "dashboard": {
       "status": "IMPLEMENTED_TESTED",
@@ -155,23 +172,29 @@
     },
     "scheduler": {
       "status": "NOT_IMPLEMENTED_BY_DESIGN"
+    },
+    "cohort_labels": {
+      "status": "IMPLEMENTED_TESTED",
+      "rule": "live scan prospective only with fresh OBSERVED_RETRIEVAL data (<=300 s); otherwise EXCLUDED_NOT_PROSPECTIVE"
     }
   },
   "verification": {
     "tests_main_env": {
-      "passed": 68,
+      "passed": 85,
       "failed": 0,
       "skipped": 0
     },
     "tests_clean_pip_env": {
-      "passed": 67,
+      "passed": 84,
       "failed": 0,
       "skipped": 1,
       "skip_reason": "optional anthropic SDK not installed"
     },
-    "demo_self_checks_passed": 26,
-    "dashboard_http_pages_checked": 26,
-    "replay_cli_run": {
+    "review_reproductions_failed_before_fix": true,
+    "demo_self_checks_passed": 27,
+    "dashboard_http_pages_checked": 28,
+    "migration_upgrade_from_39c9c78": "verified",
+    "replay_cli_run_at_39c9c78": {
       "sessions": 4,
       "cutoffs": 52,
       "detector_rows": 1092
@@ -201,14 +224,14 @@
     "hosting": "UNKNOWN (not authorized)"
   },
   "next_tasks": [
-    "Place on the Mac at the requested path and rerun setup/tests/demo",
+    "Re-verify round-1 corrections on the Mac, including the reviewer's own reproduction scripts",
+    "Detector parity against trading/pilot/runner.py (COMPRESSION plateau lows first)",
+    "Prospective comparison against real retained hourly alerts over common coverage (needs live data)",
     "Configure ASTRA_SEC_USER_AGENT and run a bounded live SEC collection twice",
-    "Verify v1 engine equivalence against trading/pilot/runner.py",
     "Decide records reconciliation with trading/records + record_control.py",
     "Choose and implement a live market data provider",
     "Corporate actions and point-in-time instrument metadata",
     "Alert digest cap and delivery channel decision (needs authorization)",
-    "Run the hourly-alert comparison on real radar outputs",
     "Extend calendar beyond 2027 from an authoritative source",
     "AI provider decision and capped live test only with explicit authorization"
   ],
@@ -216,6 +239,20 @@
     "repository": "jonathanpratama-boop/Moonshot-Scanner",
     "branch": "claude/loving-gauss-1o1ldm",
     "application_commit": "72a4d0261327eed5ac2e96780f29e0a20fa82029",
-    "pull_request": "none opened"
+    "pull_request": "none opened",
+    "review_round_1_commit": "the commit titled 'Correct integrity defects from ASTRA review round 1' (hash in git log)"
+  },
+  "review_round_1": {
+    "reviewer": "ASTRA (independent local test of commit 39c9c78)",
+    "date": "2026-09-30",
+    "verdict_before_fixes": "keep code; corrections requested before accepting handoff",
+    "findings_reproduced_as_failing_tests": 9,
+    "findings_fixed": 9,
+    "details": "docs/REVIEW_ROUND1.md",
+    "regression_tests": "tests/test_review_round1.py",
+    "not_fixed": [
+      "COMPRESSION plateau-low divergence from original v1 engine: needs trading/pilot/runner.py"
+    ],
+    "reviewer_scripts_available": false
   }
 }

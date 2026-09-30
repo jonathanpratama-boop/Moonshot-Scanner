@@ -132,6 +132,27 @@ class SecClient:
         self.client.close()
 
 
+def resolve_identity(payload: dict, cik: int, configured_ticker: str | None) -> tuple[str, str | None, list[str]]:
+    """Return (identity_status, symbol or None, SEC tickers).
+
+    A stock symbol is associated only when SEC's response confirms both the requested CIK and
+    the configured ticker. Any conflict or missing confirmation leaves the symbol empty, so
+    no price data, outcome or stock-level candidate is attached to the wrong instrument.
+    """
+    tickers = [str(t).upper() for t in payload.get("tickers") or []]
+    try:
+        payload_cik = int(str(payload.get("cik", "")).lstrip("0") or "0")
+    except ValueError:
+        payload_cik = 0
+    if payload_cik != cik:
+        return f"CIK_MISMATCH(requested {cik:010d}, response {payload.get('cik')!r})", None, tickers
+    if configured_ticker is None:
+        return "SEC_CIK_ONLY(no ticker configured)", None, tickers
+    if configured_ticker in tickers:
+        return "SEC_CIK_TICKER_MATCH", configured_ticker, tickers
+    return f"TICKER_MISMATCH(configured {configured_ticker}, SEC lists {tickers})", None, tickers
+
+
 def filing_items(payload: dict, cik: int, configured_ticker: str | None) -> list[Item]:
     try:
         recent = payload["filings"]["recent"]
@@ -139,13 +160,7 @@ def filing_items(payload: dict, cik: int, configured_ticker: str | None) -> list
         cols = {k: recent[k] for k in ("accessionNumber", "form", "filingDate", "acceptanceDateTime", "primaryDocument")}
     except (KeyError, TypeError) as exc:
         raise AstraError(f"SEC_SCHEMA_UNEXPECTED: submissions payload missing field {exc}") from exc
-    tickers = [t.upper() for t in payload.get("tickers") or []]
-    if configured_ticker is None:
-        identity = "SEC_CIK_ONLY"
-    elif configured_ticker in tickers:
-        identity = "SEC_CIK_TICKER_MATCH"
-    else:
-        identity = f"TICKER_MISMATCH(configured {configured_ticker}, SEC lists {tickers})"
+    identity, symbol, tickers = resolve_identity(payload, cik, configured_ticker)
     items = []
     for i in range(n):
         row = {k: (recent[k][i] if isinstance(recent.get(k), list) and i < len(recent[k]) else None) for k in recent}
@@ -161,7 +176,7 @@ def filing_items(payload: dict, cik: int, configured_ticker: str | None) -> list
         items.append(Item(
             source_key=acc, scope_key=f"sec:{cik:010d}", title=title,
             content={"cik": cik, "entity_name": payload.get("name"), "tickers": tickers, **row},
-            symbol=configured_ticker, issuer_cik=f"{cik:010d}", issuer_name=payload.get("name"), form_type=form,
+            symbol=symbol, issuer_cik=f"{cik:010d}", issuer_name=payload.get("name"), form_type=form,
             sec_items=items_str or None, url=url, published_raw=cols["acceptanceDateTime"][i] or None,
             published_tz=None, published_time_kind="SEC_ACCEPTANCE", identity_status=identity,
         ))
@@ -208,7 +223,9 @@ def collect(conn: sqlite3.Connection, issuers_path: str | Path, cfg: Settings,
                 with tx(conn):
                     summary = ingest(conn, source_id=source_id, run_id=run_id, items=items,
                                      scopes=[f"sec:{iss['cik']:010d}"], mode=mode, is_sample=False)
-                entry.update(status="OK", filings_in_response=len(items), **{k: summary[k] for k in (
+                entry.update(status="OK", filings_in_response=len(items),
+                             identity_status=items[0].identity_status if items else resolve_identity(res["json"], iss["cik"], iss["ticker"])[0],
+                             **{k: summary[k] for k in (
                     "new_items", "sightings_only", "revisions", "BASELINE_BACKLOG", "NEW_PUBLICATION",
                     "NEWLY_FOUND_OLD_INFORMATION", "candidates_created")})
                 for k in totals:
