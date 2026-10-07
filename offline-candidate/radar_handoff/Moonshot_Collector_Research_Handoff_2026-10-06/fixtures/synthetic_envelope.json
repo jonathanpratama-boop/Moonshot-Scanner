@@ -1,0 +1,147 @@
+{
+  "schema": "moonshot.synthetic.collector.v1",
+  "classification": "SYNTHETIC_PROSPECTIVE",
+  "synthetic_fixture": true,
+  "collector_id": "SYNTHETIC-COLLECTOR",
+  "raw_text": "SYNTHETIC collector message 001; no market claim\n",
+  "raw_text_sha256": "97315a68e295515801baacb733bc5c34b96733438f6e080f6703609c08f32d36",
+  "assessment_at": "2026-10-05T19:31:00Z",
+  "collector_received_at": "2026-10-05T19:31:00Z",
+  "authored_at": "2026-10-05T19:31:00Z",
+  "source_published_at": "2026-10-05T19:31:00Z",
+  "platform_rendered_at": "2026-10-05T19:31:00Z",
+  "revision_of": null,
+  "radar_record": {
+    "candidate_id": "SYNTHETIC-INTEGRATION-001",
+    "dependency_group_id": "SYNTHETIC-INTEGRATION-001:dependency",
+    "source_id": "primary",
+    "run_id": "r1",
+    "message_id": "SYNTHETIC-COLLECTOR-MESSAGE-001",
+    "universe_key": "SYNTH",
+    "configuration_label": "SYNTHETIC ASTRA injection boundary",
+    "configuration_hash": "5a03c83b37976248f7625751dd32a6d8bac1fe8a13388236921fec17d8a3e9b7",
+    "state": "NEW",
+    "identity": {
+      "asset_class": "crypto",
+      "symbol": "SYNTH",
+      "chain": "SYNTHETIC_CHAIN",
+      "contract": "native:SYNTH",
+      "product": "spot",
+      "venue": "SYNTHETIC_VENUE",
+      "currency": "USD",
+      "verified": true,
+      "evidence": "SYNTHETIC identity fixture"
+    },
+    "detector_feed": "described claim only; no raw feed",
+    "execution_venue": null,
+    "mechanism": "Captured research claim; verify economic transmission separately",
+    "invalidation": "Unsupported or contradicted primary evidence",
+    "evidence": [
+      "SYNTHETIC collector message 001; no market claim"
+    ],
+    "missing_facts": [],
+    "owner": "SYNTHETIC_REVIEWER",
+    "evidence_to_clear": [
+      "verify original source and exact identity"
+    ],
+    "next_review_at": "2026-10-05T20:31:00Z",
+    "expiry_at": "2026-10-05T23:31:00Z",
+    "explicit_forecast": null,
+    "clocks": {
+      "published_at": {
+        "value": "2026-10-05T19:31:00Z",
+        "verified": true,
+        "evidence": "SYNTHETIC collector receipt",
+        "precision": "second",
+        "semantics": "exact_event",
+        "timezone": "UTC",
+        "publisher": "SYNTHETIC"
+      },
+      "first_verified_available_at": {
+        "value": "2026-10-05T19:31:00Z",
+        "verified": true,
+        "evidence": "SYNTHETIC collector receipt",
+        "precision": "second",
+        "semantics": "exact_event",
+        "timezone": "UTC",
+        "publisher": "SYNTHETIC"
+      },
+      "radar_first_discovered_at": {
+        "value": "2026-10-05T19:31:00Z",
+        "verified": true,
+        "evidence": "SYNTHETIC collector receipt",
+        "precision": "second",
+        "semantics": "exact_event",
+        "timezone": "UTC",
+        "publisher": "SYNTHETIC"
+      },
+      "alert_authored_at": {
+        "value": "2026-10-05T19:31:00Z",
+        "verified": true,
+        "evidence": "SYNTHETIC collector receipt",
+        "precision": "second",
+        "semantics": "exact_event",
+        "timezone": "UTC",
+        "publisher": "SYNTHETIC"
+      },
+      "collector_received_at": {
+        "value": "2026-10-05T19:31:00Z",
+        "verified": true,
+        "evidence": "SYNTHETIC collector receipt",
+        "precision": "second",
+        "semantics": "exact_event",
+        "timezone": "UTC",
+        "publisher": "SYNTHETIC"
+      },
+      "delivered_at": {
+        "value": null,
+        "verified": false,
+        "null_reason": "not provided in proposal; never reconstructed",
+        "evidence": null,
+        "precision": null,
+        "semantics": null,
+        "timezone": null,
+        "publisher": null
+      },
+      "source_data_as_of": {
+        "value": null,
+        "verified": false,
+        "null_reason": "not provided in proposal; never reconstructed",
+        "evidence": null,
+        "precision": null,
+        "semantics": null,
+        "timezone": null,
+        "publisher": null
+      },
+      "retrieved_at": {
+        "value": "2026-10-05T19:31:00Z",
+        "verified": true,
+        "evidence": "SYNTHETIC collector receipt",
+        "precision": "second",
+        "semantics": "exact_event",
+        "timezone": "UTC",
+        "publisher": "SYNTHETIC"
+      }
+    },
+    "unsupported_claims": [],
+    "late_cause": "UNKNOWN",
+    "fixture_provenance": {
+      "kind": "synthetic",
+      "operational_fixture_time": "2026-10-05T19:31:00Z",
+      "purpose": "bounded collector handoff test only"
+    }
+  },
+  "source_read": {
+    "source_id": "primary",
+    "run_id": "r1",
+    "state": "SUCCESS_NEW",
+    "at": "2026-10-05T19:31:00Z",
+    "receipt": "SYNTHETIC-RECEIPT-001",
+    "messages": [
+      "SYNTHETIC-COLLECTOR-MESSAGE-001"
+    ],
+    "watermark_before": "w0",
+    "watermark_after": "w1",
+    "history_complete": true
+  }
+}

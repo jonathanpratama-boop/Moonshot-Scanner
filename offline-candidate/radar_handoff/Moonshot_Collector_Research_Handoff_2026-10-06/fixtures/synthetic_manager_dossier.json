@@ -1,0 +1,337 @@
+{
+  "record_type": "manager_dossier",
+  "candidate_id": "SYNTHETIC-INTEGRATION-001",
+  "author_id": "SYNTHETIC_MANAGER",
+  "authored_at": "2026-10-05T19:31:00Z",
+  "authorship_evidence": "SYNTHETIC fixture authorship, not a real source claim",
+  "plan": {
+    "paper_only": true,
+    "currency": "USD",
+    "product": "real",
+    "leverage": 1,
+    "asset_class": "crypto",
+    "instrument": "SYNTH",
+    "openable": true,
+    "identity_source": "fixture",
+    "precision_source": "fixture",
+    "structure_source": "fixture",
+    "bid_mapping_source": "fixture",
+    "corporate_actions_clear_through_deadline": true,
+    "corporate_action_source": "fixture",
+    "supply_basis_verified": true,
+    "liquidity_usable": true,
+    "precision": 4,
+    "min_units": "0.0001",
+    "max_units": "1000000",
+    "min_notional": "1",
+    "max_notional": "1000000",
+    "min_ask": "99.5",
+    "max_ask": "100.2",
+    "stop": "98",
+    "target": "120",
+    "deadline": "2026-10-05T23:31:00Z",
+    "signal_expiry": "2026-10-05T20:01:00Z",
+    "checks": [
+      "2026-10-05T20:31:00Z",
+      "2026-10-05T21:31:00Z",
+      "2026-10-05T22:31:00Z",
+      "2026-10-05T23:31:00Z"
+    ],
+    "next_review": "2026-10-05T20:31:00Z",
+    "coverage_source": "hourly fixture",
+    "gap_stress": "unscheduled loss may exceed 5%",
+    "closed_session_plan": "no continuous stop; first regular session quote; pending when closed",
+    "minute_monitoring_required": false,
+    "overnight_approved": true,
+    "checkpoints": [
+      {
+        "at": "2026-10-05T23:31:00Z",
+        "on_missing": "EXIT"
+      }
+    ],
+    "events": [
+      {
+        "source": "SYNTHETIC bounded event scenario",
+        "at": "2026-10-05T20:01:00Z",
+        "failure_first_exit_bid": "99",
+        "first_exit_at": "2026-10-05T20:31:00Z",
+        "first_exit_source": "SYNTHETIC first feasible hourly observation; stress estimate, not observation"
+      }
+    ],
+    "open_fee": {
+      "id": "SYNTHBUY",
+      "instrument": "SYNTH",
+      "side": "BUY",
+      "product": "real",
+      "currency": "USD",
+      "rate": ".01",
+      "fixed": "0",
+      "tax": "0",
+      "markup": "0",
+      "verified": true,
+      "unresolved": false,
+      "source": "synthetic fee fixture",
+      "verified_at": "2026-10-05T19:31:00Z",
+      "checked_at": "2026-10-05T19:31:00Z",
+      "holding_cost_verified_zero": true
+    },
+    "close_fee": {
+      "id": "SYNTHSELL",
+      "instrument": "SYNTH",
+      "side": "SELL",
+      "product": "real",
+      "currency": "USD",
+      "rate": ".01",
+      "fixed": "0",
+      "tax": "0",
+      "markup": "0",
+      "verified": true,
+      "unresolved": false,
+      "source": "synthetic fee fixture",
+      "verified_at": "2026-10-05T19:31:00Z",
+      "checked_at": "2026-10-05T19:31:00Z",
+      "holding_cost_verified_zero": true
+    },
+    "sessions": [
+      {
+        "open": "2026-10-05T17:31:00Z",
+        "close": "2026-10-06T00:31:00Z",
+        "verified": true,
+        "source": "synthetic calendar"
+      },
+      {
+        "open": "2026-10-06T17:31:00Z",
+        "close": "2026-10-07T00:31:00Z",
+        "verified": true,
+        "source": "synthetic calendar"
+      },
+      {
+        "open": "2026-10-07T17:31:00Z",
+        "close": "2026-10-08T00:31:00Z",
+        "verified": true,
+        "source": "synthetic calendar"
+      },
+      {
+        "open": "2026-10-08T17:31:00Z",
+        "close": "2026-10-09T00:31:00Z",
+        "verified": true,
+        "source": "synthetic calendar"
+      },
+      {
+        "open": "2026-10-09T17:31:00Z",
+        "close": "2026-10-10T00:31:00Z",
+        "verified": true,
+        "source": "synthetic calendar"
+      },
+      {
+        "open": "2026-10-10T17:31:00Z",
+        "close": "2026-10-11T00:31:00Z",
+        "verified": true,
+        "source": "synthetic calendar"
+      },
+      {
+        "open": "2026-10-11T17:31:00Z",
+        "close": "2026-10-12T00:31:00Z",
+        "verified": true,
+        "source": "synthetic calendar"
+      },
+      {
+        "open": "2026-10-12T17:31:00Z",
+        "close": "2026-10-13T00:31:00Z",
+        "verified": true,
+        "source": "synthetic calendar"
+      },
+      {
+        "open": "2026-10-13T17:31:00Z",
+        "close": "2026-10-14T00:31:00Z",
+        "verified": true,
+        "source": "synthetic calendar"
+      },
+      {
+        "open": "2026-10-14T17:31:00Z",
+        "close": "2026-10-15T00:31:00Z",
+        "verified": true,
+        "source": "synthetic calendar"
+      },
+      {
+        "open": "2026-10-15T17:31:00Z",
+        "close": "2026-10-16T00:31:00Z",
+        "verified": true,
+        "source": "synthetic calendar"
+      },
+      {
+        "open": "2026-10-16T17:31:00Z",
+        "close": "2026-10-17T00:31:00Z",
+        "verified": true,
+        "source": "synthetic calendar"
+      },
+      {
+        "open": "2026-10-17T17:31:00Z",
+        "close": "2026-10-18T00:31:00Z",
+        "verified": true,
+        "source": "synthetic calendar"
+      },
+      {
+        "open": "2026-10-18T17:31:00Z",
+        "close": "2026-10-19T00:31:00Z",
+        "verified": true,
+        "source": "synthetic calendar"
+      },
+      {
+        "open": "2026-10-19T17:31:00Z",
+        "close": "2026-10-20T00:31:00Z",
+        "verified": true,
+        "source": "synthetic calendar"
+      },
+      {
+        "open": "2026-10-20T17:31:00Z",
+        "close": "2026-10-21T00:31:00Z",
+        "verified": true,
+        "source": "synthetic calendar"
+      },
+      {
+        "open": "2026-10-21T17:31:00Z",
+        "close": "2026-10-22T00:31:00Z",
+        "verified": true,
+        "source": "synthetic calendar"
+      },
+      {
+        "open": "2026-10-22T17:31:00Z",
+        "close": "2026-10-23T00:31:00Z",
+        "verified": true,
+        "source": "synthetic calendar"
+      },
+      {
+        "open": "2026-10-23T17:31:00Z",
+        "close": "2026-10-24T00:31:00Z",
+        "verified": true,
+        "source": "synthetic calendar"
+      },
+      {
+        "open": "2026-10-24T17:31:00Z",
+        "close": "2026-10-25T00:31:00Z",
+        "verified": true,
+        "source": "synthetic calendar"
+      },
+      {
+        "open": "2026-10-25T17:31:00Z",
+        "close": "2026-10-26T00:31:00Z",
+        "verified": true,
+        "source": "synthetic calendar"
+      },
+      {
+        "open": "2026-10-26T17:31:00Z",
+        "close": "2026-10-27T00:31:00Z",
+        "verified": true,
+        "source": "synthetic calendar"
+      },
+      {
+        "open": "2026-10-27T17:31:00Z",
+        "close": "2026-10-28T00:31:00Z",
+        "verified": true,
+        "source": "synthetic calendar"
+      },
+      {
+        "open": "2026-10-28T17:31:00Z",
+        "close": "2026-10-29T00:31:00Z",
+        "verified": true,
+        "source": "synthetic calendar"
+      },
+      {
+        "open": "2026-10-29T17:31:00Z",
+        "close": "2026-10-30T00:31:00Z",
+        "verified": true,
+        "source": "synthetic calendar"
+      },
+      {
+        "open": "2026-10-30T17:31:00Z",
+        "close": "2026-10-31T00:31:00Z",
+        "verified": true,
+        "source": "synthetic calendar"
+      },
+      {
+        "open": "2026-10-31T17:31:00Z",
+        "close": "2026-11-01T00:31:00Z",
+        "verified": true,
+        "source": "synthetic calendar"
+      },
+      {
+        "open": "2026-11-01T17:31:00Z",
+        "close": "2026-11-02T00:31:00Z",
+        "verified": true,
+        "source": "synthetic calendar"
+      },
+      {
+        "open": "2026-11-02T17:31:00Z",
+        "close": "2026-11-03T00:31:00Z",
+        "verified": true,
+        "source": "synthetic calendar"
+      },
+      {
+        "open": "2026-11-03T17:31:00Z",
+        "close": "2026-11-04T00:31:00Z",
+        "verified": true,
+        "source": "synthetic calendar"
+      },
+      {
+        "open": "2026-11-04T17:31:00Z",
+        "close": "2026-11-05T00:31:00Z",
+        "verified": true,
+        "source": "synthetic calendar"
+      },
+      {
+        "open": "2026-11-05T17:31:00Z",
+        "close": "2026-11-06T00:31:00Z",
+        "verified": true,
+        "source": "synthetic calendar"
+      }
+    ],
+    "dossier": {
+      "primary_source": "synthetic announcement",
+      "mechanism": "incremental holder value",
+      "priced_in": "fixture reference",
+      "disconfirming": "cancellation",
+      "sensitivity": "diluted supply",
+      "horizon_reason": "dated repricing",
+      "resistance_path": "fixture",
+      "ordinary_variability": "fixture",
+      "published_at": "2026-10-05T19:31:00Z",
+      "first_observed_at": "2026-10-05T19:31:00Z",
+      "status": "confirmed",
+      "timing": "dated",
+      "valuation_support": "direct",
+      "target_derivation": {
+        "method": "token_value",
+        "source": "synthetic calculation",
+        "assumptions": "net holder value after liabilities and dilution",
+        "frozen_at": "2026-10-05T19:31:00Z",
+        "holder_value_low": "120000",
+        "diluted_units": "1000"
+      },
+      "scenarios": {
+        "failure": {
+          "source": "fixture",
+          "assumptions": "fixture",
+          "low": "98",
+          "high": "98",
+          "by": "2026-10-05T23:31:00Z"
+        },
+        "partial": {
+          "source": "fixture",
+          "assumptions": "fixture",
+          "low": "105",
+          "high": "105",
+          "by": "2026-10-05T23:31:00Z"
+        },
+        "delivery": {
+          "source": "fixture",
+          "assumptions": "fixture",
+          "low": "120",
+          "high": "120",
+          "by": "2026-10-05T23:31:00Z"
+        }
+      }
+    }
+  },
+  "plan_sha256": "570757466abfd771fe08c504d4ddc80fd3444c6c34bc1bf256fe0e10824020e9"
+}

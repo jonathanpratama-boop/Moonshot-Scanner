@@ -1,0 +1,174 @@
+{
+  "mode": "OFFLINE_SYNTHETIC_REPLAY",
+  "authorization_evidence": "OFFLINE fixture only; actual source/rule configuration missing",
+  "universe": {
+    "HLB": [
+      {
+        "asset_class": "stock",
+        "ticker": "HLB",
+        "venue": "SYNTHETIC_KOREAN_LISTING",
+        "currency": "KRW",
+        "security_id": "fixture-hlb",
+        "verified": true,
+        "evidence": "SYNTHETIC identity constraint; not real provider verification"
+      }
+    ],
+    "NEAR": [
+      {
+        "asset_class": "crypto",
+        "symbol": "NEAR",
+        "chain": "SYNTHETIC_NEAR",
+        "contract": "native:SYNTHETIC_NEAR",
+        "product": "spot",
+        "venue": "SYNTHETIC_VENUE",
+        "currency": "USD",
+        "verified": true,
+        "evidence": "SYNTHETIC identity fixture"
+      }
+    ],
+    "APXC": [
+      {
+        "asset_class": "stock",
+        "ticker": "APXC",
+        "venue": "CSE",
+        "currency": "CAD",
+        "security_id": "fixture-apxc",
+        "verified": true,
+        "evidence": "SYNTHETIC identity constraint; not real provider verification"
+      },
+      {
+        "asset_class": "stock",
+        "ticker": "APXCF",
+        "venue": "OTCQX",
+        "currency": "USD",
+        "security_id": "fixture-apxcf",
+        "verified": true,
+        "evidence": "SYNTHETIC identity constraint; not real provider verification"
+      }
+    ],
+    "TECHD": [
+      {
+        "asset_class": "stock",
+        "ticker": "TECHD",
+        "venue": "SYNTHETIC_APAC_LISTING",
+        "currency": "SYNTHETIC_CURRENCY",
+        "security_id": "fixture-techd",
+        "verified": true,
+        "evidence": "SYNTHETIC identity constraint; not real provider verification"
+      }
+    ],
+    "SYNTH": [
+      {
+        "asset_class": "crypto",
+        "symbol": "SYNTH",
+        "chain": "SYNTHETIC_CHAIN",
+        "contract": "native:SYNTH",
+        "product": "spot",
+        "venue": "SYNTHETIC_VENUE",
+        "currency": "USD",
+        "verified": true,
+        "evidence": "SYNTHETIC identity fixture"
+      }
+    ]
+  },
+  "authorized_runs": {
+    "r1": "2026-10-06T18:00:00Z",
+    "r2": "2026-10-06T19:00:00Z",
+    "r3": "2026-10-06T20:00:00Z",
+    "r4": "2026-10-06T21:00:00Z",
+    "r5": "2026-10-06T22:00:00Z"
+  },
+  "detector_config_sha256": "5a03c83b37976248f7625751dd32a6d8bac1fe8a13388236921fec17d8a3e9b7",
+  "sources": {
+    "primary": {
+      "universe": [
+        "HLB",
+        "NEAR",
+        "APXC",
+        "TECHD",
+        "SYNTH"
+      ],
+      "expected_runs": [
+        "r1",
+        "r2",
+        "r3",
+        "r4",
+        "r5"
+      ],
+      "schedule_evidence": "SYNTHETIC existing authorized cadence fixture, not actual authorization",
+      "watermark": "w0",
+      "continuity_verified": true,
+      "connector_limits": "SYNTHETIC complete delta fixture",
+      "calendar": {
+        "verified": false,
+        "reason": "actual calendars unavailable"
+      },
+      "coverage_start": "2026-10-06T18:00:00Z",
+      "kind": "disclosure"
+    },
+    "movers": {
+      "universe": [
+        "HLB",
+        "NEAR",
+        "APXC",
+        "TECHD",
+        "SYNTH"
+      ],
+      "expected_runs": [
+        "r1",
+        "r2",
+        "r3",
+        "r4",
+        "r5"
+      ],
+      "schedule_evidence": "SYNTHETIC existing authorized cadence fixture, not actual authorization",
+      "watermark": "w0",
+      "continuity_verified": true,
+      "connector_limits": "SYNTHETIC complete delta fixture",
+      "calendar": {
+        "verified": false,
+        "reason": "actual calendars unavailable"
+      },
+      "coverage_start": "2026-10-06T18:00:00Z",
+      "kind": "tape"
+    }
+  },
+  "notification_rules": {
+    "notice": {
+      "authorized": true,
+      "authorization_evidence": "SYNTHETIC rule fixture",
+      "trigger": "OVERDUE",
+      "universe": [
+        "HLB",
+        "NEAR",
+        "APXC",
+        "TECHD",
+        "SYNTH"
+      ]
+    },
+    "qualified": {
+      "authorized": true,
+      "authorization_evidence": "SYNTHETIC rule fixture",
+      "trigger": "EXISTING_QUALIFIED_ALERT",
+      "universe": [
+        "HLB",
+        "NEAR",
+        "APXC",
+        "TECHD",
+        "SYNTH"
+      ]
+    },
+    "failure": {
+      "authorized": true,
+      "authorization_evidence": "SYNTHETIC rule fixture",
+      "trigger": "SOURCE_FAILURE",
+      "universe": [
+        "HLB",
+        "NEAR",
+        "APXC",
+        "TECHD",
+        "SYNTH"
+      ]
+    }
+  }
+}

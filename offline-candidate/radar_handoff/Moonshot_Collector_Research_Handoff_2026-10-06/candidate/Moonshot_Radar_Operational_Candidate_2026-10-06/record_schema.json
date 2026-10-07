@@ -1,0 +1,279 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:moonshot:offline-radar-replay:v1",
+  "title": "Offline radar fixture interchange",
+  "description": "Shape schema only. Authoritative semantic checks are in radar_ops.py. No source-truth/live-authorization certification; no JSON-schema dependency required.",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/candidate_input"
+    },
+    {
+      "$ref": "#/$defs/source_read"
+    },
+    {
+      "$ref": "#/$defs/config"
+    }
+  ],
+  "$defs": {
+    "clock": {
+      "type": "object",
+      "required": [
+        "value",
+        "verified",
+        "evidence",
+        "precision",
+        "semantics",
+        "timezone",
+        "publisher"
+      ],
+      "properties": {
+        "value": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "verified": {
+          "type": "boolean"
+        },
+        "null_reason": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "evidence": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "precision": {
+          "enum": [
+            "second",
+            "minute",
+            "day",
+            null
+          ]
+        },
+        "semantics": {
+          "enum": [
+            "exact_event",
+            "available_by",
+            null
+          ]
+        },
+        "timezone": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "publisher": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "candidate_input": {
+      "type": "object",
+      "required": [
+        "candidate_id",
+        "dependency_group_id",
+        "source_id",
+        "run_id",
+        "message_id",
+        "configuration_label",
+        "configuration_hash",
+        "universe_key",
+        "state",
+        "identity",
+        "clocks",
+        "mechanism",
+        "invalidation",
+        "evidence",
+        "missing_facts",
+        "owner",
+        "evidence_to_clear",
+        "explicit_forecast",
+        "fixture_provenance"
+      ],
+      "properties": {
+        "state": {
+          "const": "NEW"
+        },
+        "identity": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "description": "Exact frozen-universe identity plus verified=true/evidence. Stock ticker/venue/currency/security_id; crypto symbol/chain/contract/product/venue/currency. Feed and execution venue stay separate."
+        },
+        "clocks": {
+          "type": "object",
+          "required": [
+            "published_at",
+            "first_verified_available_at",
+            "radar_first_discovered_at",
+            "alert_authored_at",
+            "collector_received_at",
+            "delivered_at",
+            "source_data_as_of",
+            "retrieved_at"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "published_at": {
+              "$ref": "#/$defs/clock"
+            },
+            "first_verified_available_at": {
+              "$ref": "#/$defs/clock"
+            },
+            "radar_first_discovered_at": {
+              "$ref": "#/$defs/clock"
+            },
+            "alert_authored_at": {
+              "$ref": "#/$defs/clock"
+            },
+            "collector_received_at": {
+              "$ref": "#/$defs/clock"
+            },
+            "delivered_at": {
+              "$ref": "#/$defs/clock"
+            },
+            "source_data_as_of": {
+              "$ref": "#/$defs/clock"
+            },
+            "retrieved_at": {
+              "$ref": "#/$defs/clock"
+            }
+          }
+        },
+        "explicit_forecast": {
+          "type": "null"
+        },
+        "next_review_at": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "expiry_at": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "event_trigger": {
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "fixture_provenance": {
+          "type": "object",
+          "required": [
+            "kind",
+            "historical_cutoff",
+            "cutoff_reason"
+          ],
+          "properties": {
+            "kind": {
+              "enum": [
+                "synthetic",
+                "proposal_described_claim"
+              ]
+            },
+            "historical_cutoff": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "source_read": {
+      "type": "object",
+      "required": [
+        "source_id",
+        "run_id",
+        "state",
+        "at",
+        "receipt",
+        "watermark_before",
+        "watermark_after",
+        "history_complete"
+      ],
+      "properties": {
+        "state": {
+          "enum": [
+            "SUCCESS_NEW",
+            "SUCCESS_NO_NEW",
+            "FAILED",
+            "PARTIAL",
+            "EXPECTED_NOT_OBSERVED"
+          ]
+        },
+        "history_complete": {
+          "type": "boolean"
+        },
+        "messages": {
+          "type": "array"
+        },
+        "no_signal_conclusion": {
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "recovery": {
+          "type": [
+            "object",
+            "null"
+          ]
+        }
+      }
+    },
+    "config": {
+      "type": "object",
+      "required": [
+        "mode",
+        "authorization_evidence",
+        "universe",
+        "authorized_runs",
+        "sources",
+        "detector_config_sha256"
+      ],
+      "properties": {
+        "mode": {
+          "const": "OFFLINE_SYNTHETIC_REPLAY"
+        },
+        "universe": {
+          "type": "object"
+        },
+        "authorized_runs": {
+          "type": "object"
+        },
+        "sources": {
+          "type": "object"
+        },
+        "notification_rules": {
+          "type": "object"
+        }
+      }
+    }
+  },
+  "x-semantic-rules": [
+    "Non-null clocks need traceable verified provenance/timezone; never infer missing clocks.",
+    "Open candidates need owner, evidence_to_clear, and prospective review/expiry/event-review bound.",
+    "Research expiry never supplies forecast endpoint; statements never automatically join a cohort.",
+    "Universe/run scope is frozen; actual live configuration remains unavailable.",
+    "Failed/partial reads retain continuity gaps until complete evidence-backed recovery.",
+    "Only configured independently qualifying existing rules yield inert deduped previews; revisions alone are silent.",
+    "In-memory history is a replay artifact, not durable production storage."
+  ]
+}

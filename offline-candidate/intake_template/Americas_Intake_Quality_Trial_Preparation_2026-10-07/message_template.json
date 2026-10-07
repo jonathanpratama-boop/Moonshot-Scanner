@@ -1,0 +1,24 @@
+{
+  "identity": {
+    "platform_message_id": null,
+    "collector_key": null,
+    "key_evidence": "REPLACE_WITH_OBSERVED_ID_OR_KEY_EVIDENCE"
+  },
+  "body": {
+    "redacted_text": "REPLACE_WITH_EXACT_REDACTED_UTF8_MESSAGE",
+    "original_sha256": "REPLACE_WITH_ORIGINAL_UTF8_SHA256",
+    "original_utf8_bytes": null,
+    "redacted_sha256": "REPLACE_WITH_REDACTED_UTF8_SHA256",
+    "redacted_utf8_bytes": null,
+    "redaction_policy": "PRIVATE_ACCOUNT_V1",
+    "redaction_count": null,
+    "privacy_reviewed": true,
+    "original_hash_provenance": "BROWSER_UTF8_HASH"
+  },
+  "rendered_at": null,
+  "rendered_time_text": null,
+  "authored_at": null,
+  "authorship_evidence": null,
+  "message_kind": "OTHER",
+  "explicit_no_signal_evidence": null
+}

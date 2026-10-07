@@ -1,0 +1,37 @@
+# Python and generated output
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+tmp/
+runtime/
+outputs/
+test-results/
+node_modules/
+dist/
+build/
+
+# Credentials, account records and private captures
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*credentials*
+*cookies*
+*secrets*
+private/
+captures/
+raw_captures/
+recovered_packet/
+checkpoints/
+checkpoint.json
+journals/
+*.journal
+*.log
+*.xlsx
+*.xls
+*.zip
+*.tar*
+.DS_Store

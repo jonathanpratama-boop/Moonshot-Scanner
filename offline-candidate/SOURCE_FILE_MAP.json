@@ -1,0 +1,322 @@
+[
+  {
+    "component": "intake_template_only",
+    "path": "intake_template/Americas_Intake_Quality_Trial_Preparation_2026-10-07/message_template.json",
+    "source_archive": "Americas_Intake_Quality_Trial_Preparation_2026-10-07.zip",
+    "source_archive_sha256": "ee0ea81548fb274b94bb61c4c57be8a42278abb391b2a1ed2c304dbf5521bc55",
+    "source_member": "Americas_Intake_Quality_Trial_Preparation_2026-10-07/message_template.json",
+    "sha256": "331f03bab2b711e8da09adfe3125e17816d0396df293b46a6641f636afff959e",
+    "bytes": 745,
+    "source_bytes_unchanged": true
+  },
+  {
+    "component": "offline_radar_and_handoff",
+    "path": "radar_handoff/Moonshot_Collector_Research_Handoff_2026-10-06/candidate/Moonshot_Radar_Operational_Candidate_2026-10-06/candidate/archive_adapter.py",
+    "source_archive": "Moonshot_Collector_Research_Handoff_2026-10-06.zip",
+    "source_archive_sha256": "6279d9ba191d6ed1468a69ae22ec879004e13d05a1f06544303d8a9f62f36c29",
+    "source_member": "Moonshot_Collector_Research_Handoff_2026-10-06/candidate/Moonshot_Radar_Operational_Candidate_2026-10-06/candidate/archive_adapter.py",
+    "sha256": "45df558c502570357558f36601cd87ea76250904abffe8986b9c773ce335c80f",
+    "bytes": 10332,
+    "source_bytes_unchanged": true
+  },
+  {
+    "component": "offline_radar_and_handoff",
+    "path": "radar_handoff/Moonshot_Collector_Research_Handoff_2026-10-06/candidate/Moonshot_Radar_Operational_Candidate_2026-10-06/candidate/collector_handoff.py",
+    "source_archive": "Moonshot_Collector_Research_Handoff_2026-10-06.zip",
+    "source_archive_sha256": "6279d9ba191d6ed1468a69ae22ec879004e13d05a1f06544303d8a9f62f36c29",
+    "source_member": "Moonshot_Collector_Research_Handoff_2026-10-06/candidate/Moonshot_Radar_Operational_Candidate_2026-10-06/candidate/collector_handoff.py",
+    "sha256": "74e5cc07bf222d7ef9adb5406c3ac6dee0f2155ff51fde5ec086ce83a53fbf20",
+    "bytes": 16777,
+    "source_bytes_unchanged": true
+  },
+  {
+    "component": "offline_radar_and_handoff",
+    "path": "radar_handoff/Moonshot_Collector_Research_Handoff_2026-10-06/candidate/Moonshot_Radar_Operational_Candidate_2026-10-06/candidate/radar_ops.py",
+    "source_archive": "Moonshot_Collector_Research_Handoff_2026-10-06.zip",
+    "source_archive_sha256": "6279d9ba191d6ed1468a69ae22ec879004e13d05a1f06544303d8a9f62f36c29",
+    "source_member": "Moonshot_Collector_Research_Handoff_2026-10-06/candidate/Moonshot_Radar_Operational_Candidate_2026-10-06/candidate/radar_ops.py",
+    "sha256": "d2377ada72adacc8ca1fb64636a62f48cd3d8c91f20afdc5e921404e8954da9b",
+    "bytes": 31287,
+    "source_bytes_unchanged": true
+  },
+  {
+    "component": "offline_radar_and_handoff",
+    "path": "radar_handoff/Moonshot_Collector_Research_Handoff_2026-10-06/candidate/Moonshot_Radar_Operational_Candidate_2026-10-06/fixtures/cases.json",
+    "source_archive": "Moonshot_Collector_Research_Handoff_2026-10-06.zip",
+    "source_archive_sha256": "6279d9ba191d6ed1468a69ae22ec879004e13d05a1f06544303d8a9f62f36c29",
+    "source_member": "Moonshot_Collector_Research_Handoff_2026-10-06/candidate/Moonshot_Radar_Operational_Candidate_2026-10-06/fixtures/cases.json",
+    "sha256": "e9b00f3d2e29b91ef1068c477890c10c529aa737e15b30d98da60367edfff48c",
+    "bytes": 21033,
+    "source_bytes_unchanged": true
+  },
+  {
+    "component": "offline_radar_and_handoff",
+    "path": "radar_handoff/Moonshot_Collector_Research_Handoff_2026-10-06/candidate/Moonshot_Radar_Operational_Candidate_2026-10-06/fixtures/config.json",
+    "source_archive": "Moonshot_Collector_Research_Handoff_2026-10-06.zip",
+    "source_archive_sha256": "6279d9ba191d6ed1468a69ae22ec879004e13d05a1f06544303d8a9f62f36c29",
+    "source_member": "Moonshot_Collector_Research_Handoff_2026-10-06/candidate/Moonshot_Radar_Operational_Candidate_2026-10-06/fixtures/config.json",
+    "sha256": "175dd4e6e2993edd317300ffcb5a1cc9528afdf13b2b2dc42855c0f54490a9c8",
+    "bytes": 4422,
+    "source_bytes_unchanged": true
+  },
+  {
+    "component": "offline_radar_and_handoff",
+    "path": "radar_handoff/Moonshot_Collector_Research_Handoff_2026-10-06/candidate/Moonshot_Radar_Operational_Candidate_2026-10-06/fixtures/demo_replay.json",
+    "source_archive": "Moonshot_Collector_Research_Handoff_2026-10-06.zip",
+    "source_archive_sha256": "6279d9ba191d6ed1468a69ae22ec879004e13d05a1f06544303d8a9f62f36c29",
+    "source_member": "Moonshot_Collector_Research_Handoff_2026-10-06/candidate/Moonshot_Radar_Operational_Candidate_2026-10-06/fixtures/demo_replay.json",
+    "sha256": "a3141ac991ac64714e3758fdd2ec22ceb789f6157beb7651d8d279464602d1cf",
+    "bytes": 30220,
+    "source_bytes_unchanged": true
+  },
+  {
+    "component": "offline_radar_and_handoff",
+    "path": "radar_handoff/Moonshot_Collector_Research_Handoff_2026-10-06/candidate/Moonshot_Radar_Operational_Candidate_2026-10-06/fixtures/injected_detector_outputs.json",
+    "source_archive": "Moonshot_Collector_Research_Handoff_2026-10-06.zip",
+    "source_archive_sha256": "6279d9ba191d6ed1468a69ae22ec879004e13d05a1f06544303d8a9f62f36c29",
+    "source_member": "Moonshot_Collector_Research_Handoff_2026-10-06/candidate/Moonshot_Radar_Operational_Candidate_2026-10-06/fixtures/injected_detector_outputs.json",
+    "sha256": "abf130520a637907c13a5a4ae2d0059b814a8709953f7b5cd4fac2c68d46b140",
+    "bytes": 790,
+    "source_bytes_unchanged": true
+  },
+  {
+    "component": "offline_radar_and_handoff",
+    "path": "radar_handoff/Moonshot_Collector_Research_Handoff_2026-10-06/candidate/Moonshot_Radar_Operational_Candidate_2026-10-06/record_schema.json",
+    "source_archive": "Moonshot_Collector_Research_Handoff_2026-10-06.zip",
+    "source_archive_sha256": "6279d9ba191d6ed1468a69ae22ec879004e13d05a1f06544303d8a9f62f36c29",
+    "source_member": "Moonshot_Collector_Research_Handoff_2026-10-06/candidate/Moonshot_Radar_Operational_Candidate_2026-10-06/record_schema.json",
+    "sha256": "8c89cb9a50909979b8d9231a76374cda4d46fb4b74270dd55dc62bacd9559fd3",
+    "bytes": 6774,
+    "source_bytes_unchanged": true
+  },
+  {
+    "component": "offline_radar_and_handoff",
+    "path": "radar_handoff/Moonshot_Collector_Research_Handoff_2026-10-06/candidate/Moonshot_Radar_Operational_Candidate_2026-10-06/tests/run_worker.py",
+    "source_archive": "Moonshot_Collector_Research_Handoff_2026-10-06.zip",
+    "source_archive_sha256": "6279d9ba191d6ed1468a69ae22ec879004e13d05a1f06544303d8a9f62f36c29",
+    "source_member": "Moonshot_Collector_Research_Handoff_2026-10-06/candidate/Moonshot_Radar_Operational_Candidate_2026-10-06/tests/run_worker.py",
+    "sha256": "64c4d4f583dd6e7b10e5a15e3cf41e5d9ad56e1964cbbedf8d2fb72433d59018",
+    "bytes": 911,
+    "source_bytes_unchanged": true
+  },
+  {
+    "component": "offline_radar_and_handoff",
+    "path": "radar_handoff/Moonshot_Collector_Research_Handoff_2026-10-06/candidate/Moonshot_Radar_Operational_Candidate_2026-10-06/tests/test_radar.py",
+    "source_archive": "Moonshot_Collector_Research_Handoff_2026-10-06.zip",
+    "source_archive_sha256": "6279d9ba191d6ed1468a69ae22ec879004e13d05a1f06544303d8a9f62f36c29",
+    "source_member": "Moonshot_Collector_Research_Handoff_2026-10-06/candidate/Moonshot_Radar_Operational_Candidate_2026-10-06/tests/test_radar.py",
+    "sha256": "defdfee1f088f3cf5f40964885ea9370b5a11343b337cc5837bc6919c5218ae2",
+    "bytes": 19630,
+    "source_bytes_unchanged": true
+  },
+  {
+    "component": "offline_handoff_contracts",
+    "path": "radar_handoff/Moonshot_Collector_Research_Handoff_2026-10-06/fixtures/synthetic_assessment_request.json",
+    "source_archive": "Moonshot_Collector_Research_Handoff_2026-10-06.zip",
+    "source_archive_sha256": "6279d9ba191d6ed1468a69ae22ec879004e13d05a1f06544303d8a9f62f36c29",
+    "source_member": "Moonshot_Collector_Research_Handoff_2026-10-06/fixtures/synthetic_assessment_request.json",
+    "sha256": "9dca4a30c1d3bfc561b41dbbc1dc9df335d4e9dbda258cdefb49fe10f5fed9b2",
+    "bytes": 63,
+    "source_bytes_unchanged": true
+  },
+  {
+    "component": "offline_handoff_contracts",
+    "path": "radar_handoff/Moonshot_Collector_Research_Handoff_2026-10-06/fixtures/synthetic_config.json",
+    "source_archive": "Moonshot_Collector_Research_Handoff_2026-10-06.zip",
+    "source_archive_sha256": "6279d9ba191d6ed1468a69ae22ec879004e13d05a1f06544303d8a9f62f36c29",
+    "source_member": "Moonshot_Collector_Research_Handoff_2026-10-06/fixtures/synthetic_config.json",
+    "sha256": "377f9e7321ed8bfa55f91aecb86cc7c214f11081b5a9afb26bb706332bafe54f",
+    "bytes": 4422,
+    "source_bytes_unchanged": true
+  },
+  {
+    "component": "offline_handoff_contracts",
+    "path": "radar_handoff/Moonshot_Collector_Research_Handoff_2026-10-06/fixtures/synthetic_envelope.json",
+    "source_archive": "Moonshot_Collector_Research_Handoff_2026-10-06.zip",
+    "source_archive_sha256": "6279d9ba191d6ed1468a69ae22ec879004e13d05a1f06544303d8a9f62f36c29",
+    "source_member": "Moonshot_Collector_Research_Handoff_2026-10-06/fixtures/synthetic_envelope.json",
+    "sha256": "23744f61dd7a135b97de0367579bf6a7a49dde18d25c65be235442c4d9addc5e",
+    "bytes": 4788,
+    "source_bytes_unchanged": true
+  },
+  {
+    "component": "offline_handoff_contracts",
+    "path": "radar_handoff/Moonshot_Collector_Research_Handoff_2026-10-06/fixtures/synthetic_manager_dossier.json",
+    "source_archive": "Moonshot_Collector_Research_Handoff_2026-10-06.zip",
+    "source_archive_sha256": "6279d9ba191d6ed1468a69ae22ec879004e13d05a1f06544303d8a9f62f36c29",
+    "source_member": "Moonshot_Collector_Research_Handoff_2026-10-06/fixtures/synthetic_manager_dossier.json",
+    "sha256": "58bc43e065cc6c2bb73a0e93447f40f311ddc0e14331024b824fd9ff09c637e6",
+    "bytes": 9590,
+    "source_bytes_unchanged": true
+  },
+  {
+    "component": "offline_handoff_contracts",
+    "path": "radar_handoff/Moonshot_Collector_Research_Handoff_2026-10-06/tests/run_worker.py",
+    "source_archive": "Moonshot_Collector_Research_Handoff_2026-10-06.zip",
+    "source_archive_sha256": "6279d9ba191d6ed1468a69ae22ec879004e13d05a1f06544303d8a9f62f36c29",
+    "source_member": "Moonshot_Collector_Research_Handoff_2026-10-06/tests/run_worker.py",
+    "sha256": "cb4368bac13f538bc6838d1e06fcb39befdef71b5492e35d37ba421ba146697c",
+    "bytes": 1716,
+    "source_bytes_unchanged": true
+  },
+  {
+    "component": "offline_handoff_contracts",
+    "path": "radar_handoff/Moonshot_Collector_Research_Handoff_2026-10-06/tests/test_handoff.py",
+    "source_archive": "Moonshot_Collector_Research_Handoff_2026-10-06.zip",
+    "source_archive_sha256": "6279d9ba191d6ed1468a69ae22ec879004e13d05a1f06544303d8a9f62f36c29",
+    "source_member": "Moonshot_Collector_Research_Handoff_2026-10-06/tests/test_handoff.py",
+    "sha256": "0539f61329ee7ad4f46be768d3043338f450531d8b77ab555db2449627a30f37",
+    "bytes": 14452,
+    "source_bytes_unchanged": true
+  },
+  {
+    "component": "accepted_recovery_cli",
+    "path": "recovery_cli/Catalyst_Ledger_Recovery_Benchmark_2026-10-07/candidate_tree/candidate/catalyst_paper_delivery/build_workbook.mjs",
+    "source_archive": "Catalyst_Ledger_Recovery_Benchmark_2026-10-07.zip",
+    "source_archive_sha256": "2c50eacd77f5f8ac195e5b80641b85dac1b170ef1a3eda1ee576271fc8667735",
+    "source_member": "Catalyst_Ledger_Recovery_Benchmark_2026-10-07/candidate_tree/candidate/catalyst_paper_delivery/build_workbook.mjs",
+    "sha256": "65aa193d08bda6aaa811ddc36a97a64ea6b1b80fae3680165b811886184d6133",
+    "bytes": 12051,
+    "source_bytes_unchanged": true
+  },
+  {
+    "component": "accepted_recovery_cli",
+    "path": "recovery_cli/Catalyst_Ledger_Recovery_Benchmark_2026-10-07/candidate_tree/candidate/catalyst_paper_delivery/entry_bridge.py",
+    "source_archive": "Catalyst_Ledger_Recovery_Benchmark_2026-10-07.zip",
+    "source_archive_sha256": "2c50eacd77f5f8ac195e5b80641b85dac1b170ef1a3eda1ee576271fc8667735",
+    "source_member": "Catalyst_Ledger_Recovery_Benchmark_2026-10-07/candidate_tree/candidate/catalyst_paper_delivery/entry_bridge.py",
+    "sha256": "0d8991a1aa95c677266c4d25fe7710fd0c46e4af5cdea18648b868d2e19fa580",
+    "bytes": 17131,
+    "source_bytes_unchanged": true
+  },
+  {
+    "component": "accepted_recovery_cli",
+    "path": "recovery_cli/Catalyst_Ledger_Recovery_Benchmark_2026-10-07/candidate_tree/candidate/catalyst_paper_delivery/entry_contract.json",
+    "source_archive": "Catalyst_Ledger_Recovery_Benchmark_2026-10-07.zip",
+    "source_archive_sha256": "2c50eacd77f5f8ac195e5b80641b85dac1b170ef1a3eda1ee576271fc8667735",
+    "source_member": "Catalyst_Ledger_Recovery_Benchmark_2026-10-07/candidate_tree/candidate/catalyst_paper_delivery/entry_contract.json",
+    "sha256": "ec5bef0607852befe36a2c69e65205371ff18b65d3efb6af6db42533d5658c53",
+    "bytes": 7707,
+    "source_bytes_unchanged": true
+  },
+  {
+    "component": "accepted_recovery_cli",
+    "path": "recovery_cli/Catalyst_Ledger_Recovery_Benchmark_2026-10-07/candidate_tree/candidate/catalyst_paper_delivery/ledger.py",
+    "source_archive": "Catalyst_Ledger_CLI_Refusal_2026-10-07.zip",
+    "source_archive_sha256": "5aa4915a375f9ec0a119947bb579cb6bf19c75acfc661b38b2fd249da7f0044f",
+    "source_member": "Catalyst_Ledger_CLI_Refusal_2026-10-07/patched_files/ledger.py",
+    "sha256": "af4e1af77632ef82a9b4947d7a7119053e270f32d328b9dd6b864f4d5ebe7de8",
+    "bytes": 30182,
+    "source_bytes_unchanged": true
+  },
+  {
+    "component": "accepted_recovery_cli",
+    "path": "recovery_cli/Catalyst_Ledger_Recovery_Benchmark_2026-10-07/candidate_tree/candidate/catalyst_paper_delivery/recovery.py",
+    "source_archive": "Catalyst_Ledger_Recovery_Benchmark_2026-10-07.zip",
+    "source_archive_sha256": "2c50eacd77f5f8ac195e5b80641b85dac1b170ef1a3eda1ee576271fc8667735",
+    "source_member": "Catalyst_Ledger_Recovery_Benchmark_2026-10-07/candidate_tree/candidate/catalyst_paper_delivery/recovery.py",
+    "sha256": "048749aab675505eff3fe19e7f07cdec701ce88a071a71713117d8755daeadac",
+    "bytes": 18786,
+    "source_bytes_unchanged": true
+  },
+  {
+    "component": "accepted_recovery_cli",
+    "path": "recovery_cli/Catalyst_Ledger_Recovery_Benchmark_2026-10-07/candidate_tree/candidate/catalyst_paper_v2/accounting.py",
+    "source_archive": "Catalyst_Ledger_Recovery_Benchmark_2026-10-07.zip",
+    "source_archive_sha256": "2c50eacd77f5f8ac195e5b80641b85dac1b170ef1a3eda1ee576271fc8667735",
+    "source_member": "Catalyst_Ledger_Recovery_Benchmark_2026-10-07/candidate_tree/candidate/catalyst_paper_v2/accounting.py",
+    "sha256": "29688797f6738e4aa02ca87403a5a90d60dec0bca54cffab36a4a4a7e266f8a6",
+    "bytes": 8165,
+    "source_bytes_unchanged": true
+  },
+  {
+    "component": "accepted_recovery_cli",
+    "path": "recovery_cli/Catalyst_Ledger_Recovery_Benchmark_2026-10-07/candidate_tree/candidate/catalyst_paper_v2/catalyst.py",
+    "source_archive": "Catalyst_Ledger_Recovery_Benchmark_2026-10-07.zip",
+    "source_archive_sha256": "2c50eacd77f5f8ac195e5b80641b85dac1b170ef1a3eda1ee576271fc8667735",
+    "source_member": "Catalyst_Ledger_Recovery_Benchmark_2026-10-07/candidate_tree/candidate/catalyst_paper_v2/catalyst.py",
+    "sha256": "28ad94762eb385267c243c0ffd3e8ac75b17a8e708057e11bf7f88046d4c3c28",
+    "bytes": 31396,
+    "source_bytes_unchanged": true
+  },
+  {
+    "component": "accepted_recovery_cli_tests",
+    "path": "recovery_cli/Catalyst_Ledger_Recovery_Benchmark_2026-10-07/cli_refusal_tests/test_cli_refusal.py",
+    "source_archive": "Catalyst_Ledger_CLI_Refusal_2026-10-07.zip",
+    "source_archive_sha256": "5aa4915a375f9ec0a119947bb579cb6bf19c75acfc661b38b2fd249da7f0044f",
+    "source_member": "Catalyst_Ledger_CLI_Refusal_2026-10-07/patched_files/test_cli_refusal.py",
+    "sha256": "8c48a5354b0f96a41e612776b17f81d92fd58ca44a10245ceccd008202014d1b",
+    "bytes": 15385,
+    "source_bytes_unchanged": true
+  },
+  {
+    "component": "accepted_recovery_cli",
+    "path": "recovery_cli/Catalyst_Ledger_Recovery_Benchmark_2026-10-07/prior_tests/rv_helpers.py",
+    "source_archive": "Catalyst_Ledger_Recovery_Benchmark_2026-10-07.zip",
+    "source_archive_sha256": "2c50eacd77f5f8ac195e5b80641b85dac1b170ef1a3eda1ee576271fc8667735",
+    "source_member": "Catalyst_Ledger_Recovery_Benchmark_2026-10-07/prior_tests/rv_helpers.py",
+    "sha256": "901bf2333dc5c88211db0ed539e1f7cfa014d54cd07cb7e6a8f31ba1f2c759d5",
+    "bytes": 2691,
+    "source_bytes_unchanged": true
+  },
+  {
+    "component": "accepted_recovery_cli",
+    "path": "recovery_cli/Catalyst_Ledger_Recovery_Benchmark_2026-10-07/prior_tests/test_persistence_repairs.py",
+    "source_archive": "Catalyst_Ledger_Recovery_Benchmark_2026-10-07.zip",
+    "source_archive_sha256": "2c50eacd77f5f8ac195e5b80641b85dac1b170ef1a3eda1ee576271fc8667735",
+    "source_member": "Catalyst_Ledger_Recovery_Benchmark_2026-10-07/prior_tests/test_persistence_repairs.py",
+    "sha256": "040f6ff55a541df7b262af9afe6cfc3af6d577e5b78cecf836ccc694f0f848ee",
+    "bytes": 15077,
+    "source_bytes_unchanged": true
+  },
+  {
+    "component": "accepted_recovery_cli",
+    "path": "recovery_cli/Catalyst_Ledger_Recovery_Benchmark_2026-10-07/recovery_tests/fault_driver.py",
+    "source_archive": "Catalyst_Ledger_Recovery_Benchmark_2026-10-07.zip",
+    "source_archive_sha256": "2c50eacd77f5f8ac195e5b80641b85dac1b170ef1a3eda1ee576271fc8667735",
+    "source_member": "Catalyst_Ledger_Recovery_Benchmark_2026-10-07/recovery_tests/fault_driver.py",
+    "sha256": "1b37f7955ab2db835b88bf71988eeee7d6e32d549af9bfa96d9583c0e4151651",
+    "bytes": 3535,
+    "source_bytes_unchanged": true
+  },
+  {
+    "component": "accepted_recovery_cli",
+    "path": "recovery_cli/Catalyst_Ledger_Recovery_Benchmark_2026-10-07/recovery_tests/raw_fault_driver.py",
+    "source_archive": "Catalyst_Ledger_Recovery_Benchmark_2026-10-07.zip",
+    "source_archive_sha256": "2c50eacd77f5f8ac195e5b80641b85dac1b170ef1a3eda1ee576271fc8667735",
+    "source_member": "Catalyst_Ledger_Recovery_Benchmark_2026-10-07/recovery_tests/raw_fault_driver.py",
+    "sha256": "560082c4196ca47cc727b95ab4f671355e72ed54209008a32bcd7218dcc30eec",
+    "bytes": 381,
+    "source_bytes_unchanged": true
+  },
+  {
+    "component": "accepted_recovery_cli",
+    "path": "recovery_cli/Catalyst_Ledger_Recovery_Benchmark_2026-10-07/recovery_tests/run_worker.py",
+    "source_archive": "Catalyst_Ledger_Recovery_Benchmark_2026-10-07.zip",
+    "source_archive_sha256": "2c50eacd77f5f8ac195e5b80641b85dac1b170ef1a3eda1ee576271fc8667735",
+    "source_member": "Catalyst_Ledger_Recovery_Benchmark_2026-10-07/recovery_tests/run_worker.py",
+    "sha256": "c70c71435ce51932f91374df4bd5cce55cca3e4969d7ce4dbc73aa2c1b3630f0",
+    "bytes": 824,
+    "source_bytes_unchanged": true
+  },
+  {
+    "component": "accepted_recovery_cli",
+    "path": "recovery_cli/Catalyst_Ledger_Recovery_Benchmark_2026-10-07/recovery_tests/test_recovery.py",
+    "source_archive": "Catalyst_Ledger_Recovery_Benchmark_2026-10-07.zip",
+    "source_archive_sha256": "2c50eacd77f5f8ac195e5b80641b85dac1b170ef1a3eda1ee576271fc8667735",
+    "source_member": "Catalyst_Ledger_Recovery_Benchmark_2026-10-07/recovery_tests/test_recovery.py",
+    "sha256": "c39b253cba47b1bb6e0856a09ee6fe33f22dcf834160471d5d7a3034f7e448b5",
+    "bytes": 25319,
+    "source_bytes_unchanged": true
+  },
+  {
+    "component": "accepted_recovery_cli",
+    "path": "recovery_cli/Catalyst_Ledger_Recovery_Benchmark_2026-10-07/tools/trace_runner.py",
+    "source_archive": "Catalyst_Ledger_Recovery_Benchmark_2026-10-07.zip",
+    "source_archive_sha256": "2c50eacd77f5f8ac195e5b80641b85dac1b170ef1a3eda1ee576271fc8667735",
+    "source_member": "Catalyst_Ledger_Recovery_Benchmark_2026-10-07/tools/trace_runner.py",
+    "sha256": "4cb3e927a37d949077acaee2302ea4ae5f91dda7581a5ce8aa53de5e28938aef",
+    "bytes": 896,
+    "source_bytes_unchanged": true
+  }
+]

@@ -1,0 +1,44 @@
+{
+  "package": "Moonshot_Offline_Source_Candidate_2026-10-07",
+  "kind": "sanitized_offline_source_candidate",
+  "source_code_changes": false,
+  "executed_during_packaging": false,
+  "source_archives": {
+    "benchmark": {
+      "name": "Catalyst_Ledger_Recovery_Benchmark_2026-10-07.zip",
+      "sha256": "2c50eacd77f5f8ac195e5b80641b85dac1b170ef1a3eda1ee576271fc8667735"
+    },
+    "accepted_cli_repair": {
+      "name": "Catalyst_Ledger_CLI_Refusal_2026-10-07.zip",
+      "sha256": "5aa4915a375f9ec0a119947bb579cb6bf19c75acfc661b38b2fd249da7f0044f"
+    },
+    "assessment": {
+      "name": "Catalyst_CLI_Repair_Assessment_Evidence_2026-10-07.zip",
+      "sha256": "fcd31103a45ca2b6be135bde652424839d332a582bf51bb7339e0a5ed2c9db20"
+    },
+    "collector_handoff": {
+      "name": "Moonshot_Collector_Research_Handoff_2026-10-06.zip",
+      "sha256": "6279d9ba191d6ed1468a69ae22ec879004e13d05a1f06544303d8a9f62f36c29"
+    },
+    "intake_preparation": {
+      "name": "Americas_Intake_Quality_Trial_Preparation_2026-10-07.zip",
+      "sha256": "ee0ea81548fb274b94bb61c4c57be8a42278abb391b2a1ed2c304dbf5521bc55"
+    }
+  },
+  "canonical_ledger": "recovery_cli/Catalyst_Ledger_Recovery_Benchmark_2026-10-07/candidate_tree/candidate/catalyst_paper_delivery/ledger.py",
+  "composition": "Benchmark source subset plus the accepted ledger and new test at the two previously assessed patch targets. Radar/handoff source stays separate; no new integration patch.",
+  "legacy_repository": {
+    "component": "ASTRA research scanner",
+    "preserve_existing_paths": true,
+    "previously_observed_branch": "claude/loving-gauss-1o1ldm",
+    "previously_observed_short_commit": "def376e",
+    "recheck_before_upload": true
+  },
+  "future_repository_subdirectory": "offline-candidate/",
+  "combined_runnable": false,
+  "excluded_private_bound_component": "Intake trial implementation, source-bound schema and configuration",
+  "missing_original_tests": [
+    "Original R3 helper and execution coverage",
+    "Frozen 99-case evaluator"
+  ]
+}

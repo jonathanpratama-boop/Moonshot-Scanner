@@ -1,0 +1,138 @@
+{
+  "execution_in_this_package": "NOT_RUN",
+  "counts_are_static_methods_not_runtime_subtests": true,
+  "files": [
+    {
+      "path": "radar_handoff/Moonshot_Collector_Research_Handoff_2026-10-06/candidate/Moonshot_Radar_Operational_Candidate_2026-10-06/tests/test_radar.py",
+      "test_method_count": 25,
+      "methods": [
+        "RadarTests.test_01_hlb_late_claim_never_invents_time_or_cause",
+        "RadarTests.test_01_attribution_requires_trace_not_speculation",
+        "RadarTests.test_02_near_rerun_and_state_transition_keep_dependency",
+        "RadarTests.test_03_apxc_venues_currency_and_unsupported_targets",
+        "RadarTests.test_04_techd_expiry_not_forecast_or_calendar",
+        "RadarTests.test_05_platform_time_cannot_supply_authorship",
+        "RadarTests.test_05_receipts_append_and_cannot_be_edited",
+        "RadarTests.test_05_delays_need_exact_comparable_clocks",
+        "RadarTests.test_05_explicit_forecast_remains_unadmitted",
+        "RadarTests.test_05_event_lead_and_content_bound_delivery",
+        "RadarTests.test_06_source_failure_no_new_partial_recovery",
+        "RadarTests.test_06_no_signal_and_unknown_denominator",
+        "RadarTests.test_06_missing_expected_run_and_registry_order",
+        "RadarTests.test_06_bad_recovery_cannot_erase_gap",
+        "RadarTests.test_07_expiry_close_and_linked_reopening",
+        "RadarTests.test_07_bounded_review_renewal_and_metrics",
+        "RadarTests.test_07_alert_gating_dedup_revisions_stay_silent",
+        "RadarTests.test_07_overdue_and_failure_notice_rule_required",
+        "RadarTests.test_07_invalid_transitions_scope_and_unbounded_records",
+        "RadarTests.test_07_review_only_deadline_closes_without_renewal",
+        "RadarTests.test_08_exact_stock_crypto_parity_missing_and_wrong_contract",
+        "RadarTests.test_08_injected_detector_bytes_unchanged_not_actual_astra",
+        "RadarTests.test_08_snapshot_copy_chain_and_refusal_atomicity",
+        "RadarTests.test_08_offline_only_frozen_baseline_hashes",
+        "SyntheticEntryTests.test_08_radar_record_complete_separate_plan_buy_and_whole_exit"
+      ],
+      "current_package_status": "STATIC_LAYOUT_INTACT_NOT_RUN"
+    },
+    {
+      "path": "radar_handoff/Moonshot_Collector_Research_Handoff_2026-10-06/tests/test_handoff.py",
+      "test_method_count": 19,
+      "methods": [
+        "HandoffTests.test_historical_bytes_clocks_and_unknowns_round_trip",
+        "HandoffTests.test_historical_never_enters_radar_or_execution",
+        "HandoffTests.test_historical_promotion_explicitly_refused",
+        "HandoffTests.test_historical_pin_tamper_and_missing_raw_refused",
+        "HandoffTests.test_missing_dossier_exact_frozen_reasons_no_forecast_gate",
+        "HandoffTests.test_identity_mismatch_preserves_original",
+        "HandoffTests.test_synthetic_complete_assessment_without_execution",
+        "HandoffTests.test_synthetic_missing_raw_and_hash_mismatch",
+        "HandoffTests.test_synthetic_missing_authored_and_collector_clocks_stay_unknown",
+        "HandoffTests.test_conflicting_clock_binding_refused",
+        "HandoffTests.test_future_read_and_contradictory_publication_clock_refused",
+        "HandoffTests.test_continuity_gap_remains_separate_from_dossier",
+        "HandoffTests.test_duplicate_does_not_create_new_or_promote",
+        "HandoffTests.test_conflicting_revision_is_not_silently_overwritten",
+        "HandoffTests.test_separate_dossier_candidate_binding_and_plan_hash",
+        "HandoffTests.test_plan_identity_mismatch_not_overwritten",
+        "HandoffTests.test_unresolved_identity_reports_missing_input",
+        "HandoffTests.test_collector_record_binding_mismatch",
+        "HandoffTests.test_cli_child_actual_optimization_and_no_execution"
+      ],
+      "current_package_status": "MISSING_PRIVATE_OR_BASELINE_DEPENDENCIES_NOT_RUN"
+    },
+    {
+      "path": "recovery_cli/Catalyst_Ledger_Recovery_Benchmark_2026-10-07/cli_refusal_tests/test_cli_refusal.py",
+      "test_method_count": 7,
+      "methods": [
+        "RawCliRefusalTests.test_raw_init_refused_without_creating_output_or_touching_inputs",
+        "RawCliRefusalTests.test_raw_advance_refused_on_recovery_root_and_plain_chain",
+        "RawCliRefusalTests.test_raw_advance_refused_while_recovery_operation_is_uncertain",
+        "RawCliRefusalTests.test_recovery_cli_init_and_advance_continue_to_work",
+        "RawCliRefusalTests.test_raw_verify_and_export_preserved_and_do_not_clear_pending",
+        "RawCliRefusalTests.test_no_environment_bypass_and_only_documented_subcommands",
+        "RawCliRefusalTests.test_imported_api_and_in_process_main_semantics"
+      ],
+      "current_package_status": "MISSING_PRIVATE_OR_BASELINE_DEPENDENCIES_NOT_RUN"
+    },
+    {
+      "path": "recovery_cli/Catalyst_Ledger_Recovery_Benchmark_2026-10-07/prior_tests/test_persistence_repairs.py",
+      "test_method_count": 12,
+      "methods": [
+        "PersistenceRepairs.test_A06_nonstring_receipt_keys_refused_before_publication",
+        "PersistenceRepairs.test_A06_preflight_refusal_does_not_create_output_directory",
+        "PersistenceRepairs.test_json_safe_receipt_metadata_saves_and_verifies_exact_bytes",
+        "PersistenceRepairs.test_C08_directory_fsync_failure_retains_generation_and_reports_uncertainty",
+        "PersistenceRepairs.test_C08_directory_open_failure_retains_generation",
+        "PersistenceRepairs.test_C08_directory_close_failure_retains_generation",
+        "PersistenceRepairs.test_C08_interleaved_committed_successor_is_not_orphaned",
+        "PersistenceRepairs.test_C08_separate_process_commits_successor_before_parent_fsync_fails",
+        "PersistenceRepairs.test_successful_looking_short_or_changed_write_refused_before_publication",
+        "PersistenceRepairs.test_prelink_io_failures_clean_up_and_allow_retry",
+        "PersistenceRepairs.test_successful_same_content_retry_still_refuses_overwrite",
+        "PersistenceRepairs.test_temporary_readback_io_failure_refused_before_publication"
+      ],
+      "current_package_status": "MISSING_PRIVATE_OR_BASELINE_DEPENDENCIES_NOT_RUN"
+    },
+    {
+      "path": "recovery_cli/Catalyst_Ledger_Recovery_Benchmark_2026-10-07/recovery_tests/test_recovery.py",
+      "test_method_count": 27,
+      "methods": [
+        "RecoveryTests.test_normal_roundtrip_and_duplicate_does_not_replay",
+        "RecoveryTests.test_duplicate_init_is_idempotent",
+        "RecoveryTests.test_changed_request_under_completed_id_is_refused",
+        "RecoveryTests.test_explicit_extended_timing_is_refused_without_intent",
+        "RecoveryTests.test_stale_parent_is_refused_before_intent",
+        "RecoveryTests.test_no_receipt_cannot_buy_and_no_new_intent",
+        "RecoveryTests.test_intent_create_failure_publishes_nothing_and_safe_retry",
+        "RecoveryTests.test_intent_sync_failures_publish_nothing_and_stay_pending",
+        "RecoveryTests.test_partial_pending_record_blocks_without_publication",
+        "RecoveryTests.test_publication_uncertainty_status_is_read_only_and_reconcile_no_replay",
+        "RecoveryTests.test_uncertain_sell_keeps_recorded_cash_separate_from_accepted_cash",
+        "RecoveryTests.test_post_publication_resync_and_completion_failures",
+        "RecoveryTests.test_completion_uncertainty_and_lost_ack_never_replay",
+        "RecoveryTests.test_partial_completion_fails_closed_and_preserves_result",
+        "RecoveryTests.test_real_process_crashes_at_intent_publication_and_completion",
+        "RecoveryTests.test_failed_reconciliation_stays_pending",
+        "RecoveryTests.test_reconciliation_record_failure_preserves_pending",
+        "RecoveryTests.test_missing_malformed_and_symlink_controls_fail_closed",
+        "RecoveryTests.test_missing_journal_after_publication_cannot_adopt_chain",
+        "RecoveryTests.test_unexplained_successor_preserved_and_blocks_reconciliation",
+        "RecoveryTests.test_completed_evidence_requires_resync_before_duplicate_or_new_mutation",
+        "RecoveryTests.test_concurrent_caller_lock_and_stale_lock_restart",
+        "RecoveryTests.test_bootstrap_failure_cannot_publish_or_silently_resume",
+        "RecoveryTests.test_raw_verify_valid_does_not_clear_pending",
+        "RecoveryTests.test_before_after_uncertain_buy_blocks_next_transition_only_through_caller",
+        "RecoveryTests.test_two_process_buy_requests_commit_at_most_once",
+        "RecoveryTests.test_changed_code_identity_or_visible_result_cannot_reconcile"
+      ],
+      "current_package_status": "MISSING_PRIVATE_OR_BASELINE_DEPENDENCIES_NOT_RUN"
+    }
+  ],
+  "omitted_test_families": [
+    "Core tests and delivery tests containing account-shaped fixtures",
+    "Original R3 helper-dependent tests",
+    "Frozen 99-case evaluator",
+    "Private-source-bound intake trial tests"
+  ],
+  "historical_results": "See STATUS.md; not a new execution result."
+}

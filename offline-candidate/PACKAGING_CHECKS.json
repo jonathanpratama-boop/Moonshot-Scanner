@@ -1,0 +1,21 @@
+{
+  "date_utc": "2026-10-07",
+  "check_type": "static_packaging_only",
+  "source_archives_sha256_verified": 5,
+  "unchanged_copied_files": 32,
+  "python_ast_parse_files": 20,
+  "json_parse_files_before_generated_reports": 14,
+  "source_execution": false,
+  "runtime_import_verification": false,
+  "canonical_ledger_count": 1,
+  "selected_source_bytes_preserved": true,
+  "privacy_pattern_findings": 0,
+  "privacy_check_limit": "Explicit allowlist, source inspection and targeted pattern checks; no claim of exhaustive secret detection.",
+  "known_layout_blockers": [
+    "Collector handoff older nested baseline omitted",
+    "Recovery protocol README and baseline fixture/tests omitted",
+    "Historical pinned packet omitted",
+    "Private-source-bound trial implementation and schema omitted"
+  ],
+  "inventory_and_hash_scope": "All package files except MANIFEST.sha256 itself; see UPLOAD_INVENTORY.txt."
+}

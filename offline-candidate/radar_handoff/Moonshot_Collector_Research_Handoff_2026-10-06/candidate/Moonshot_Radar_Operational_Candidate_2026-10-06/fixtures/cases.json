@@ -1,0 +1,647 @@
+{
+  "HLB": {
+    "candidate_id": "APAC-HLB-20261006-01-r2.1",
+    "dependency_group_id": "APAC-HLB-20261006-01-r2.1:dependency",
+    "source_id": "primary",
+    "run_id": "r1",
+    "message_id": "APAC-HLB-20261006-01-r2.1:DESCRIBED_NOT_RAW",
+    "universe_key": "HLB",
+    "configuration_label": "SYNTHETIC ASTRA injection boundary",
+    "configuration_hash": "5a03c83b37976248f7625751dd32a6d8bac1fe8a13388236921fec17d8a3e9b7",
+    "state": "NEW",
+    "identity": null,
+    "detector_feed": "described claim only; no raw feed",
+    "execution_venue": null,
+    "mechanism": "Captured research claim; verify economic transmission separately",
+    "invalidation": "Unsupported or contradicted primary evidence",
+    "evidence": [
+      "final proposal PDF page 3; raw signal/cutoff evidence unavailable"
+    ],
+    "missing_facts": [
+      "original point-in-time capture",
+      "verified primary-source timing"
+    ],
+    "owner": "SYNTHETIC_REVIEWER",
+    "evidence_to_clear": [
+      "verify original source and exact identity"
+    ],
+    "next_review_at": "2026-10-06T19:00:00Z",
+    "expiry_at": "2026-10-06T20:00:00Z",
+    "explicit_forecast": null,
+    "clocks": {
+      "published_at": {
+        "value": null,
+        "verified": false,
+        "null_reason": "not provided in proposal; never reconstructed",
+        "evidence": null,
+        "precision": null,
+        "semantics": null,
+        "timezone": null,
+        "publisher": null
+      },
+      "first_verified_available_at": {
+        "value": null,
+        "verified": false,
+        "null_reason": "not provided in proposal; never reconstructed",
+        "evidence": null,
+        "precision": null,
+        "semantics": null,
+        "timezone": null,
+        "publisher": null
+      },
+      "radar_first_discovered_at": {
+        "value": null,
+        "verified": false,
+        "null_reason": "not provided in proposal; never reconstructed",
+        "evidence": null,
+        "precision": null,
+        "semantics": null,
+        "timezone": null,
+        "publisher": null
+      },
+      "alert_authored_at": {
+        "value": null,
+        "verified": false,
+        "null_reason": "not provided in proposal; never reconstructed",
+        "evidence": null,
+        "precision": null,
+        "semantics": null,
+        "timezone": null,
+        "publisher": null
+      },
+      "collector_received_at": {
+        "value": null,
+        "verified": false,
+        "null_reason": "not provided in proposal; never reconstructed",
+        "evidence": null,
+        "precision": null,
+        "semantics": null,
+        "timezone": null,
+        "publisher": null
+      },
+      "delivered_at": {
+        "value": null,
+        "verified": false,
+        "null_reason": "not provided in proposal; never reconstructed",
+        "evidence": null,
+        "precision": null,
+        "semantics": null,
+        "timezone": null,
+        "publisher": null
+      },
+      "source_data_as_of": {
+        "value": null,
+        "verified": false,
+        "null_reason": "not provided in proposal; never reconstructed",
+        "evidence": null,
+        "precision": null,
+        "semantics": null,
+        "timezone": null,
+        "publisher": null
+      },
+      "retrieved_at": {
+        "value": null,
+        "verified": false,
+        "null_reason": "not provided in proposal; never reconstructed",
+        "evidence": null,
+        "precision": null,
+        "semantics": null,
+        "timezone": null,
+        "publisher": null
+      }
+    },
+    "unsupported_claims": [],
+    "late_cause": "UNKNOWN",
+    "fixture_provenance": {
+      "kind": "proposal_described_claim",
+      "historical_cutoff": null,
+      "cutoff_reason": "raw point-in-time capture unavailable",
+      "operational_fixture_time": "2026-10-06T18:00:00Z",
+      "deadline_basis": "synthetic review/expiry clocks, not original signal deadlines",
+      "source_document_sha256": "1d420c7afdaa0892c7aceea1c1afae910697ed4b0a2730b51acb34485b369820"
+    },
+    "late_status": "CAPTURED_LATE_CLAIM",
+    "captured_chronology_claim": "reporting before Korean open; discovery after session; exact minutes unknown"
+  },
+  "NEAR": {
+    "candidate_id": "NEAR-20261005-RSSHOCK-03",
+    "dependency_group_id": "NEAR-20261005-RSSHOCK-03:dependency",
+    "source_id": "primary",
+    "run_id": "r1",
+    "message_id": "NEAR-20261005-RSSHOCK-03:DESCRIBED_NOT_RAW",
+    "universe_key": "NEAR",
+    "configuration_label": "SYNTHETIC ASTRA injection boundary",
+    "configuration_hash": "5a03c83b37976248f7625751dd32a6d8bac1fe8a13388236921fec17d8a3e9b7",
+    "state": "NEW",
+    "identity": {
+      "asset_class": "crypto",
+      "symbol": "NEAR",
+      "chain": "SYNTHETIC_NEAR",
+      "contract": "native:SYNTHETIC_NEAR",
+      "product": "spot",
+      "venue": "SYNTHETIC_VENUE",
+      "currency": "USD",
+      "verified": true,
+      "evidence": "SYNTHETIC identity fixture"
+    },
+    "detector_feed": "described claim only; no raw feed",
+    "execution_venue": null,
+    "mechanism": "Captured research claim; verify economic transmission separately",
+    "invalidation": "Unsupported or contradicted primary evidence",
+    "evidence": [
+      "final proposal PDF page 3; raw signal/cutoff evidence unavailable"
+    ],
+    "missing_facts": [
+      "original point-in-time capture",
+      "verified primary-source timing"
+    ],
+    "owner": "SYNTHETIC_REVIEWER",
+    "evidence_to_clear": [
+      "verify original source and exact identity"
+    ],
+    "next_review_at": "2026-10-06T19:00:00Z",
+    "expiry_at": "2026-10-06T20:00:00Z",
+    "explicit_forecast": null,
+    "clocks": {
+      "published_at": {
+        "value": null,
+        "verified": false,
+        "null_reason": "not provided in proposal; never reconstructed",
+        "evidence": null,
+        "precision": null,
+        "semantics": null,
+        "timezone": null,
+        "publisher": null
+      },
+      "first_verified_available_at": {
+        "value": null,
+        "verified": false,
+        "null_reason": "not provided in proposal; never reconstructed",
+        "evidence": null,
+        "precision": null,
+        "semantics": null,
+        "timezone": null,
+        "publisher": null
+      },
+      "radar_first_discovered_at": {
+        "value": null,
+        "verified": false,
+        "null_reason": "not provided in proposal; never reconstructed",
+        "evidence": null,
+        "precision": null,
+        "semantics": null,
+        "timezone": null,
+        "publisher": null
+      },
+      "alert_authored_at": {
+        "value": null,
+        "verified": false,
+        "null_reason": "not provided in proposal; never reconstructed",
+        "evidence": null,
+        "precision": null,
+        "semantics": null,
+        "timezone": null,
+        "publisher": null
+      },
+      "collector_received_at": {
+        "value": null,
+        "verified": false,
+        "null_reason": "not provided in proposal; never reconstructed",
+        "evidence": null,
+        "precision": null,
+        "semantics": null,
+        "timezone": null,
+        "publisher": null
+      },
+      "delivered_at": {
+        "value": null,
+        "verified": false,
+        "null_reason": "not provided in proposal; never reconstructed",
+        "evidence": null,
+        "precision": null,
+        "semantics": null,
+        "timezone": null,
+        "publisher": null
+      },
+      "source_data_as_of": {
+        "value": null,
+        "verified": false,
+        "null_reason": "not provided in proposal; never reconstructed",
+        "evidence": null,
+        "precision": null,
+        "semantics": null,
+        "timezone": null,
+        "publisher": null
+      },
+      "retrieved_at": {
+        "value": null,
+        "verified": false,
+        "null_reason": "not provided in proposal; never reconstructed",
+        "evidence": null,
+        "precision": null,
+        "semantics": null,
+        "timezone": null,
+        "publisher": null
+      }
+    },
+    "unsupported_claims": [],
+    "late_cause": "UNKNOWN",
+    "fixture_provenance": {
+      "kind": "proposal_described_claim",
+      "historical_cutoff": null,
+      "cutoff_reason": "raw point-in-time capture unavailable",
+      "operational_fixture_time": "2026-10-06T18:00:00Z",
+      "deadline_basis": "synthetic review/expiry clocks, not original signal deadlines",
+      "source_document_sha256": "1d420c7afdaa0892c7aceea1c1afae910697ed4b0a2730b51acb34485b369820"
+    },
+    "detector_result": {
+      "captured_label": "RS_SHOCK",
+      "raw_output_unavailable": true
+    }
+  },
+  "APXC": {
+    "candidate_id": "AMERICAS-APXC-20261005-01",
+    "dependency_group_id": "AMERICAS-APXC-20261005-01:dependency",
+    "source_id": "primary",
+    "run_id": "r1",
+    "message_id": "AMERICAS-APXC-20261005-01:DESCRIBED_NOT_RAW",
+    "universe_key": "APXC",
+    "configuration_label": "SYNTHETIC ASTRA injection boundary",
+    "configuration_hash": "5a03c83b37976248f7625751dd32a6d8bac1fe8a13388236921fec17d8a3e9b7",
+    "state": "NEW",
+    "identity": null,
+    "detector_feed": "described claim only; no raw feed",
+    "execution_venue": null,
+    "mechanism": "Assay headline; economics and holder value unverified",
+    "invalidation": "Unsupported or contradicted primary evidence",
+    "evidence": [
+      "final proposal PDF page 3; raw signal/cutoff evidence unavailable"
+    ],
+    "missing_facts": [
+      "original point-in-time capture",
+      "verified primary-source timing"
+    ],
+    "owner": "SYNTHETIC_REVIEWER",
+    "evidence_to_clear": [
+      "verify original source and exact identity"
+    ],
+    "next_review_at": "2026-10-06T19:00:00Z",
+    "expiry_at": "2026-10-06T20:00:00Z",
+    "explicit_forecast": null,
+    "clocks": {
+      "published_at": {
+        "value": null,
+        "verified": false,
+        "null_reason": "not provided in proposal; never reconstructed",
+        "evidence": null,
+        "precision": null,
+        "semantics": null,
+        "timezone": null,
+        "publisher": null
+      },
+      "first_verified_available_at": {
+        "value": null,
+        "verified": false,
+        "null_reason": "not provided in proposal; never reconstructed",
+        "evidence": null,
+        "precision": null,
+        "semantics": null,
+        "timezone": null,
+        "publisher": null
+      },
+      "radar_first_discovered_at": {
+        "value": null,
+        "verified": false,
+        "null_reason": "not provided in proposal; never reconstructed",
+        "evidence": null,
+        "precision": null,
+        "semantics": null,
+        "timezone": null,
+        "publisher": null
+      },
+      "alert_authored_at": {
+        "value": null,
+        "verified": false,
+        "null_reason": "not provided in proposal; never reconstructed",
+        "evidence": null,
+        "precision": null,
+        "semantics": null,
+        "timezone": null,
+        "publisher": null
+      },
+      "collector_received_at": {
+        "value": null,
+        "verified": false,
+        "null_reason": "not provided in proposal; never reconstructed",
+        "evidence": null,
+        "precision": null,
+        "semantics": null,
+        "timezone": null,
+        "publisher": null
+      },
+      "delivered_at": {
+        "value": null,
+        "verified": false,
+        "null_reason": "not provided in proposal; never reconstructed",
+        "evidence": null,
+        "precision": null,
+        "semantics": null,
+        "timezone": null,
+        "publisher": null
+      },
+      "source_data_as_of": {
+        "value": null,
+        "verified": false,
+        "null_reason": "not provided in proposal; never reconstructed",
+        "evidence": null,
+        "precision": null,
+        "semantics": null,
+        "timezone": null,
+        "publisher": null
+      },
+      "retrieved_at": {
+        "value": null,
+        "verified": false,
+        "null_reason": "not provided in proposal; never reconstructed",
+        "evidence": null,
+        "precision": null,
+        "semantics": null,
+        "timezone": null,
+        "publisher": null
+      }
+    },
+    "unsupported_claims": [
+      "+30%",
+      "+50%",
+      "+100%"
+    ],
+    "late_cause": "UNKNOWN",
+    "fixture_provenance": {
+      "kind": "proposal_described_claim",
+      "historical_cutoff": null,
+      "cutoff_reason": "raw point-in-time capture unavailable",
+      "operational_fixture_time": "2026-10-06T18:00:00Z",
+      "deadline_basis": "synthetic review/expiry clocks, not original signal deadlines",
+      "source_document_sha256": "1d420c7afdaa0892c7aceea1c1afae910697ed4b0a2730b51acb34485b369820"
+    }
+  },
+  "TECHD": {
+    "candidate_id": "APAC-TECHD-20261005-01-r2.1",
+    "dependency_group_id": "APAC-TECHD-20261005-01-r2.1:dependency",
+    "source_id": "primary",
+    "run_id": "r1",
+    "message_id": "APAC-TECHD-20261005-01-r2.1:DESCRIBED_NOT_RAW",
+    "universe_key": "TECHD",
+    "configuration_label": "SYNTHETIC ASTRA injection boundary",
+    "configuration_hash": "5a03c83b37976248f7625751dd32a6d8bac1fe8a13388236921fec17d8a3e9b7",
+    "state": "NEW",
+    "identity": null,
+    "detector_feed": "described claim only; no raw feed",
+    "execution_venue": null,
+    "mechanism": "Captured research claim; verify economic transmission separately",
+    "invalidation": "Unsupported or contradicted primary evidence",
+    "evidence": [
+      "final proposal PDF page 3; raw signal/cutoff evidence unavailable"
+    ],
+    "missing_facts": [
+      "original point-in-time capture",
+      "verified primary-source timing"
+    ],
+    "owner": "SYNTHETIC_REVIEWER",
+    "evidence_to_clear": [
+      "verify original source and exact identity"
+    ],
+    "next_review_at": "2026-10-06T19:00:00Z",
+    "expiry_at": "2026-10-06T20:00:00Z",
+    "explicit_forecast": null,
+    "clocks": {
+      "published_at": {
+        "value": null,
+        "verified": false,
+        "null_reason": "not provided in proposal; never reconstructed",
+        "evidence": null,
+        "precision": null,
+        "semantics": null,
+        "timezone": null,
+        "publisher": null
+      },
+      "first_verified_available_at": {
+        "value": null,
+        "verified": false,
+        "null_reason": "not provided in proposal; never reconstructed",
+        "evidence": null,
+        "precision": null,
+        "semantics": null,
+        "timezone": null,
+        "publisher": null
+      },
+      "radar_first_discovered_at": {
+        "value": null,
+        "verified": false,
+        "null_reason": "not provided in proposal; never reconstructed",
+        "evidence": null,
+        "precision": null,
+        "semantics": null,
+        "timezone": null,
+        "publisher": null
+      },
+      "alert_authored_at": {
+        "value": null,
+        "verified": false,
+        "null_reason": "not provided in proposal; never reconstructed",
+        "evidence": null,
+        "precision": null,
+        "semantics": null,
+        "timezone": null,
+        "publisher": null
+      },
+      "collector_received_at": {
+        "value": null,
+        "verified": false,
+        "null_reason": "not provided in proposal; never reconstructed",
+        "evidence": null,
+        "precision": null,
+        "semantics": null,
+        "timezone": null,
+        "publisher": null
+      },
+      "delivered_at": {
+        "value": null,
+        "verified": false,
+        "null_reason": "not provided in proposal; never reconstructed",
+        "evidence": null,
+        "precision": null,
+        "semantics": null,
+        "timezone": null,
+        "publisher": null
+      },
+      "source_data_as_of": {
+        "value": null,
+        "verified": false,
+        "null_reason": "not provided in proposal; never reconstructed",
+        "evidence": null,
+        "precision": null,
+        "semantics": null,
+        "timezone": null,
+        "publisher": null
+      },
+      "retrieved_at": {
+        "value": null,
+        "verified": false,
+        "null_reason": "not provided in proposal; never reconstructed",
+        "evidence": null,
+        "precision": null,
+        "semantics": null,
+        "timezone": null,
+        "publisher": null
+      }
+    },
+    "unsupported_claims": [
+      "large return claim unsupported"
+    ],
+    "late_cause": "UNKNOWN",
+    "fixture_provenance": {
+      "kind": "proposal_described_claim",
+      "historical_cutoff": null,
+      "cutoff_reason": "raw point-in-time capture unavailable",
+      "operational_fixture_time": "2026-10-06T18:00:00Z",
+      "deadline_basis": "synthetic review/expiry clocks, not original signal deadlines",
+      "source_document_sha256": "1d420c7afdaa0892c7aceea1c1afae910697ed4b0a2730b51acb34485b369820"
+    },
+    "original_research_expiry": {
+      "value": null,
+      "reason": "proposal says preserve; original timestamp unavailable"
+    }
+  },
+  "SYNTH": {
+    "candidate_id": "SYNTHETIC-INTEGRATION-001",
+    "dependency_group_id": "SYNTHETIC-INTEGRATION-001:dependency",
+    "source_id": "primary",
+    "run_id": "r1",
+    "message_id": "SYNTHETIC-INTEGRATION-001:DESCRIBED_NOT_RAW",
+    "universe_key": "SYNTH",
+    "configuration_label": "SYNTHETIC ASTRA injection boundary",
+    "configuration_hash": "5a03c83b37976248f7625751dd32a6d8bac1fe8a13388236921fec17d8a3e9b7",
+    "state": "NEW",
+    "identity": {
+      "asset_class": "crypto",
+      "symbol": "SYNTH",
+      "chain": "SYNTHETIC_CHAIN",
+      "contract": "native:SYNTH",
+      "product": "spot",
+      "venue": "SYNTHETIC_VENUE",
+      "currency": "USD",
+      "verified": true,
+      "evidence": "SYNTHETIC identity fixture"
+    },
+    "detector_feed": "described claim only; no raw feed",
+    "execution_venue": null,
+    "mechanism": "Captured research claim; verify economic transmission separately",
+    "invalidation": "Unsupported or contradicted primary evidence",
+    "evidence": [
+      "final proposal PDF page 3; raw signal/cutoff evidence unavailable"
+    ],
+    "missing_facts": [
+      "original point-in-time capture",
+      "verified primary-source timing"
+    ],
+    "owner": "SYNTHETIC_REVIEWER",
+    "evidence_to_clear": [
+      "verify original source and exact identity"
+    ],
+    "next_review_at": "2026-10-06T19:00:00Z",
+    "expiry_at": "2026-10-06T20:00:00Z",
+    "explicit_forecast": null,
+    "clocks": {
+      "published_at": {
+        "value": null,
+        "verified": false,
+        "null_reason": "not provided in proposal; never reconstructed",
+        "evidence": null,
+        "precision": null,
+        "semantics": null,
+        "timezone": null,
+        "publisher": null
+      },
+      "first_verified_available_at": {
+        "value": null,
+        "verified": false,
+        "null_reason": "not provided in proposal; never reconstructed",
+        "evidence": null,
+        "precision": null,
+        "semantics": null,
+        "timezone": null,
+        "publisher": null
+      },
+      "radar_first_discovered_at": {
+        "value": "2026-10-06T18:00:00Z",
+        "verified": true,
+        "evidence": "SYNTHETIC trace",
+        "precision": "second",
+        "semantics": "exact_event",
+        "timezone": "UTC",
+        "publisher": "SYNTHETIC"
+      },
+      "alert_authored_at": {
+        "value": null,
+        "verified": false,
+        "null_reason": "not provided in proposal; never reconstructed",
+        "evidence": null,
+        "precision": null,
+        "semantics": null,
+        "timezone": null,
+        "publisher": null
+      },
+      "collector_received_at": {
+        "value": null,
+        "verified": false,
+        "null_reason": "not provided in proposal; never reconstructed",
+        "evidence": null,
+        "precision": null,
+        "semantics": null,
+        "timezone": null,
+        "publisher": null
+      },
+      "delivered_at": {
+        "value": null,
+        "verified": false,
+        "null_reason": "not provided in proposal; never reconstructed",
+        "evidence": null,
+        "precision": null,
+        "semantics": null,
+        "timezone": null,
+        "publisher": null
+      },
+      "source_data_as_of": {
+        "value": null,
+        "verified": false,
+        "null_reason": "not provided in proposal; never reconstructed",
+        "evidence": null,
+        "precision": null,
+        "semantics": null,
+        "timezone": null,
+        "publisher": null
+      },
+      "retrieved_at": {
+        "value": null,
+        "verified": false,
+        "null_reason": "not provided in proposal; never reconstructed",
+        "evidence": null,
+        "precision": null,
+        "semantics": null,
+        "timezone": null,
+        "publisher": null
+      }
+    },
+    "unsupported_claims": [],
+    "late_cause": "UNKNOWN",
+    "fixture_provenance": {
+      "kind": "synthetic",
+      "historical_cutoff": null,
+      "cutoff_reason": "raw point-in-time capture unavailable",
+      "operational_fixture_time": "2026-10-06T18:00:00Z",
+      "deadline_basis": "synthetic review/expiry clocks, not original signal deadlines",
+      "source_document_sha256": "1d420c7afdaa0892c7aceea1c1afae910697ed4b0a2730b51acb34485b369820"
+    }
+  }
+}

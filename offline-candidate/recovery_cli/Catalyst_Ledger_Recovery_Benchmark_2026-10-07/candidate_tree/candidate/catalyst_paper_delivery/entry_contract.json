@@ -1,0 +1,262 @@
+{
+  "schema": "MOONSHOT_OFFLINE_BRIDGE_V1",
+  "scope": "isolated synthetic integration; no live entry enablement",
+  "records": {
+    "research_record": "Research candidate and original evidence. It cannot supply absent plan values or a forecast by implication.",
+    "explicit_forecast": "Optional separate original prospective statement; never required for paper-entry eligibility and not admitted to the frozen study here.",
+    "manager_dossier": "Separate authored record with a complete frozen plan and its hash; source truth remains an external fact.",
+    "decision": "Persisted ENTRY_DECISION or validated WAIT/PASS research review; ENTRY_DECISION alone is not a BUY.",
+    "execution_quote": "Original postdecision quote record, distinct from decision witness and research reference price.",
+    "execution_result": "Accepted BUY/SELL only after recovery caller acknowledgement; uncertainty is not accepted execution."
+  },
+  "never_required": [
+    "probability",
+    "ranking_score",
+    "rank_threshold",
+    "forecast_admission",
+    "explicit_forecast"
+  ],
+  "manager_required": [
+    "record_type",
+    "candidate_id",
+    "author_id",
+    "authored_at",
+    "authorship_evidence",
+    "plan",
+    "plan_sha256"
+  ],
+  "required_plan_paths": [
+    "/paper_only",
+    "/currency",
+    "/product",
+    "/leverage",
+    "/asset_class",
+    "/instrument",
+    "/openable",
+    "/identity_source",
+    "/precision_source",
+    "/structure_source",
+    "/bid_mapping_source",
+    "/corporate_actions_clear_through_deadline",
+    "/corporate_action_source",
+    "/supply_basis_verified",
+    "/liquidity_usable",
+    "/precision",
+    "/min_units",
+    "/max_units",
+    "/min_notional",
+    "/max_notional",
+    "/min_ask",
+    "/max_ask",
+    "/stop",
+    "/target",
+    "/deadline",
+    "/signal_expiry",
+    "/checks",
+    "/next_review",
+    "/coverage_source",
+    "/gap_stress",
+    "/closed_session_plan",
+    "/minute_monitoring_required",
+    "/checkpoints",
+    "/events",
+    "/open_fee",
+    "/close_fee",
+    "/dossier",
+    "/dossier/primary_source",
+    "/dossier/mechanism",
+    "/dossier/priced_in",
+    "/dossier/disconfirming",
+    "/dossier/sensitivity",
+    "/dossier/horizon_reason",
+    "/dossier/resistance_path",
+    "/dossier/ordinary_variability",
+    "/dossier/published_at",
+    "/dossier/first_observed_at",
+    "/dossier/status",
+    "/dossier/timing",
+    "/dossier/valuation_support",
+    "/dossier/target_derivation",
+    "/dossier/scenarios",
+    "/dossier/target_derivation/method",
+    "/dossier/target_derivation/source",
+    "/dossier/target_derivation/assumptions",
+    "/dossier/target_derivation/frozen_at",
+    "/dossier/target_derivation/holder_value_low",
+    "/dossier/target_derivation/diluted_units",
+    "/dossier/scenarios/failure/source",
+    "/dossier/scenarios/failure/assumptions",
+    "/dossier/scenarios/failure/low",
+    "/dossier/scenarios/failure/high",
+    "/dossier/scenarios/failure/by",
+    "/dossier/scenarios/partial/source",
+    "/dossier/scenarios/partial/assumptions",
+    "/dossier/scenarios/partial/low",
+    "/dossier/scenarios/partial/high",
+    "/dossier/scenarios/partial/by",
+    "/dossier/scenarios/delivery/source",
+    "/dossier/scenarios/delivery/assumptions",
+    "/dossier/scenarios/delivery/low",
+    "/dossier/scenarios/delivery/high",
+    "/dossier/scenarios/delivery/by",
+    "/open_fee/id",
+    "/open_fee/instrument",
+    "/open_fee/side",
+    "/open_fee/product",
+    "/open_fee/currency",
+    "/open_fee/rate",
+    "/open_fee/fixed",
+    "/open_fee/tax",
+    "/open_fee/markup",
+    "/open_fee/verified",
+    "/open_fee/unresolved",
+    "/open_fee/source",
+    "/open_fee/verified_at",
+    "/open_fee/checked_at",
+    "/open_fee/holding_cost_verified_zero",
+    "/close_fee/id",
+    "/close_fee/instrument",
+    "/close_fee/side",
+    "/close_fee/product",
+    "/close_fee/currency",
+    "/close_fee/rate",
+    "/close_fee/fixed",
+    "/close_fee/tax",
+    "/close_fee/markup",
+    "/close_fee/verified",
+    "/close_fee/unresolved",
+    "/close_fee/source",
+    "/close_fee/verified_at",
+    "/close_fee/checked_at",
+    "/close_fee/holding_cost_verified_zero",
+    "/checkpoints/*/at",
+    "/checkpoints/*/on_missing",
+    "/events/*/source",
+    "/events/*/at"
+  ],
+  "conditional_plan_paths": [
+    {
+      "when": "asset_class != crypto",
+      "paths": [
+        "/sessions",
+        "/sessions/*/open",
+        "/sessions/*/close",
+        "/sessions/*/verified",
+        "/sessions/*/source"
+      ]
+    },
+    {
+      "when": "deadline UTC date > decision UTC date",
+      "paths": [
+        "/overnight_approved"
+      ]
+    },
+    {
+      "when": "event at <= deadline",
+      "paths": [
+        "/events/*/failure_first_exit_bid",
+        "/events/*/first_exit_source",
+        "/events/*/first_exit_at"
+      ]
+    }
+  ],
+  "wait_inputs": [
+    "condition",
+    "evidence_due",
+    "witness_ask",
+    "witness_bid"
+  ],
+  "execution_quote_fields": [
+    "id",
+    "instrument",
+    "currency",
+    "product",
+    "at",
+    "retrieved",
+    "bid",
+    "ask"
+  ],
+  "entry_preview_fields": [
+    "evidence_unchanged",
+    "dossier_hash",
+    "evidence_checked_at",
+    "instrument",
+    "product",
+    "currency",
+    "side",
+    "units",
+    "fee_id",
+    "total_fee",
+    "at",
+    "retrieved"
+  ],
+  "receipt_fields": [
+    "checkpoint_sha256",
+    "checkpoint_library_id",
+    "checkpoint_library_version",
+    "readback_verified",
+    "verified_at_utc"
+  ],
+  "exit_fee_fields": "Same bound frozen fee terms with the existing fresh applicability check; no new fee policy.",
+  "execution_validation": "Do not pre-reject quote/preview evidence using this field inventory: pass the original operation bytes to recovery.advance so the core logs quote rejection or permanently consumes the first valid quote exactly as before.",
+  "validators": {
+    "validate_plan": {
+      "file": "catalyst_paper_v2/catalyst.py",
+      "line": 207
+    },
+    "economics": {
+      "file": "catalyst_paper_v2/catalyst.py",
+      "line": 125
+    },
+    "risk_gate": {
+      "file": "catalyst_paper_v2/catalyst.py",
+      "line": 121
+    },
+    "event_gate": {
+      "file": "catalyst_paper_v2/catalyst.py",
+      "line": 256
+    },
+    "wait_decision": {
+      "file": "catalyst_paper_v2/catalyst.py",
+      "line": 263
+    },
+    "in_session": {
+      "file": "catalyst_paper_v2/catalyst.py",
+      "line": 198
+    },
+    "profile": {
+      "file": "catalyst_paper_v2/catalyst.py",
+      "line": 148
+    },
+    "fresh_applicability": {
+      "file": "catalyst_paper_v2/catalyst.py",
+      "line": 172
+    },
+    "Simulator": {
+      "file": "catalyst_paper_v2/catalyst.py",
+      "line": 297
+    }
+  },
+  "arithmetic_authority": "The pinned engine only: target_derivation.holder_value_low / diluted_units == target == scenarios.delivery.low; scenarios failure/partial/delivery retain sourced stress ranges and dates. Future failure bid is a sourced stress estimate, not a future observation or guarantee.",
+  "reason_codes": [
+    "INPUT_MISSING",
+    "INPUT_SHAPE",
+    "MANAGER_DOSSIER_REQUIRED",
+    "PLAN_BINDING_MISMATCH",
+    "MANAGER_PROVENANCE_INVALID",
+    "FROZEN_VALIDATOR_REJECTED",
+    "FROZEN_WAIT_REJECTED",
+    "FROZEN_FILL_GATE_FAILED",
+    "FROZEN_QUOTE_REJECTED",
+    "FROZEN_EXIT_PENDING",
+    "CALLER_PENDING",
+    "CALLER_BLOCKED",
+    "DUPLICATE_OPERATION_SUPPRESSED",
+    "SYNTHETIC_FIXTURE_ONLY"
+  ],
+  "frozen_hashes": {
+    "catalyst.py": "28ad94762eb385267c243c0ffd3e8ac75b17a8e708057e11bf7f88046d4c3c28",
+    "ledger.py": "9d2a083f3aa91baaa13607464bf9c9ee5ecd34161ad7c8343114bcdf2443658a",
+    "recovery.py": "048749aab675505eff3fe19e7f07cdec701ce88a071a71713117d8755daeadac"
+  }
+}

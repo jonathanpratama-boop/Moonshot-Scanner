@@ -1,0 +1,17 @@
+{
+  "stock": {
+    "input_sha256": "8497e4c31c89352dc7a30194c35248f5a4238d0cb1ff44b16632470b1e2166a6",
+    "output_utf8": "{\"result\":\"PASS\",\"synthetic\":true}",
+    "output_sha256": "85b69b19c1f17227df77dbb8eb1a11ba64c3e455f1720acd05e2c20ac8be4e90"
+  },
+  "crypto": {
+    "input_sha256": "cb27f38c60e4e6d6ae379f83d0ba1bc789fec203283069fd95820571b53cb293",
+    "output_utf8": "{\"result\":\"PASS\",\"synthetic\":true}",
+    "output_sha256": "85b69b19c1f17227df77dbb8eb1a11ba64c3e455f1720acd05e2c20ac8be4e90"
+  },
+  "missing": {
+    "input_sha256": "272fbaa2bdadba37e2cac745e9dfe7ba5d82284377ce8674acc832208859ed55",
+    "output_utf8": "{\"result\":\"INSUFFICIENT_DATA\",\"synthetic\":true}",
+    "output_sha256": "db7f84009720a41ea679edf5384b48b8d2fbe193c0876af6bb6cb7ffa743bc83"
+  }
+}
